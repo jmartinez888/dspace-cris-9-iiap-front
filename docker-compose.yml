@@ -3,7 +3,7 @@ services:
     # Dokploy usará el Dockerfile de la raíz de tu repo de Angular
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.dist
     environment:
       # --- CONFIGURACIÓN INTERNA DE NODE.JS ---
       - DSPACE_UI_SSL=false
