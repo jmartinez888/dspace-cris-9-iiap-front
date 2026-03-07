@@ -1,0 +1,28 @@
+services:
+  frontend:
+    # Dokploy usará el Dockerfile de la raíz de tu repo de Angular
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      # --- CONFIGURACIÓN INTERNA DE NODE.JS ---
+      - DSPACE_UI_SSL=false
+      - DSPACE_UI_HOST=0.0.0.0
+      - DSPACE_UI_PORT=4000
+      - DSPACE_UI_NAMESPACE=/
+
+      # --- CONEXIÓN AL BACKEND PARA SSR (Usamos el dominio oficial) ---
+      - DSPACE_REST_SSL=true
+      - DSPACE_REST_HOST=api-cris.iiap.gob.pe
+      - DSPACE_REST_PORT=443
+      - DSPACE_REST_NAMESPACE=/server/api
+
+      # --- RUTAS PÚBLICAS (Lo que verá el usuario en su navegador) ---
+      - DSPACE_UI_URL=https://cris.iiap.gob.pe
+      - DSPACE_REST_URL=https://api-cris.iiap.gob.pe/server
+
+      # Optimización de memoria para Angular en Producción
+      - NODE_OPTIONS=--max_old_space_size=4096
+    ports:
+      - "4000:4000"
+    restart: unless-stopped
