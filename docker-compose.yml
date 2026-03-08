@@ -11,11 +11,10 @@
 networks:
   dspacenet:
 services:
-  dspace-angular:
-    container_name: dspace-angular
+  frontend:
     environment:
       DSPACE_UI_SSL: 'false'
-      DSPACE_UI_HOST: dspace-angular
+      DSPACE_UI_HOST: frontend
       DSPACE_UI_PORT: '4000'
       DSPACE_UI_NAMESPACE: /
       # NOTE: When running the UI in production mode (which the -dist image does),
