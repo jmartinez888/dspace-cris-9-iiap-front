@@ -1,28 +1,39 @@
+#
+# The contents of this file are subject to the license and copyright
+# detailed in the LICENSE and NOTICE files at the root of the source
+# tree and available online at
+#
+# http://www.dspace.org/license/
+#
+
+# Docker Compose for running the DSpace Angular UI dist build
+# for previewing with the DSpace Demo site backend
+networks:
+  dspacenet:
 services:
-  frontend:
-    # Dokploy usará el Dockerfile de la raíz de tu repo de Angular
+  dspace-angular:
+    container_name: dspace-angular
+    environment:
+      DSPACE_UI_SSL: 'false'
+      DSPACE_UI_HOST: dspace-angular
+      DSPACE_UI_PORT: '4000'
+      DSPACE_UI_NAMESPACE: /
+      # NOTE: When running the UI in production mode (which the -dist image does),
+      # these DSPACE_REST_* variables MUST point at a public, HTTPS URL.
+      # This is because Server Side Rendering (SSR) currently requires a public URL,
+      # see this bug: https://github.com/DSpace/dspace-angular/issues/1485
+      DSPACE_REST_SSL: 'true'
+      DSPACE_REST_HOST: api-cris.iiap.gob.pe
+      DSPACE_REST_PORT: 443
+      DSPACE_REST_NAMESPACE: /server
     build:
       context: .
       dockerfile: Dockerfile.dist
-    environment:
-      # --- CONFIGURACIÓN INTERNA DE NODE.JS ---
-      - DSPACE_UI_SSL=false
-      - DSPACE_UI_HOST=0.0.0.0
-      - DSPACE_UI_PORT=4000
-      - DSPACE_UI_NAMESPACE=/
-
-      # --- CONEXIÓN AL BACKEND PARA SSR (Usamos el dominio oficial) ---
-      - DSPACE_REST_SSL=true
-      - DSPACE_REST_HOST=api-cris.iiap.gob.pe
-      - DSPACE_REST_PORT=443
-      - DSPACE_REST_NAMESPACE=/server/api
-
-      # --- RUTAS PÚBLICAS (Lo que verá el usuario en su navegador) ---
-      - DSPACE_UI_URL=https://cris.iiap.gob.pe
-      - DSPACE_REST_URL=https://api-cris.iiap.gob.pe/server
-
-      # Optimización de memoria para Angular en Producción
-      - NODE_OPTIONS=--max_old_space_size=4096
+    networks:
+      dspacenet:
     ports:
-      - "4000:4000"
+    - published: 4000
+      target: 4000
+    stdin_open: true
+    tty: true
     restart: unless-stopped
