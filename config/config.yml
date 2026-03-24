@@ -1,5 +1,30 @@
+ui:
+  ssl: false
+  host: localhost
+  port: 4000
+  nameSpace: /
+
 rest:
   ssl: false
   host: localhost
   port: 8080
   nameSpace: /server
+
+fallbackLanguage: es
+
+ssr:
+  enabled: true
+
+languages:
+  - code: es
+    label: Español
+    active: true
+  - code: en
+    label: English
+    active: true
+  - code: de
+    label: Deutsch
+    active: true
+  - code: fr
+    label: Français
+    active: true

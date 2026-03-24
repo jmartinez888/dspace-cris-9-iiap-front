@@ -47,10 +47,6 @@ export const copyWebpackOptions = {
           return path.join('assets', matches[1], matches[2]);
         }
       },
-    },
-    {
-      from: path.join(__dirname, '..', 'src', 'robots.txt.ejs'),
-      to: 'assets/robots.txt.ejs'
     }
   ]
 };
