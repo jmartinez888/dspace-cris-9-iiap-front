@@ -197,7 +197,16 @@ export class DsDynamicOneboxComponent extends DsDynamicVocabularyComponent imple
     this.subs.push(this.group.get(this.model.id).valueChanges.pipe(
       filter((value) => this.currentValue !== value))
       .subscribe((value) => {
-        this.setCurrentValue(this.model.value);
+        if (hasValue(this.model.value)) {
+          this.vocabulary$.pipe(
+            filter((vocabulary: Vocabulary) => isNotEmpty(vocabulary)),
+            take(1),
+          ).subscribe((vocabulary: Vocabulary) => {
+            this.setCurrentValue(this.model.value, vocabulary.hierarchical);
+          });
+        } else {
+          this.setCurrentValue(this.model.value);
+        }
       }));
   }
 
