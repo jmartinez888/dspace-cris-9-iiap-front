@@ -7922,6 +7922,8 @@
 
   "vocabulary-treeview.tree.description.nsi": "The Norwegian Science Index",
 
+  "vocabulary-treeview.tree.description.ocde-perucris": "Select a field of knowledge OCDE",
+
   "vocabulary-treeview.tree.description.srsc": "Research Subject Categories",
 
   "vocabulary-treeview.tree.description.publication-coar-types": "Publication types",
@@ -9381,6 +9383,8 @@
   "search.filters.applied.charts.homepageConfiguration.title": "Search Output",
 
   "vocabulary-treeview.tree.description.patent-coar-types": "Patent types",
+
+  "vocabulary-treeview.tree.description.ocde-perucris": "Select a field of knowledge OCDE",
 
   "vocabulary-treeview.tree.description.oecd": "Fields of Science and Technology classification",
 
