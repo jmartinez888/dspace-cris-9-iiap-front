@@ -8,7 +8,6 @@ import { SuggestionsPopupComponent } from '../../../../app/notifications/suggest
 import { ThemedBrowseSectionComponent } from '../../../../app/shared/explore/section-component/browse-section/themed-browse-section.component';
 import { ThemedCountersSectionComponent } from '../../../../app/shared/explore/section-component/counters-section/themed-counters-section.component';
 import { ThemedFacetSectionComponent } from '../../../../app/shared/explore/section-component/facet-section/themed-facet-section.component';
-import { ThemedSearchSectionComponent } from '../../../../app/shared/explore/section-component/search-section/themed-search-section.component';
 import { ThemedTextSectionComponent } from '../../../../app/shared/explore/section-component/text-section/themed-text-section.component';
 import { ThemedTopSectionComponent } from '../../../../app/shared/explore/section-component/top-section/themed-top-section.component';
 
@@ -26,7 +25,6 @@ import { ThemedTopSectionComponent } from '../../../../app/shared/explore/sectio
     ThemedCountersSectionComponent,
     ThemedFacetSectionComponent,
     ThemedHomeNewsComponent,
-    ThemedSearchSectionComponent,
     ThemedTextSectionComponent,
     ThemedTopSectionComponent,
   ],

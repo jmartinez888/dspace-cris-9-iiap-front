@@ -32,14 +32,14 @@ $enable-shadows: true !default;
 /*** SEMANTIC COLOR SCHEME ***/
 
 // Override semantic colors
-$primary:   #2b4e72 !default;               // Blue gray
-$secondary: #495057 !default;               // As Bootstrap $gray-700
+$primary:   #94ba65 !default;               // Verde elegante DSpace
+$secondary: #FF7E2E !default;               // Naranja institucional IIAP
 $success:   #94ba65 !default;               // Lime
-$info:      #006666 !default;               // Blue green
-$warning:   #ec9433 !default;               // Orange
+$info:      #FF7E2E !default;               // Naranja secundario IIAP (usado en info)
+$warning:   #FF7E2E !default;               // Naranja secundario IIAP
 $danger:    #cf4444 !default;               // Red
-$light:     #f8f9fa !default;               // As Bootstrap $gray-100
-$dark:      darken(#2b4e72, 17%) !default;  // Blue gray (darker)
+$light:     #f4f6f7 !default;               // Gris tenue para fondos
+$dark:      #1a1a1a !default;               // Negro mate/oscuro neutro (reemplaza azul DSpace)
 
 // Add new semantic colors here (you don't need to add existing semantic colors)
 $global-custom-semantic-colors: (
@@ -80,26 +80,26 @@ $primary-bg-subtle: $light !default;
 
 $ds-home-news-link-color: $link-color !default;
 $ds-home-news-link-hover-color: darken($ds-home-news-link-color, 15%) !default;
-$ds-breadcrumb-link-color: #003333 !default;
-$ds-breadcrumb-link-active-color: #040D11 !default;
+$ds-breadcrumb-link-color: #94ba65 !default;
+$ds-breadcrumb-link-active-color: #7da54e !default;
 
 $ds-header-navbar-border-top-color: #fff !default;
 $ds-header-navbar-border-bottom-color: #ced4da !default;
 
 $ds-header-bg: #fff !default;
-$ds-header-icon-color: $link-color !default;
-$ds-header-icon-color-hover: $link-hover-color !default;
+$ds-header-icon-color: $primary !default;
+$ds-header-icon-color-hover: $primary !default;
 
 $ds-navbar-bg: #fff !default;
 $ds-navbar-dropdown-bg: #fff !default;
 $ds-expandable-navbar-bg: #fff !default;
-$ds-navbar-link-color: $link-color !default;
-$ds-navbar-link-color-hover: #{darken($ds-navbar-link-color, 15%)} !default;
+$ds-navbar-link-color: #94ba65 !default;
+$ds-navbar-link-color-hover: #7da54e !default;
 
-$ds-slider-color: darken(#94BA65, 17%) !default;
-$ds-slider-handle-color: darken(#2B4E72, 17%) !default;
+$ds-slider-color: #94ba65 !default;
+$ds-slider-handle-color: #FF7E2E !default;
 
-$ds-admin-sidebar-bg: darken(#2b4e72, 17%) !default;
+$ds-admin-sidebar-bg: #1a1a1a !default;
 $ds-admin-sidebar-active-bg: darken($ds-admin-sidebar-bg, 3%) !default;
 $ds-admin-sidebar-fg: #47495d !default;
 $ds-admin-sidebar-fixed-element-width: 55px !default;

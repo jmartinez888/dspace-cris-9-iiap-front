@@ -152,9 +152,24 @@ ds-dynamic-form-control-container.d-none {
     visibility: collapse;
 }
 
-/* Used for dso administrative functionality */
+/* Botones que por defecto eran grises (btn-dark) ahora son Verde Institucional */
 .btn-dark {
-    background-color: var(--ds-admin-sidebar-bg);
+    background-color: #94ba65 !important;
+    border-color: #94ba65 !important;
+    color: #fff !important;
+    &:hover {
+        background-color: #7da54e !important;
+        border-color: #7da54e !important;
+    }
+}
+
+.btn-outline-dark {
+    border-color: #94ba65 !important;
+    color: #94ba65 !important;
+    &:hover {
+        background-color: #94ba65 !important;
+        color: #fff !important;
+    }
 }
 
 button.switch {
@@ -455,6 +470,20 @@ ul.dso-edit-menu-dropdown>li .nav-item.nav-link {
     &.btn-primary:focus, &.btn-outline-primary:focus {
         outline-color: darken($primary, 5%);
     }
+ 
+    &.btn-primary, &.btn-secondary {
+        color: #fff !important; 
+        &:hover {
+            color: #fff !important;
+            transform: scale(1.02);
+        }
+    }
+    
+    &.btn-outline-primary, &.btn-outline-secondary {
+        &:hover {
+            color: #fff !important;
+        }
+    }
 }
 
 dynamic-ng-bootstrap-checkbox .custom-control-input:focus ~ .custom-control-label::before {
@@ -606,9 +635,289 @@ ngb-tooltip-window {
   }
 }
 
-.form-select {
-  -webkit-appearance: none !important;
-  -moz-appearance: none !important;
-  appearance: none !important;
+/* ==========================================================================
+   IIAP Institutional Branding (Orange & Green)
+   ========================================================================== */
+
+/* Badges (Tags de Publicación, Proyecto, etc.) y Contadores */
+.badge.bg-info,
+.badge-info,
+.badge-item-type,
+.badge.bg-secondary,
+.badge-secondary {
+    background-color: #FF7E2E !important;
+    color: white !important;
+    font-weight: 600;
+}
+
+/* Home Navigation & Discovery Tabs (Comunidades, Resultados, Estadísticas) */
+.nav-pills .nav-link.active,
+.nav-pills .show > .nav-link {
+    background-color: #94ba65 !important;
+    color: white !important;
+}
+
+.nav-link, .btn-link {
+    color: #94ba65; // Verde institucional por defecto
+    transition: all 0.3s ease;
+    
+    &:hover {
+        color: #7da54e !important; // Verde más oscuro al hover
+        text-decoration: none;
+    }
+}
+
+/* Pestañas de Navegación (Tabs: Autores, Proyectos, etc.) - Mantener Naranja */
+.nav-tabs .nav-link {
+    color: #FF7E2E !important;
+    font-weight: 500;
+    
+    &:hover {
+        color: #e66a1f !important; // Naranja un poco más oscuro
+        text-decoration: none;
+        background-color: transparent !important;
+        transform: none !important;
+    }
+    
+    &.active {
+        color: #1a1a1a !important; // Texto activo oscuro neutral
+    }
+}
+
+/* Forzar verde en iconos de cabecera específicos */
+.navbar-nav .nav-link:hover,
+.ds-header-icon-color-hover {
+    color: #94ba65 !important;
+}
+
+/* Enlaces institucionales (Verde Elegante) para la sección principal */
+#main-content a:not(.nav-link):not(.btn):not(.badge) {
+    color: #94ba65;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    &:hover {
+        color: #7da54e;
+        text-decoration: underline;
+    }
+}
+
+/* Efecto de agrandamiento suave para ítems de contadores (Resultados, Proyectos, Personas) */
+.counters-section {
+    transition: transform 0.3s ease;
+}
+
+a:hover .counters-section,
+.counters-section:hover {
+    transform: scale(1.08) !important;
+    color: #7da54e !important;
+    text-decoration: none !important;
+}
+
+/* Eliminar espacios entre banner y nav */
+#main-content.my-cs {
+    padding-top: 0 !important;
+    margin-top: 0 !important;
+}
+
+.outer-wrapper {
+    display: flex;
+    flex-direction: column;
+}
+
+ds-header-navbar-wrapper {
+    z-index: 10;
+}
+
+/* Espaciado de Breadcrumbs */
+ds-breadcrumbs {
+    display: block;
+    margin-bottom: 2rem !important;
+}
+
+/* Ajustes adicionales para legibilidad en el home */
+.home-news-content {
+    .lead {
+        color: #4a4a4a !important;
+    }
+}
+
+/* ==========================================================================
+   IIAP OMNI-OVERRIDE (Phase 2 - High Specificity)
+   ========================================================================== */
+
+/* 1. FUERZA TOTAL EN BOTONES (Buscar, Exportar, Estadística, Iniciar Sesión) */
+html body .btn,
+html body .ds-search-form-submit,
+html body .search-button {
+    color: #94ba65 !important;
+    background-color: transparent !important;
+    border-color: transparent !important;
+    box-shadow: none !important;
+    
+    &:hover, &:focus, &:active {
+        color: #7da54e !important;
+        transform: none;
+    }
+}
+
+/* Botones que SÍ deben ser sólidos (Buscar principal si se desea) */
+html body .btn-primary,
+html body .btn-secondary,
+html body .btn-orange {
+    color: #fff !important;
+    background-color: #94ba65 !important;
+    border-color: #94ba65 !important;
+    
+    &.btn-orange {
+        background-color: #FF7E2E !important;
+        border-color: #FF7E2E !important;
+        color: #fff !important;
+
+        &:hover {
+            background-color: #e66a1f !important;
+            border-color: #e66a1f !important;
+            color: #fff !important;
+        }
+    }
+}
+
+
+/* Forzar que los bordes de los botones outline también sean verdes/naranjas */
+html body .btn-outline-primary,
+html body .btn-outline-secondary {
+    color: #94ba65 !important;
+    border-color: #94ba65 !important;
+    background-color: transparent !important;
+    
+    &:hover {
+        background-color: #94ba65 !important;
+        color: #fff !important;
+    }
+}
+
+/* 2. FUERZA TOTAL EN NAVEGACIÓN Y CABECERA */
+html body .navbar-nav .nav-link,
+html body .navbar-nav .nav-item > a,
+html body .ds-header-icon-color,
+html body .ds-navbar-link-color {
+    color: #94ba65 !important; // Verde institucional por defecto
+    font-weight: 500;
+    
+    &:hover, &.active {
+        color: #7da54e !important; // Verde más oscuro al hover/activo
+    }
+}
+
+/* Iconos específicos (Mundo, Lupa, Cuenta) - Solo color de fuente cuando NO están en botones sólidos */
+html body .fas.fa-globe,
+html body .fas.fa-search,
+html body .fas.fa-user,
+html body .ds-header-icon-color-hover:hover,
+html body .language-selector .btn,
+html body .account-button .btn {
+    color: #94ba65 !important;
+    background-color: transparent !important;
+    border: none !important;
+    padding: 0.25rem !important;
+}
+
+/* Forzar blanco en iconos para botones sólidos */
+html body .btn-primary .fas,
+html body .btn-secondary .fas,
+html body .btn-orange .fas,
+html body .ds-search-form-submit .fas {
+    color: #fff !important;
+}
+
+/* 3. LIMPIEZA TOTAL DE BREADCRUMBS */
+html body ds-breadcrumbs .breadcrumb,
+html body .breadcrumb-wrapper {
+    background-color: #ffffff !important;
+    border: none !important;
+    padding-left: 0 !important;
+    box-shadow: none !important;
+}
+
+html body ds-breadcrumbs .breadcrumb-item,
+html body ds-breadcrumbs .breadcrumb-item a {
+    color: #94ba65 !important;
+    font-weight: 500;
+    
+    &:hover {
+        color: #7da54e !important;
+        text-decoration: underline;
+    }
+    
+    &.active {
+        color: #1a1a1a !important; // El ítem actual en gris oscuro neutral
+    }
+}
+
+/* Separador de breadcrumbs */
+html body .breadcrumb-item + .breadcrumb-item::before {
+    color: #ced4da !important;
+}
+
+/* Ajuste buscador principal - Mantener sólido el botón de buscar pero sin márgenes deformados */
+html body .ds-search-form .input-group-append .btn,
+html body .ds-search-form .btn-primary.ds-search-form-submit {
+    background-color: #FF7E2E !important;
+    border-color: #FF7E2E !important;
+    color: #fff !important;
+    margin: 0 !important;
+}
+
+/* Forzar transparencia en botones de "Más..." y expanders */
+html body .btn-link,
+html body .truncatable-list .btn {
+    background-color: transparent !important;
+    border: none !important;
+    color: #94ba65 !important;
+    text-decoration: none !important;
+    
+    &:hover {
+        color: #7da54e !important;
+        text-decoration: underline !important;
+    }
+}
+
+/* Forzar Estilo Outline con Hover Sólido en botones de navegación del ítem (Vista Sencilla / Completa) */
+html body .item-page .btn-outline-primary,
+html body .item-page .simple-view-link a,
+html body .item-page .full-view-link a {
+    background-color: #fff !important;
+    border: 1px solid #94ba65 !important;
+    color: #94ba65 !important;
+    padding: 0.5rem 1rem !important;
+    display: inline-block;
+    transition: all 0.3s ease !important;
+    
+    &:hover {
+        background-color: #94ba65 !important;
+        border-color: #94ba65 !important;
+        color: #fff !important;
+        text-decoration: none !important;
+    }
+}
+
+/* Estandarización de Listas y Botones "Examinar" (Collection Browse) */
+html body .list-group-item.active {
+    background-color: #94ba65 !important;
+    border-color: #94ba65 !important;
+    color: #fff !important;
+    
+    &:hover, &:focus {
+        background-color: #94ba65 !important;
+        border-color: #94ba65 !important;
+        color: #fff !important;
+    }
+}
+
+html body .list-group-item {
+    color: #94ba65 !important;
+    &:hover {
+        background-color: #f8f9fa !important;
+        color: #7da54e !important;
+    }
 }
 

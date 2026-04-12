@@ -10,7 +10,7 @@
   ],
   "include": [
     "src/**/*.d.ts",
-    "src/themes/**/*.module.ts"
+    "src/themes/**/*.ts"
   ],
   "exclude": [
     "src/test.ts",
@@ -19,7 +19,8 @@
     "src/**/*.test.ts",
     "src/**/*.stub.ts",
     "src/**/testing/*",
-    "src/**/mocks/*"
+    "src/**/mocks/*",
+    "src/backend/**/*"
   ],
   "angularCompilerOptions": {
     "entryModule": "./src/modules/app/browser-app.module#BrowserAppModule"

@@ -10,7 +10,9 @@
   <div class="inner-wrapper">
     <ds-system-wide-alert-banner></ds-system-wide-alert-banner>
     <ds-header-navbar-wrapper></ds-header-navbar-wrapper>
-    <ds-breadcrumbs></ds-breadcrumbs>
+    @if (!(isHomePage$ | async)) {
+      <ds-breadcrumbs></ds-breadcrumbs>
+    }
     <main class="my-cs" id="main-content">
 
       @if (shouldShowRouteLoader) {

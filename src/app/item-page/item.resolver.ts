@@ -23,17 +23,21 @@ import {
  * The self links defined in this list are expected to be requested somewhere in the near future
  * Requesting them as embeds will limit the number of requests
  */
+export const ITEM_PAGE_LINKS_TO_FOLLOW: FollowLinkConfig<Item>[] = [
+  followLink('owningCollection', {},
+    followLink('parentCommunity', {},
+      followLink('parentCommunity')),
+  ),
+  followLink('relationships'),
+  followLink('version', {}, followLink('versionhistory')),
+  followLink('bundles', {}, followLink('bitstreams')),
+  followLink('thumbnail'),
+  followLink('metrics'),
+];
+
 export function getItemPageLinksToFollow(): FollowLinkConfig<Item>[] {
   const followLinks: FollowLinkConfig<Item>[] = [
-    followLink('owningCollection', {},
-      followLink('parentCommunity', {},
-        followLink('parentCommunity')),
-    ),
-    followLink('relationships'),
-    followLink('version', {}, followLink('versionhistory')),
-    followLink('bundles', {}, followLink('bitstreams')),
-    followLink('thumbnail'),
-    followLink('metrics'),
+    ...ITEM_PAGE_LINKS_TO_FOLLOW,
   ];
   if (environment.item.showAccessStatuses) {
     followLinks.push(followLink('accessStatus'));

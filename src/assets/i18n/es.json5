@@ -2417,6 +2417,7 @@
 
   // "community.search.breadcrumbs": "Search",
   "community.search.breadcrumbs": "Buscar",
+  "search.placeholder": "Buscar en el repositorio...",
 
   // "community.search.results.head": "Search Results",
   "community.search.results.head": "Resultados de la búsqueda",
@@ -9072,6 +9073,9 @@
 
   // "vocabulary-treeview.load-more": "Load more",
   "vocabulary-treeview.load-more": "Cargar más",
+
+  // "vocabulary-treeview.tree.description.coar-resource-types-es": "Select a resource type",
+  "vocabulary-treeview.tree.description.coar-resource-types-es": "Seleccione un tipo de recurso",
 
   // "vocabulary-treeview.search.form.reset": "Reset",
   "vocabulary-treeview.search.form.reset": "Reiniciar",
