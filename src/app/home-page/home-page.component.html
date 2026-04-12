@@ -1,13 +1,5 @@
-@if ((site$.value && hasHomeHeaderMetadata)) {
-  <div id="home-header-wrapper">
-    <ds-text-section [sectionId]="'site'"
-      [textRowSection]="homeHeaderSection"
-    [site]="site$.value"></ds-text-section>
-  </div>
-} @else {
-  <ds-home-coar></ds-home-coar>
-  <ds-home-news></ds-home-news>
-}
+<ds-home-coar></ds-home-coar>
+<ds-home-news></ds-home-news>
 
 
 @if (site$.value) {
@@ -28,11 +20,6 @@
                   <ds-browse-section
                     [sectionId]="sectionId"
                   [browseSection]="$any(sectionComponent)"></ds-browse-section>
-                }
-                @case ('search') {
-                  <ds-search-section
-                    [sectionId]="sectionId"
-                  [searchSection]="$any(sectionComponent)"></ds-search-section>
                 }
                 @case ('facet') {
                   <ds-facet-section

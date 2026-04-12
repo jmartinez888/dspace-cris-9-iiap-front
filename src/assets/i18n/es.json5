@@ -2417,6 +2417,7 @@
 
   // "community.search.breadcrumbs": "Search",
   "community.search.breadcrumbs": "Buscar",
+  "search.placeholder": "Buscar en el repositorio...",
 
   // "community.search.results.head": "Search Results",
   "community.search.results.head": "Resultados de la búsqueda",

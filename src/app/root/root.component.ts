@@ -23,6 +23,7 @@ import {
   of,
 } from 'rxjs';
 import {
+  distinctUntilChanged,
   first,
   map,
   skipWhile,
@@ -82,6 +83,11 @@ export class RootComponent implements OnInit {
   notificationOptions: INotificationBoardOptions;
   models: any;
 
+  /**
+   * Whether or not the current route is the home page
+   */
+  isHomePage$: Observable<boolean>;
+
   browserOsClasses = new BehaviorSubject<string[]>([]);
 
   /**
@@ -139,6 +145,12 @@ export class RootComponent implements OnInit {
     if (this.router.url === getPageInternalServerErrorRoute()) {
       this.shouldShowRouteLoader = false;
     }
+
+    this.isHomePage$ = this.router.events.pipe(
+      startWith(this.router.url),
+      map(() => this.router.url === '/' || this.router.url === '/home' || this.router.url.startsWith('/home')),
+      distinctUntilChanged(),
+    );
   }
 
   skipToMainContent() {

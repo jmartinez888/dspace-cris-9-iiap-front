@@ -1,8 +1,6 @@
-import { AsyncPipe } from '@angular/common';
 import { Component } from '@angular/core';
 
 import { HomeNewsComponent as BaseComponent } from '../../../../../app/home-page/home-news/home-news.component';
-import { ThemedTextSectionComponent } from '../../../../../app/shared/explore/section-component/text-section/themed-text-section.component';
 
 @Component({
   selector: 'ds-themed-home-news',
@@ -11,8 +9,6 @@ import { ThemedTextSectionComponent } from '../../../../../app/shared/explore/se
   // templateUrl: './home-news.component.html'
   templateUrl: '../../../../../app/home-page/home-news/home-news.component.html',
   imports: [
-    AsyncPipe,
-    ThemedTextSectionComponent,
   ],
 })
 export class HomeNewsComponent extends BaseComponent {

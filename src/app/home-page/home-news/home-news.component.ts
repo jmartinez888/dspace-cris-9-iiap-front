@@ -1,4 +1,3 @@
-import { AsyncPipe } from '@angular/common';
 import {
   Component,
   OnInit,
@@ -19,15 +18,12 @@ import { SectionDataService } from '../../core/layout/section-data.service';
 import { LocaleService } from '../../core/locale/locale.service';
 import { Site } from '../../core/shared/site.model';
 import { isEmpty } from '../../shared/empty.util';
-import { ThemedTextSectionComponent } from '../../shared/explore/section-component/text-section/themed-text-section.component';
 
 @Component({
   selector: 'ds-base-home-news',
   styleUrls: ['./home-news.component.scss'],
   templateUrl: './home-news.component.html',
   imports: [
-    AsyncPipe,
-    ThemedTextSectionComponent,
   ],
 })
 
