@@ -35,7 +35,15 @@
               "url-parse",
               "uuid",
               "xlsx",
-              "zone.js"
+              "zone.js",
+              "rfdc",
+              "raf",
+              "rgbcolor",
+              "orejime/dist/orejime",
+              "leaflet",
+              "leaflet-providers",
+              "leaflet.markercluster",
+              "date-fns-tz"
             ],
             "outputPath": "dist/browser",
             "index": "src/index.html",
