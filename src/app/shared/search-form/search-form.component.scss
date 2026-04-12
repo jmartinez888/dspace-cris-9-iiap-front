@@ -1,13 +1,47 @@
-// temporary fix for bootstrap 4 beta btn color issue
-.btn-secondary {
-  background-color: var(--bs-input-bg);
-  color: var(--bs-input-color);
+.input-group {
+    background-color: white;
+    border-radius: 50px;
+    padding: 0.3rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05); // Sombra suave
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+
+    &:focus-within {
+        box-shadow: 0 4px 20px rgba(92, 255, 168, 0.2); // Sombra con color primario al enfocar
+    }
+}
+
+#query {
+    border: none;
+    box-shadow: none;
+    padding-left: 1.5rem;
+    background: transparent;
+    &::placeholder {
+        color: #adb5bd;
+        font-style: italic;
+    }
+}
+
+.search-button {
+    border-radius: 50px !important;
+    padding: 0.5rem 1.5rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    background-color: #94ba65 !important; // Verde elegante DSpace
+    border: none;
+    color: #fff !important; // Texto blanco para mejor contraste en verde oscuro
+
+    &:hover {
+        transform: scale(1.02);
+        background-color: #7da54e !important; // Verde un poco más oscuro para hover
+        box-shadow: 0 4px 12px rgba(148, 186, 101, 0.3);
+    }
 }
 
 .scope-button {
-  max-width: var(--ds-search-form-scope-max-width);
-}
-
-.form-group { // add margin to parent components
-  margin-bottom: 0;
+    border: none;
+    border-radius: 50px !important;
+    background-color: var(--bs-light);
+    margin-right: 0.5rem;
+    max-width: var(--ds-search-form-scope-max-width);
 }

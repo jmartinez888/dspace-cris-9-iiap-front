@@ -7,9 +7,9 @@
     rel="nofollow">
     <label class="mb-0 d-flex w-100">
       <input type="checkbox" [checked]="false" class="my-1 align-self-stretch filter-checkbox" role="checkbox" tabindex="0"/>
-      <span class="w-100 ps-1 break-facet">
-        <span class="float-end badge bg-secondary rounded-pill mt-1 ms-1">{{filterValue.count | dsShortNumber}}</span>
-        {{  labelTranslation | dsCapitalize }}
+      <span class="w-100 ps-1 d-flex justify-content-between align-items-center">
+        <span class="break-facet me-2">{{  labelTranslation | dsCapitalize }}</span>
+        <span class="badge bg-secondary rounded-pill">{{filterValue.count | dsShortNumber}}</span>
       </span>
     </label>
   </a>
