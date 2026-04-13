@@ -900,6 +900,23 @@ html body .item-page .full-view-link a {
     }
 }
 
+/* PAGINACIÓN INSTITUCIONAL IIAP */
+html body .page-item.active .page-link {
+    background-color: #94ba65 !important;
+    border-color: #94ba65 !important;
+    color: #fff !important;
+}
+
+html body .page-link {
+    color: #94ba65 !important;
+    box-shadow: none !important;
+    
+    &:hover {
+        background-color: #e9ecef !important;
+        color: #7da54e !important;
+    }
+}
+
 /* Estandarización de Listas y Botones "Examinar" (Collection Browse) */
 html body .list-group-item.active {
     background-color: #94ba65 !important;
