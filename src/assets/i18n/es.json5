@@ -6733,10 +6733,10 @@
   "repository.image.logo": "Logotipo del repositorio",
 
   // "repository.title": "DSpace Repository",
-  "repository.title": "Repositorio DSpace",
+  "repository.title": "CRIS IIAP",
 
   // "repository.title.prefix": "DSpace Repository :: ",
-  "repository.title.prefix": "Repositorio DSpace :: ",
+  "repository.title.prefix": "CRIS IIAP :: ",
 
   // "resource-policies.add.button": "Add",
   "resource-policies.add.button": "Agregar",
