@@ -14106,10 +14106,15 @@
   "layout.tab.header.Person.details": "Perfil",
 
   // "layout.tab.header.Person.publications": "Publications",
+  "layout.tab.header.Person.p_pubs": "Publicaciones",
   "layout.tab.header.Person.publications": "Publicaciones",
 
   // "layout.tab.header.Person.projects": "Projects",
+  "layout.tab.header.Person.p_projs": "Proyectos",
   "layout.tab.header.Person.projects": "Proyectos",
+
+  "layout.tab.header.Person.p_pats": "Patentes",
+  "layout.tab.header.Person.p_orgs": "Unidades Organizativas",
 
   // "layout.tab.header.Person.otherinfo": "Other",
   "layout.tab.header.Person.otherinfo": "Otros",
