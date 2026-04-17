@@ -103,8 +103,10 @@ export class CrisLayoutComponent implements OnInit {
         if (!existing.includes(req)) {
           const dummy = new CrisLayoutTab();
           const fakeIds: any = { organizations: 9901, projects: 9902, publications: 9903, people: 9904 };
+          const headers: any = { organizations: 'Dependencias', projects: 'Proyectos', publications: 'Publicaciones', people: 'Personas' };
           dummy.id = fakeIds[req] || Math.floor(Math.random() * 1000000);
           dummy.shortname = req;
+          dummy.header = headers[req];
           dummy.entityType = 'OrgUnit';
           dummy.leading = false;
           dummy.isActive = false;

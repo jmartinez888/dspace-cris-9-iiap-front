@@ -64,28 +64,56 @@ export const crisItemPageTabResolver: ResolveFn<RemoteData<PaginatedList<CrisLay
                   if (!existing.includes(req)) {
                     const dummy = new CrisLayoutTab();
                     const fakeIds: any = { organizations: 9901, projects: 9902, publications: 9903, people: 9904 };
+                    const headers: any = { organizations: 'Dependencias', projects: 'Proyectos', publications: 'Publicaciones', people: 'Personas' };
                     dummy.id = fakeIds[req] || Math.floor(Math.random() * 1000000);
                     dummy.shortname = req;
+                    dummy.header = headers[req];
                     dummy.entityType = 'OrgUnit';
+                    dummy.leading = false;
+                    dummy.isActive = false;
+                    dummy.children = [];
+                    dummy.rows = [];
+                    (dummy as any).isDummy = true;
                     tabs.push(dummy);
                   }
                 });
+                const order = ['maininformation', 'organizations', 'projects', 'publications', 'people'];
+                tabs.sort((a, b) => {
+                  const idxA = order.indexOf(a.shortname);
+                  const idxB = order.indexOf(b.shortname);
+                  return (idxA > -1 ? idxA : 99) - (idxB > -1 ? idxB : 99);
+                });
                 tabsRD.payload.page = tabs;
               } else if (itemRD.payload.entityType === 'Person') {
-                const tabs = tabsRD.payload.page || [];
+                const safeTabs = tabsRD.payload.page || [];
                 const requiredTabs = ['publications', 'projects', 'patents', 'orgunits'];
-                const existing = tabs.map(t => t.shortname);
+                // Filter out unwanted tabs for Person display
+                const filteredTabs = safeTabs.filter(t => t.shortname !== 'otherinfo' && t.shortname !== 'indicators');
+                const existing = filteredTabs.map(t => t.shortname);
                 requiredTabs.forEach(req => {
                   if (!existing.includes(req)) {
                     const dummy = new CrisLayoutTab();
                     const fakeIds: any = { publications: 9911, projects: 9912, patents: 9913, orgunits: 9914 };
+                    const headers: any = { publications: 'Publicaciones', projects: 'Proyectos', patents: 'Patentes', orgunits: 'Unidades Organizativas' };
                     dummy.id = fakeIds[req] || Math.floor(Math.random() * 1000000);
                     dummy.shortname = req;
+                    dummy.header = headers[req];
                     dummy.entityType = 'Person';
-                    tabs.push(dummy);
+                    dummy.leading = false;
+                    dummy.isActive = false;
+                    dummy.children = [];
+                    dummy.rows = [];
+                    (dummy as any).isDummy = true;
+                    filteredTabs.push(dummy);
                   }
                 });
-                tabsRD.payload.page = tabs;
+                const order = ['details', 'publications', 'projects', 'patents', 'orgunits'];
+                filteredTabs.sort((a, b) => {
+                  const idxA = order.indexOf(a.shortname);
+                  const idxB = order.indexOf(b.shortname);
+                  return (idxA > -1 ? idxA : 99) - (idxB > -1 ? idxB : 99);
+                });
+                tabsRD.payload.page = filteredTabs;
               }
 
               if (tabsRD?.payload?.page?.length > 0) {
