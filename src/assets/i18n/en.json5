@@ -9503,14 +9503,6 @@
   "layout.field.label.OrgUnit.[organization.identifier.ror]": "ROR Identifier",
   "layout.field.label.OrgUnit.[dc.title]": "Organisation Name",
 
-  "layout.tab.empty.OrgUnit.organizations": "The Organizational Unit <strong>{{name}}</strong> has no registered sub-organizations.",
-  "layout.tab.empty.OrgUnit.projects": "The Organizational Unit <strong>{{name}}</strong> has no registered projects.",
-  "layout.tab.empty.OrgUnit.publications": "The Organizational Unit <strong>{{name}}</strong> has no registered publications.",
-  "layout.tab.empty.Person.p_pubs": "<strong>{{name}}</strong> has no related Publications",
-  "layout.tab.empty.Person.p_projs": "<strong>{{name}}</strong> has no registered Projects",
-  "layout.tab.empty.Person.p_pats": "<strong>{{name}}</strong> has no registered Patents",
-  "layout.tab.empty.Person.p_orgs": "<strong>{{name}}</strong> has no related Organizational Units",
-
   "layout.field.label.Project.[dc.description.abstract]": "Description",
   "layout.field.label.Project.[dc.subject]": "Keywords",
   "layout.field.label.Project.[oairecerif.acronym]": "Acronym",

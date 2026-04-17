@@ -192,7 +192,7 @@ export class CrisLayoutComponent implements OnInit {
       getFirstSucceededRemoteData(),
       getRemoteDataPayload(),
       getPaginatedListPayload(),
-      map((tabs: CrisLayoutTab[]) => this.processOrgUnitTabs(tabs))
+      map((tabs: CrisLayoutTab[]) => this.processEntityTabs(tabs))
     );
   }
 
