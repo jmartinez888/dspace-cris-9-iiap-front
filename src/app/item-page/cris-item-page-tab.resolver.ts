@@ -73,6 +73,23 @@ export const crisItemPageTabResolver: ResolveFn<RemoteData<PaginatedList<CrisLay
                 tabsRD.payload.page = tabs;
               }
 
+              if (itemRD.payload.entityType === 'Person') {
+                const tabs = tabsRD.payload.page || [];
+                const requiredTabs = ['p_pubs', 'p_projs', 'p_pats', 'p_orgs'];
+                const existing = tabs.map(t => t.shortname);
+                requiredTabs.forEach(req => {
+                  if (!existing.includes(req)) {
+                    const dummy = new CrisLayoutTab();
+                    const fakeIds: any = { p_pubs: 9911, p_projs: 9912, p_pats: 9913, p_orgs: 9914 };
+                    dummy.id = fakeIds[req] || Math.floor(Math.random() * 1000000);
+                    dummy.shortname = req;
+                    dummy.entityType = 'Person';
+                    tabs.push(dummy);
+                  }
+                });
+                tabsRD.payload.page = tabs;
+              }
+
               if (tabsRD?.payload?.page?.length > 0) {
                 // By splitting the url with uuid we can understand if the item is primary item page or a tab
                 const urlSplit = state.url.split(route.params.id);
