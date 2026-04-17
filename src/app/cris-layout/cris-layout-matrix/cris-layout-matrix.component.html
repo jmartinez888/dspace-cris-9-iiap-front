@@ -16,6 +16,11 @@
           La Unidad Organizativa <strong>{{ item?.name || item?.firstMetadataValue('dc.title') }}</strong> no cuenta con publicaciones registradas.
         </div>
       }
+      @if (tab.shortname === 'people') {
+        <div class="alert alert-info mt-4" style="background-color: #f8f9fa; border-left: 4px solid #FF7E2E; color: #333;">
+          La Unidad Organizativa <strong>{{ item?.name || item?.firstMetadataValue('dc.title') }}</strong> no cuenta con personas registradas.
+        </div>
+      }
       @if (tab.shortname === 'p_pats') {
         <div class="alert alert-info mt-4" style="background-color: #f8f9fa; border-left: 4px solid #FF7E2E; color: #333;">
           <strong>{{ item?.name || item?.firstMetadataValue('dc.title') }}</strong> no cuenta con Patentes registradas.
