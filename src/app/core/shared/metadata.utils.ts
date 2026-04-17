@@ -195,10 +195,10 @@ export class Metadata {
     if (isEmpty(value)) {
       return false;
     }
-    if (isObject(value) && value.hasOwnProperty('value')) {
-      return isNotEmpty(value.value);
+    if (isObject(value) && (value as any).hasOwnProperty('value')) {
+      return isNotEmpty((value as any).value) && (value as any).value !== PLACEHOLDER_VALUE;
     }
-    return true;
+    return value !== PLACEHOLDER_VALUE;
   }
 
   /**
@@ -208,9 +208,8 @@ export class Metadata {
    * @param {MetadataValueFilter} filter the filter to use.
    * @returns {boolean} whether the filter matches, or true if no filter is given.
    */
-  public static valueMatches(mdValue: MetadataValue, filter: MetadataValueFilter) {
     if (!filter) {
-      return true;
+      return mdValue.value !== PLACEHOLDER_VALUE;
     } else if (filter.language && filter.language !== mdValue.language) {
       return false;
     } else if (filter.authority && filter.authority !== mdValue.authority) {
