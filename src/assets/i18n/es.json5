@@ -14120,6 +14120,8 @@
   // "layout.tab.header.Person.secure": "Secured Tab",
   "layout.tab.header.Person.secure": "Pestaña asegurada",
 
+  "layout.tab.header.Person.research-activity": "Actividad de Investigación",
+
   // "layout.tab.header.OrgUnit.maininformation": "Information",
   "layout.tab.header.OrgUnit.maininformation": "Información",
 
@@ -14127,7 +14129,7 @@
   "layout.tab.header.OrgUnit.details": "Detalles",
 
   // "layout.tab.header.OrgUnit.organizations": "Organizations",
-  "layout.tab.header.OrgUnit.organizations": "Organizaciones",
+  "layout.tab.header.OrgUnit.organizations": "Dependencias",
 
   // "layout.tab.header.OrgUnit.publications": "Publications",
   "layout.tab.header.OrgUnit.publications": "Publicaciones",
@@ -14200,6 +14202,10 @@
 
   // "layout.box.header.Person.secure": "Secured box",
   "layout.box.header.Person.secure": "Caja segura",
+
+  "layout.box.header.Person.publications": "Publicaciones",
+  "layout.box.header.Person.patents": "Patentes",
+  "layout.box.header.Person.orgunits": "Unidades Organizativas",
 
   // "layout.box.header.OrgUnit.rpprojects": "OrgUnit's Researchers projects",
   "layout.box.header.OrgUnit.rpprojects": "Proyectos de investigadores de OrgUnit",
@@ -14316,7 +14322,13 @@
   "layout.field.label.OrgUnit.[organization.address.addressCountry]": "País",
 
   // "layout.field.label.OrgUnit.[organization.address.addressLocality]": "City",
-  "layout.field.label.OrgUnit.[organization.address.addressLocality]": "Ciudad",
+  "layout.field.label.OrgUnit.[organization.address.addressLocality]": "Dirección",
+
+  // "layout.field.label.OrgUnit.[oairecerif.identifier.url]": "Identifier URL",
+  "layout.field.label.OrgUnit.[oairecerif.identifier.url]": "Sitio Web",
+
+  // "layout.field.label.OrgUnit.[oairecerif.acronym]": "Acronym",
+  "layout.field.label.OrgUnit.[oairecerif.acronym]": "Acrónimo",
 
   // "layout.field.label.OrgUnit.[dc.description.abstract]": "Description",
   "layout.field.label.OrgUnit.[dc.description.abstract]": "Descripción",
@@ -14325,10 +14337,10 @@
   "layout.field.label.OrgUnit.[crisou.director]": "Directora",
 
   // "layout.field.label.OrgUnit.[organization.parentOrganization]": "Parent Organisation",
-  "layout.field.label.OrgUnit.[organization.parentOrganization]": "Organización matriz",
+  "layout.field.label.OrgUnit.[organization.parentOrganization]": "Organización Matriz",
 
   // "layout.field.label.OrgUnit.[organization.foundingDate]": "Founding Date",
-  "layout.field.label.OrgUnit.[organization.foundingDate]": "Fecha de fundación",
+  "layout.field.label.OrgUnit.[organization.foundingDate]": "Fecha de Fundación",
 
   // "layout.field.label.OrgUnit.[crisou.boards]": "Boards",
   "layout.field.label.OrgUnit.[crisou.boards]": "Tableros",
@@ -14337,40 +14349,40 @@
   "layout.field.label.OrgUnit.[organization.identifier.ror]": "Identificador ROR",
 
   // "layout.field.label.OrgUnit.[dc.title]": "Organisation Name",
-  "layout.field.label.OrgUnit.[dc.title]": "Nombre de la organización",
+  "layout.field.label.OrgUnit.[dc.title]": "Nombre de la Organización",
 
   // "layout.field.label.Project.[dc.description.abstract]": "Description",
   "layout.field.label.Project.[dc.description.abstract]": "Descripción",
 
   // "layout.field.label.Project.[dc.subject]": "Keywords",
-  "layout.field.label.Project.[dc.subject]": "Palabras clave",
+  "layout.field.label.Project.[dc.subject]": "Palabras Clave",
 
   // "layout.field.label.Project.[oairecerif.acronym]": "Acronym",
   "layout.field.label.Project.[oairecerif.acronym]": "Acrónimo",
 
   // "layout.field.label.Project.[dc.title]": "Project Title",
-  "layout.field.label.Project.[dc.title]": "Título del proyecto",
+  "layout.field.label.Project.[dc.title]": "Título del Proyecto",
 
   // "layout.field.label.Project.[crispj.coordinator]": "Consortium Coordinator",
   "layout.field.label.Project.[crispj.coordinator]": "Coordinador del Consorcio",
 
   // "layout.field.label.Project.[crispj.partnerou]": "Partner Organisations",
-  "layout.field.label.Project.[crispj.partnerou]": "Organizaciones asociadas",
+  "layout.field.label.Project.[crispj.partnerou]": "Organizaciones Asociadas",
 
   // "layout.field.label.Project.[oairecerif.internalid]": "Internal ID",
-  "layout.field.label.Project.[oairecerif.internalid]": "Identificación interna",
+  "layout.field.label.Project.[oairecerif.internalid]": "Identificación Interna",
 
   // "layout.field.label.Project.[crispj.investigator]": "Principal Investigator",
-  "layout.field.label.Project.[crispj.investigator]": "Investigador principal",
+  "layout.field.label.Project.[crispj.investigator]": "Investigador Principal",
 
   // "layout.field.label.Project.[oairecerif.project.status]": "Status",
   "layout.field.label.Project.[oairecerif.project.status]": "Estado",
 
   // "layout.field.label.Project.[oairecerif.project.startDate]": "Start Date",
-  "layout.field.label.Project.[oairecerif.project.startDate]": "Fecha de inicio",
+  "layout.field.label.Project.[oairecerif.project.startDate]": "Fecha de Inicio",
 
   // "layout.field.label.Project.[oairecerif.project.endDate]": "End Date",
-  "layout.field.label.Project.[oairecerif.project.endDate]": "Fecha de finalización",
+  "layout.field.label.Project.[oairecerif.project.endDate]": "Fecha de Finalización",
 
   // "layout.field.label.Project.[crispj.coinvestigators]": "Investigators",
   "layout.field.label.Project.[crispj.coinvestigators]": "Investigadores",
@@ -14382,7 +14394,7 @@
   "layout.field.label.Project.[dc.relation.equipment]": "Usos",
 
   // "layout.field.label.Project.[oairecerif.identifier.url]": "Project Web Site",
-  "layout.field.label.Project.[oairecerif.identifier.url]": "Sitio web del proyecto",
+  "layout.field.label.Project.[oairecerif.identifier.url]": "Sitio Web del Proyecto",
 
   // "layout.field.label.Project.[crispj.openaireid]": "OpenAIRE ID",
   "layout.field.label.Project.[crispj.openaireid]": "ID de OpenAIRE",
@@ -14397,16 +14409,16 @@
   "layout.field.label.Funding.[oairecerif.funder]": "Financiador",
 
   // "layout.field.label.Funding.[oairecerif.fundingParent]": "Funding Program",
-  "layout.field.label.Funding.[oairecerif.fundingParent]": "Programa de financiación",
+  "layout.field.label.Funding.[oairecerif.fundingParent]": "Programa de Financiación",
 
   // "layout.field.label.Funding.[oairecerif.identifier.url]": "Award URL",
-  "layout.field.label.Funding.[oairecerif.identifier.url]": "URL del premio",
+  "layout.field.label.Funding.[oairecerif.identifier.url]": "URL del Premio",
 
   // "layout.field.label.Funding.[oairecerif.oamandate]": "OA Mandate",
   "layout.field.label.Funding.[oairecerif.oamandate]": "Mandato de la OA",
 
   // "layout.field.label.Funding.[oairecerif.internalid]": "Funding code",
-  "layout.field.label.Funding.[oairecerif.internalid]": "Código de financiación",
+  "layout.field.label.Funding.[oairecerif.internalid]": "Código de Financiación",
 
   // "layout.field.label.Funding.[oairecerif.amount]": "Amount",
   "layout.field.label.Funding.[oairecerif.amount]": "Importe",
@@ -14415,7 +14427,7 @@
   "layout.field.label.Funding.[oairecerif.amount.currency]": "Moneda",
 
   // "layout.field.label.Person.[dc.subject]": "Research Interests",
-  "layout.field.label.Person.[dc.subject]": "Intereses de investigación",
+  "layout.field.label.Person.[dc.subject]": "Intereses de Investigación",
 
   // "layout.field.label.Person.[person.knowsLanguage]": "Knows Language",
   "layout.field.label.Person.[person.knowsLanguage]": "Sabe el idioma",
