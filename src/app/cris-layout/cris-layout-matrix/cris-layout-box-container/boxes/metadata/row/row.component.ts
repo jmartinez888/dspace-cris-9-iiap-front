@@ -4,6 +4,9 @@ import {
   Input,
 } from '@angular/core';
 
+import { RouterLink } from '@angular/router';
+import { TranslateModule } from '@ngx-translate/core';
+
 import {
   CrisLayoutBox,
   LayoutField,
@@ -23,6 +26,8 @@ import { MetadataContainerComponent } from './metadata-container/metadata-contai
   styleUrls: ['./row.component.scss'],
   imports: [
     MetadataContainerComponent,
+    RouterLink,
+    TranslateModule,
   ],
 })
 export class RowComponent {
