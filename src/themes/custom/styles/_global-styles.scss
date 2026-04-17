@@ -2,3 +2,54 @@
 
 // imports the base global style
 @import '../../../styles/_global-styles.scss';
+
+// Removed ds-cris-layout tab overrides to restore bootstrap default
+
+nav.cris-layout-navbar {
+    border-bottom: 1px solid #dee2e6; /* Línea base del tab folder */
+    margin-bottom: 20px;
+    
+    .navbar-nav {
+      flex-direction: row;
+      gap: 5px;
+      align-items: flex-end;
+      height: auto !important;
+      margin-bottom: 0 !important;
+    }
+
+    .sidebar-section.horizontal {
+      border: 1px solid transparent; 
+      border-bottom: none;
+      border-top-left-radius: 4px;
+      border-top-right-radius: 4px;
+      margin-bottom: -1px; /* Solapar el borde inferior */
+      transition: all 0.2s ease;
+      
+      .nav-item {
+        color: #FF7E2E !important; /* Color inactivo naranja */
+        padding: 10px 16px !important;
+        background: transparent !important;
+        font-weight: 500;
+        
+        &:hover {
+          color: #e66a1f !important;
+          text-decoration: none !important;
+        }
+      }
+
+      &.active {
+        border-color: #dee2e6; /* Borde visible gris claro */
+        border-bottom-color: #ffffff !important; /* Oculta la línea por debajo */
+        background-color: #ffffff;
+        
+        .nav-item {
+          color: #333333 !important; /* Texto negro activo */
+          font-weight: 600;
+        }
+      }
+    }
+}
+// Override global h1 margin-bottom (Bootstrap 5 sets it strictly to 0.5rem defaults)
+h1 {
+  margin-bottom: 25px; 
+}

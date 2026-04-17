@@ -9,6 +9,8 @@ import { Item } from '../../core/shared/item.model';
 import { ContextMenuComponent } from '../../shared/context-menu/context-menu.component';
 import { CrisLayoutMatrixComponent } from '../cris-layout-matrix/cris-layout-matrix.component';
 
+import { TranslateModule } from '@ngx-translate/core';
+
 @Component({
   selector: 'ds-cris-layout-leading',
   templateUrl: './cris-layout-leading.component.html',
@@ -16,6 +18,7 @@ import { CrisLayoutMatrixComponent } from '../cris-layout-matrix/cris-layout-mat
   imports: [
     ContextMenuComponent,
     CrisLayoutMatrixComponent,
+    TranslateModule,
   ],
 })
 export class CrisLayoutLeadingComponent {
