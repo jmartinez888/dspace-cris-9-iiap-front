@@ -208,6 +208,7 @@ export class Metadata {
    * @param {MetadataValueFilter} filter the filter to use.
    * @returns {boolean} whether the filter matches, or true if no filter is given.
    */
+  public static valueMatches(mdValue: MetadataValue, filter: MetadataValueFilter): boolean {
     if (!filter) {
       return mdValue.value !== PLACEHOLDER_VALUE;
     } else if (filter.language && filter.language !== mdValue.language) {
