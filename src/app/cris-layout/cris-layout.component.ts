@@ -85,10 +85,10 @@ export class CrisLayoutComponent implements OnInit {
   }
 
   /**
-   * Helper to append dummy tabs and filter/order tabs based on entity type
+   * Helper to append dummy tabs for OrgUnit and Person if they are missing
    */
-  processTabsByEntity(tabs: CrisLayoutTab[]): CrisLayoutTab[] {
-    if (!this.item) {
+  processEntityTabs(tabs: CrisLayoutTab[]): CrisLayoutTab[] {
+    if (!this.item || !tabs || tabs.length === 0) {
       return tabs;
     }
 
@@ -96,7 +96,7 @@ export class CrisLayoutComponent implements OnInit {
       const requiredTabs = ['organizations', 'projects', 'publications'];
       const existing = tabs.map(t => t.shortname);
       const newTabs = [...tabs];
-
+      
       requiredTabs.forEach(req => {
         if (!existing.includes(req)) {
           const dummy = new CrisLayoutTab();
@@ -112,22 +112,21 @@ export class CrisLayoutComponent implements OnInit {
           newTabs.push(dummy);
         }
       });
-
+      
       const order = ['maininformation', 'organizations', 'projects', 'publications', 'people'];
       newTabs.sort((a, b) => {
         const idxA = order.indexOf(a.shortname);
         const idxB = order.indexOf(b.shortname);
         return (idxA > -1 ? idxA : 99) - (idxB > -1 ? idxB : 99);
       });
+      
       return newTabs;
     }
 
     if (this.item.entityType === 'Person') {
       const requiredTabs = ['p_pubs', 'p_projs', 'p_pats', 'p_orgs'];
-      const hiddenTabs = ['otherinfo', 'indicators'];
-      
-      // Filter out explicitly hidden tabs
-      let filteredTabs = tabs.filter(t => !hiddenTabs.includes(t.shortname));
+      // Filter out unwanted tabs for Person display
+      const filteredTabs = tabs.filter(t => t.shortname !== 'otherinfo' && t.shortname !== 'indicators');
       const existing = filteredTabs.map(t => t.shortname);
       
       requiredTabs.forEach(req => {
@@ -146,12 +145,13 @@ export class CrisLayoutComponent implements OnInit {
         }
       });
 
-      const order = ['details', 'p_pubs', 'p_projs', 'p_pats', 'p_orgs', 'bitstreams'];
+      const order = ['details', 'p_pubs', 'p_projs', 'p_pats', 'p_orgs'];
       filteredTabs.sort((a, b) => {
         const idxA = order.indexOf(a.shortname);
         const idxB = order.indexOf(b.shortname);
         return (idxA > -1 ? idxA : 99) - (idxB > -1 ? idxB : 99);
       });
+
       return filteredTabs;
     }
 
@@ -165,11 +165,11 @@ export class CrisLayoutComponent implements OnInit {
 
     if (this.dataTabs$) {
       this.tabs$ = this.dataTabs$.pipe(
-        map((res: any) => this.processTabsByEntity(res.payload.page)),
+        map((res: any) => this.processEntityTabs(res.payload.page)),
       );
     } else {
       this.tabs$ = this.router.data.pipe(
-        map((res: any) => this.processTabsByEntity(res.tabs.payload.page)),
+        map((res: any) => this.processEntityTabs(res.tabs.payload.page)),
       );
     }
     this.leadingTabs$ = this.getLeadingTabs();
@@ -192,7 +192,7 @@ export class CrisLayoutComponent implements OnInit {
       getFirstSucceededRemoteData(),
       getRemoteDataPayload(),
       getPaginatedListPayload(),
-      map((tabs: CrisLayoutTab[]) => this.processTabsByEntity(tabs))
+      map((tabs: CrisLayoutTab[]) => this.processOrgUnitTabs(tabs))
     );
   }
 

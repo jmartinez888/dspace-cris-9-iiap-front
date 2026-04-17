@@ -6,7 +6,6 @@ import {
 
 import { CrisLayoutTab } from '../../core/layout/models/tab.model';
 import { Item } from '../../core/shared/item.model';
-import { TranslateModule } from '@ngx-translate/core';
 import { CrisLayoutBoxContainerComponent } from './cris-layout-box-container/cris-layout-box-container.component';
 
 @Component({
@@ -15,7 +14,6 @@ import { CrisLayoutBoxContainerComponent } from './cris-layout-box-container/cri
   styleUrls: ['./cris-layout-matrix.component.scss'],
   imports: [
     CrisLayoutBoxContainerComponent,
-    TranslateModule,
   ],
 })
 export class CrisLayoutMatrixComponent {

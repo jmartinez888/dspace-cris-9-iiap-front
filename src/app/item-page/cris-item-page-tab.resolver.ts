@@ -71,9 +71,7 @@ export const crisItemPageTabResolver: ResolveFn<RemoteData<PaginatedList<CrisLay
                   }
                 });
                 tabsRD.payload.page = tabs;
-              }
-
-              if (itemRD.payload.entityType === 'Person') {
+              } else if (itemRD.payload.entityType === 'Person') {
                 const tabs = tabsRD.payload.page || [];
                 const requiredTabs = ['p_pubs', 'p_projs', 'p_pats', 'p_orgs'];
                 const existing = tabs.map(t => t.shortname);
