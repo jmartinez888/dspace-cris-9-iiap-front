@@ -14351,6 +14351,14 @@
   // "layout.field.label.OrgUnit.[dc.title]": "Organisation Name",
   "layout.field.label.OrgUnit.[dc.title]": "Nombre de la Organización",
 
+  "layout.tab.empty.OrgUnit.organizations": "La Unidad Organizativa <strong>{{name}}</strong> no cuenta con dependencias registradas.",
+  "layout.tab.empty.OrgUnit.projects": "La Unidad Organizativa <strong>{{name}}</strong> no cuenta con proyectos registrados.",
+  "layout.tab.empty.OrgUnit.publications": "La Unidad Organizativa <strong>{{name}}</strong> no cuenta con publicaciones registradas.",
+  "layout.tab.empty.Person.p_pubs": "<strong>{{name}}</strong> no cuenta con Publicaciones relacionadas",
+  "layout.tab.empty.Person.p_projs": "<strong>{{name}}</strong> no cuenta con Proyectos registrados",
+  "layout.tab.empty.Person.p_pats": "<strong>{{name}}</strong> no cuenta con Patentes registradas",
+  "layout.tab.empty.Person.p_orgs": "<strong>{{name}}</strong> no cuenta con Unidades Organizativas relacionadas",
+
   // "layout.field.label.Project.[dc.description.abstract]": "Description",
   "layout.field.label.Project.[dc.description.abstract]": "Descripción",
 
