@@ -85,21 +85,57 @@ export class CrisLayoutComponent implements OnInit {
   }
 
   /**
+   * Helper to append dummy tabs for OrgUnit if they are missing
+   */
+  processOrgUnitTabs(tabs: CrisLayoutTab[]): CrisLayoutTab[] {
+    if (!this.item || this.item.entityType !== 'OrgUnit') {
+      return tabs;
+    }
+    const requiredTabs = ['organizations', 'projects', 'publications'];
+    const existing = tabs.map(t => t.shortname);
+    
+    // Sort logic to make sure they appear after maininformation
+    const newTabs = [...tabs];
+    
+    requiredTabs.forEach(req => {
+      if (!existing.includes(req)) {
+        const dummy = new CrisLayoutTab();
+        const fakeIds: any = { organizations: 9901, projects: 9902, publications: 9903 };
+        dummy.id = fakeIds[req] || Math.floor(Math.random() * 1000000);
+        dummy.shortname = req;
+        dummy.entityType = 'OrgUnit';
+        dummy.leading = false;
+        dummy.isActive = false;
+        dummy.children = [];
+        dummy.rows = [];
+        (dummy as any).isDummy = true;
+        newTabs.push(dummy);
+      }
+    });
+    
+    // Optional: order them just in case (e.g. maininformation, organizations, projects, publications)
+    const order = ['maininformation', 'organizations', 'projects', 'publications', 'people'];
+    newTabs.sort((a, b) => {
+      const idxA = order.indexOf(a.shortname);
+      const idxB = order.indexOf(b.shortname);
+      return (idxA > -1 ? idxA : 99) - (idxB > -1 ? idxB : 99);
+    });
+    
+    return newTabs;
+  }
+
+  /**
    * Get tabs for the specific item
    */
   ngOnInit(): void {
 
     if (this.dataTabs$) {
       this.tabs$ = this.dataTabs$.pipe(
-        map((res: any) => {
-          return res.payload.page;
-        }),
+        map((res: any) => this.processOrgUnitTabs(res.payload.page)),
       );
     } else {
       this.tabs$ = this.router.data.pipe(
-        map((res: any) => {
-          return res.tabs.payload.page;
-        }),
+        map((res: any) => this.processOrgUnitTabs(res.tabs.payload.page)),
       );
     }
     this.leadingTabs$ = this.getLeadingTabs();
@@ -122,6 +158,7 @@ export class CrisLayoutComponent implements OnInit {
       getFirstSucceededRemoteData(),
       getRemoteDataPayload(),
       getPaginatedListPayload(),
+      map((tabs: CrisLayoutTab[]) => this.processOrgUnitTabs(tabs))
     );
   }
 

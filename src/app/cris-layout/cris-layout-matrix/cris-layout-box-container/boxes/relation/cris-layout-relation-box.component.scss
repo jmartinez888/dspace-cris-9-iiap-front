@@ -5,3 +5,7 @@
 ngb-accordion{
 	flex-grow:1;
 }
+
+:host ::ng-deep ds-search-results h1 {
+    display: none !important;
+}

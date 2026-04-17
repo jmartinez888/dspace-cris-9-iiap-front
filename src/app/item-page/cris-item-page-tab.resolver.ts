@@ -55,13 +55,31 @@ export const crisItemPageTabResolver: ResolveFn<RemoteData<PaginatedList<CrisLay
         ).pipe(
           getFirstCompletedRemoteData(),
           map((tabsRD: RemoteData<PaginatedList<CrisLayoutTab>>) => {
-            if (tabsRD.hasSucceeded && tabsRD?.payload?.page?.length > 0) {
-              // By splitting the url with uuid we can understand if the item is primary item page or a tab
-              const urlSplit = state.url.split(route.params.id);
-              const givenTab = urlSplit[1];
-              const itemPageRoute = getItemPageRoute(itemRD.payload);
+            if (tabsRD.hasSucceeded) {
+              if (itemRD.payload.entityType === 'OrgUnit') {
+                const tabs = tabsRD.payload.page || [];
+                const requiredTabs = ['organizations', 'projects', 'publications'];
+                const existing = tabs.map(t => t.shortname);
+                requiredTabs.forEach(req => {
+                  if (!existing.includes(req)) {
+                    const dummy = new CrisLayoutTab();
+                    const fakeIds: any = { organizations: 9901, projects: 9902, publications: 9903 };
+                    dummy.id = fakeIds[req] || Math.floor(Math.random() * 1000000);
+                    dummy.shortname = req;
+                    dummy.entityType = 'OrgUnit';
+                    tabs.push(dummy);
+                  }
+                });
+                tabsRD.payload.page = tabs;
+              }
 
-              const isValidTab = !givenTab || tabsRD.payload.page.some((tab) => {
+              if (tabsRD?.payload?.page?.length > 0) {
+                // By splitting the url with uuid we can understand if the item is primary item page or a tab
+                const urlSplit = state.url.split(route.params.id);
+                const givenTab = urlSplit[1];
+                const itemPageRoute = getItemPageRoute(itemRD.payload);
+
+                const isValidTab = !givenTab || tabsRD.payload.page.some((tab) => {
                 const shortnameSplit = tab.shortname.split('::');
                 const shortname = shortnameSplit[shortnameSplit.length - 1];
                 return `/${shortname}` === givenTab;
@@ -82,6 +100,7 @@ export const crisItemPageTabResolver: ResolveFn<RemoteData<PaginatedList<CrisLay
                   router.navigateByUrl(itemPageRoute);
                 }
               }
+            }
             }
             return tabsRD;
           }),
