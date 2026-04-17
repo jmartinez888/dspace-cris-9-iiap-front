@@ -88,14 +88,16 @@ export class CrisLayoutComponent implements OnInit {
    * Helper to append dummy tabs for OrgUnit and Person if they are missing
    */
   processEntityTabs(tabs: CrisLayoutTab[]): CrisLayoutTab[] {
-    if (!this.item || !tabs || tabs.length === 0) {
+    if (!this.item) {
       return tabs;
     }
+    
+    const safeTabs = tabs || [];
 
     if (this.item.entityType === 'OrgUnit') {
       const requiredTabs = ['organizations', 'projects', 'publications'];
-      const existing = tabs.map(t => t.shortname);
-      const newTabs = [...tabs];
+      const existing = safeTabs.map(t => t.shortname);
+      const newTabs = [...safeTabs];
       
       requiredTabs.forEach(req => {
         if (!existing.includes(req)) {
@@ -126,7 +128,7 @@ export class CrisLayoutComponent implements OnInit {
     if (this.item.entityType === 'Person') {
       const requiredTabs = ['p_pubs', 'p_projs', 'p_pats', 'p_orgs'];
       // Filter out unwanted tabs for Person display
-      const filteredTabs = tabs.filter(t => t.shortname !== 'otherinfo' && t.shortname !== 'indicators');
+      const filteredTabs = safeTabs.filter(t => t.shortname !== 'otherinfo' && t.shortname !== 'indicators');
       const existing = filteredTabs.map(t => t.shortname);
       
       requiredTabs.forEach(req => {
@@ -155,7 +157,7 @@ export class CrisLayoutComponent implements OnInit {
       return filteredTabs;
     }
 
-    return tabs;
+    return safeTabs;
   }
 
   /**
