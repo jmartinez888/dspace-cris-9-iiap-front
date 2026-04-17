@@ -126,7 +126,7 @@ export class CrisLayoutComponent implements OnInit {
     }
 
     if (this.item.entityType === 'Person') {
-      const requiredTabs = ['p_pubs', 'p_projs', 'p_pats', 'p_orgs'];
+      const requiredTabs = ['publications', 'projects', 'patents', 'orgunits'];
       // Filter out unwanted tabs for Person display
       const filteredTabs = safeTabs.filter(t => t.shortname !== 'otherinfo' && t.shortname !== 'indicators');
       const existing = filteredTabs.map(t => t.shortname);
@@ -134,8 +134,8 @@ export class CrisLayoutComponent implements OnInit {
       requiredTabs.forEach(req => {
         if (!existing.includes(req)) {
           const dummy = new CrisLayoutTab();
-          const fakeIds: any = { p_pubs: 9911, p_projs: 9912, p_pats: 9913, p_orgs: 9914 };
-          const headers: any = { p_pubs: 'Publicaciones', p_projs: 'Proyectos', p_pats: 'Patentes', p_orgs: 'Unidades Organizativas' };
+          const fakeIds: any = { publications: 9911, projects: 9912, patents: 9913, orgunits: 9914 };
+          const headers: any = { publications: 'Publicaciones', projects: 'Proyectos', patents: 'Patentes', orgunits: 'Unidades Organizativas' };
           dummy.id = fakeIds[req] || Math.floor(Math.random() * 1000000);
           dummy.shortname = req;
           dummy.header = headers[req];
@@ -149,7 +149,7 @@ export class CrisLayoutComponent implements OnInit {
         }
       });
 
-      const order = ['details', 'p_pubs', 'p_projs', 'p_pats', 'p_orgs'];
+      const order = ['details', 'publications', 'projects', 'patents', 'orgunits'];
       filteredTabs.sort((a, b) => {
         const idxA = order.indexOf(a.shortname);
         const idxB = order.indexOf(b.shortname);

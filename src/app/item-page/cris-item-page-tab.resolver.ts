@@ -73,12 +73,12 @@ export const crisItemPageTabResolver: ResolveFn<RemoteData<PaginatedList<CrisLay
                 tabsRD.payload.page = tabs;
               } else if (itemRD.payload.entityType === 'Person') {
                 const tabs = tabsRD.payload.page || [];
-                const requiredTabs = ['p_pubs', 'p_projs', 'p_pats', 'p_orgs'];
+                const requiredTabs = ['publications', 'projects', 'patents', 'orgunits'];
                 const existing = tabs.map(t => t.shortname);
                 requiredTabs.forEach(req => {
                   if (!existing.includes(req)) {
                     const dummy = new CrisLayoutTab();
-                    const fakeIds: any = { p_pubs: 9911, p_projs: 9912, p_pats: 9913, p_orgs: 9914 };
+                    const fakeIds: any = { publications: 9911, projects: 9912, patents: 9913, orgunits: 9914 };
                     dummy.id = fakeIds[req] || Math.floor(Math.random() * 1000000);
                     dummy.shortname = req;
                     dummy.entityType = 'Person';
