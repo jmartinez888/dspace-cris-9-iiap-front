@@ -14448,13 +14448,16 @@
   "layout.field.label.Person.[crisrp.name.variant]": "Nombre alternativo",
 
   // "layout.field.label.Person.[person.affiliation.name]": "Main Affiliation",
-  "layout.field.label.Person.[person.affiliation.name]": "Afiliación principal",
+  "layout.field.label.Person.[person.affiliation.name]": "Afiliación Principal",
 
   // "layout.field.label.Person.[oairecerif.identifier.url]": "Web Site",
   "layout.field.label.Person.[oairecerif.identifier.url]": "Sitio web",
 
   // "layout.field.label.Person.[person.email]": "Email",
-  "layout.field.label.Person.[person.email]": "Correo electrónico",
+  "layout.field.label.Person.[person.email]": "Correo Electrónico",
+
+  // "layout.field.label.Person.[person.jobTitle]": "Job Title",
+  "layout.field.label.Person.[person.jobTitle]": "Puesto de Trabajo",
 
   // "layout.field.label.Person.[person.identifier.orcid]": "ORCID",
   "layout.field.label.Person.[person.identifier.orcid]": "ORCID",

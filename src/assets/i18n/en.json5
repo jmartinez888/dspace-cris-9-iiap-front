@@ -9542,6 +9542,7 @@
   "layout.field.label.Person.[person.email]": "Email",
   "layout.field.label.Person.[person.identifier.orcid]": "ORCID",
   "layout.field.label.Person.[person.identifier.scopus-author-id]": "Scopus Author ID",
+  "layout.field.label.Person.[person.jobTitle]": "Job Title",
   "layout.field.label.Person.[person.identifier.rid]": "Researcher ID",
   "layout.field.label.Person.[dc.description.abstract]": "Biography",
   "layout.field.label.Person.[oairecerif.person.affiliation]": "Affiliation",
