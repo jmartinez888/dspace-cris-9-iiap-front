@@ -161,6 +161,39 @@ export class CrisLayoutComponent implements OnInit {
       return filteredTabs;
     }
 
+    if (this.item.entityType === 'Project') {
+      const requiredTabs = ['publications', 'orgunits'];
+      const newTabs = [...safeTabs];
+      const existing = newTabs.map(t => t.shortname);
+      
+      requiredTabs.forEach(req => {
+        if (!existing.includes(req)) {
+          const dummy = new CrisLayoutTab();
+          const fakeIds: any = { publications: 9921, orgunits: 9922 };
+          const headers: any = { publications: 'Publicaciones', orgunits: 'Unidades Organizativas' };
+          dummy.id = fakeIds[req] || Math.floor(Math.random() * 1000000);
+          dummy.shortname = req;
+          dummy.header = headers[req];
+          dummy.entityType = 'Project';
+          dummy.leading = false;
+          dummy.isActive = false;
+          dummy.children = [];
+          dummy.rows = [];
+          (dummy as any).isDummy = true;
+          newTabs.push(dummy);
+        }
+      });
+
+      const order = ['maininformation', 'publications', 'orgunits'];
+      newTabs.sort((a, b) => {
+        const idxA = order.indexOf(a.shortname);
+        const idxB = order.indexOf(b.shortname);
+        return (idxA > -1 ? idxA : 99) - (idxB > -1 ? idxB : 99);
+      });
+
+      return newTabs;
+    }
+
     return safeTabs;
   }
 
