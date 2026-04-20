@@ -938,3 +938,19 @@ html body .list-group-item {
     }
 }
 
+/* IIAP Custom Styles */
+.item-page-title {
+    color: #333;
+    font-size: 1.75rem;
+    font-weight: 500;
+    line-height: 1.2;
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+}
+
+@media (max-width: 768px) {
+    .item-page-title {
+        font-size: 1.5rem;
+    }
+}
+
