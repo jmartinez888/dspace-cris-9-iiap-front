@@ -89,6 +89,16 @@ export class ThumbnailComponent implements OnChanges {
   ) {
   }
 
+  ngOnInit(): void {
+    if (hasValue(this.defaultImage) && hasNoValue(this.thumbnail)) {
+      this.setSrc(this.defaultImage);
+      // If it's a local asset, ensure we are not in loading state
+      if (this.defaultImage.includes('assets/')) {
+        this.isLoading.set(false);
+      }
+    }
+  }
+
   /**
    * Resolve the thumbnail.
    * Use a default image if no actual image is available.
@@ -200,7 +210,7 @@ export class ThumbnailComponent implements OnChanges {
         this.isLoading.set(true);
       }
       this.src.set(src);
-      if (src === null && this.isLoading() === true) {
+      if ((src === null || src.includes('assets/')) && this.isLoading() === true) {
         this.isLoading.set(false);
       }
     }

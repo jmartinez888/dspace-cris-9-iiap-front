@@ -11,14 +11,28 @@ export const getDefaultImageUrlByEntityType = (entityType: string): Observable<s
     return of(fallbackImage);
   }
 
-  const defaultImage = `assets/images/${entityType.toLowerCase()}-placeholder.svg`;
+  const type = entityType.toLowerCase();
+  const defaultImage = `assets/images/${type}-placeholder.svg`;
+
+  // For known institutional entity types, we return the path directly to avoid SSR detection issues
+  const knownTypes = ['project', 'person', 'orgunit', 'funding', 'award'];
+  if (knownTypes.includes(type)) {
+    return of(defaultImage);
+  }
+
   return checkImageExists(defaultImage).pipe(map((exists) => exists ? defaultImage : fallbackImage));
 };
 
 const checkImageExists = (url: string): Observable<boolean> =>  {
   return new Observable<boolean>((observer) => {
-    const img = new Image();
+    // Basic check: if it's already a known asset or we are on browser
+    if (typeof Image === 'undefined') {
+       observer.next(true); // Assume it exists on server to avoid flickering
+       observer.complete();
+       return;
+    }
 
+    const img = new Image();
     img.onload = () => {
       observer.next(true);
       observer.complete();
