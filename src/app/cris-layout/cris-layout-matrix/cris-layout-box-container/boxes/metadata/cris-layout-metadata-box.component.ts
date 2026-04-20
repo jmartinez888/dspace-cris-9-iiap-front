@@ -6,7 +6,8 @@ import {
   OnDestroy,
   OnInit,
 } from '@angular/core';
-import { TranslateService } from '@ngx-translate/core';
+import { RouterLink } from '@angular/router';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
 
 import {
@@ -27,6 +28,8 @@ import { RowComponent } from './row/row.component';
   styleUrls: ['./cris-layout-metadata-box.component.scss'],
   imports: [
     RowComponent,
+    RouterLink,
+    TranslateModule,
   ],
 })
 /**

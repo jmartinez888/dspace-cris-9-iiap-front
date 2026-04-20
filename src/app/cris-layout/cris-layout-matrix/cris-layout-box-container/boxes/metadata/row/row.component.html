@@ -6,13 +6,5 @@
         [item]="item"
       [field]="field"></ds-metadata-container>
     }
-    
-    @if ((box.shortname === 'details' || box.shortname === 'namecard') && lastCell) {
-      <div class="full-view-link mt-3 mb-2">
-        <a [routerLink]="['/items', item.uuid, 'full']" class="btn btn-outline-primary">
-          {{ 'item.page.link.full' | translate }}
-        </a>
-      </div>
-    }
   </div>
 }
