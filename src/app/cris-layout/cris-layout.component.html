@@ -1,4 +1,17 @@
 <div class="cris-layout">
+  <div class="container shadow-none">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-start mb-4 mt-2">
+      <h1 class="item-page-title flex-grow-1 mb-3 mb-md-0 me-md-4 text-break">
+        {{ item.firstMetadataValue('dc.title') }}
+      </h1>
+      @if (showContextMenu) {
+        <div class="context-menu-wrapper ms-auto text-end">
+          <ds-context-menu [contextMenuObject]="item" [contextMenuObjectType]="'ITEM'"></ds-context-menu>
+        </div>
+      }
+    </div>
+  </div>
+
   @if (!!tabs$) {
     <ng-container *ngVar="(leadingTabs$ | async) as leadingTabs">
       @if ((hasLeadingTab$ | async) && !!leadingTabs && leadingTabs.length > 0) {

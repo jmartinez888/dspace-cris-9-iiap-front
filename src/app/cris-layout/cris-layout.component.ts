@@ -24,8 +24,13 @@ import {
   getPaginatedListPayload,
   getRemoteDataPayload,
 } from '../core/shared/operators';
-import { isNotEmpty } from '../shared/empty.util';
+import {
+  hasNoValue,
+  hasValue,
+  isNotEmpty,
+} from '../shared/empty.util';
 import { VarDirective } from '../shared/utils/var.directive';
+import { ContextMenuComponent } from '../shared/context-menu/context-menu.component';
 import { PaginatedList } from './../core/data/paginated-list.model';
 import { CrisLayoutLeadingComponent } from './cris-layout-leading/cris-layout-leading.component';
 import { CrisLayoutLoaderComponent } from './cris-layout-loader/cris-layout-loader.component';
@@ -39,6 +44,7 @@ import { CrisLayoutLoaderComponent } from './cris-layout-loader/cris-layout-load
   styleUrls: ['./cris-layout.component.scss'],
   imports: [
     AsyncPipe,
+    ContextMenuComponent,
     CrisLayoutLeadingComponent,
     CrisLayoutLoaderComponent,
     VarDirective,
