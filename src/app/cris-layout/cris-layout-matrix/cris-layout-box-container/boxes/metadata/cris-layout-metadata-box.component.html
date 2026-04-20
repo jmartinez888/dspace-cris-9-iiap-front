@@ -1,19 +1,13 @@
 <div class="{{box.style}}">
   <!-- PRINT ROWS -->
-  @for (row of metadataBoxConfiguration?.rows; track row) {
+  @for (row of metadataBoxConfiguration?.rows; track row; let lastRow = $last) {
     <div ds-row
       [row]="row"
       [item]="item"
       [box]="box"
+      [isLastRow]="lastRow"
       class="row">
     </div>
   }
 
-  @if (box.shortname === 'details' || box.shortname === 'namecard') {
-    <div class="full-view-link mt-3 mb-2">
-      <a [routerLink]="['/items', item.uuid, 'full']" class="btn btn-outline-primary">
-        {{ 'item.page.link.full' | translate }}
-      </a>
-    </div>
-  }
 </div>
