@@ -4,6 +4,7 @@ import {
   Inject,
   Input,
   OnChanges,
+  OnInit,
   PLATFORM_ID,
   signal,
   SimpleChanges,
@@ -41,7 +42,7 @@ import { SafeUrlPipe } from '../shared/utils/safe-url-pipe';
     TranslatePipe,
   ],
 })
-export class ThumbnailComponent implements OnChanges {
+export class ThumbnailComponent implements OnChanges, OnInit {
   /**
    * The thumbnail Bitstream
    */
