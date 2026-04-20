@@ -828,7 +828,7 @@ export class DefaultAppConfig implements AppConfig {
         orientation: 'horizontal',
       },
       Project: {
-        orientation: 'vertical',
+        orientation: 'horizontal',
       },
       default: {
         orientation: 'horizontal',
