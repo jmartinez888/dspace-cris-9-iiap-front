@@ -85,21 +85,130 @@ export class CrisLayoutComponent implements OnInit {
   }
 
   /**
+   * Helper to append dummy tabs for OrgUnit and Person if they are missing
+   */
+  processEntityTabs(tabs: CrisLayoutTab[]): CrisLayoutTab[] {
+    if (!this.item) {
+      return tabs;
+    }
+    
+    const safeTabs = tabs || [];
+
+    if (this.item.entityType === 'OrgUnit') {
+      const requiredTabs = ['organizations', 'projects', 'publications', 'people'];
+      const existing = safeTabs.map(t => t.shortname);
+      const newTabs = [...safeTabs];
+      
+      requiredTabs.forEach(req => {
+        if (!existing.includes(req)) {
+          const dummy = new CrisLayoutTab();
+          const fakeIds: any = { organizations: 9901, projects: 9902, publications: 9903, people: 9904 };
+          const headers: any = { organizations: 'Dependencias', projects: 'Proyectos', publications: 'Publicaciones', people: 'Personas' };
+          dummy.id = fakeIds[req] || Math.floor(Math.random() * 1000000);
+          dummy.shortname = req;
+          dummy.header = headers[req];
+          dummy.entityType = 'OrgUnit';
+          dummy.leading = false;
+          dummy.isActive = false;
+          dummy.children = [];
+          dummy.rows = [];
+          (dummy as any).isDummy = true;
+          newTabs.push(dummy);
+        }
+      });
+      
+      const order = ['maininformation', 'organizations', 'projects', 'publications', 'people'];
+      newTabs.sort((a, b) => {
+        const idxA = order.indexOf(a.shortname);
+        const idxB = order.indexOf(b.shortname);
+        return (idxA > -1 ? idxA : 99) - (idxB > -1 ? idxB : 99);
+      });
+      
+      return newTabs;
+    }
+
+    if (this.item.entityType === 'Person') {
+      const requiredTabs = ['publications', 'projects', 'patents', 'orgunits'];
+      // Filter out unwanted tabs for Person display
+      const filteredTabs = safeTabs.filter(t => t.shortname !== 'otherinfo' && t.shortname !== 'indicators');
+      const existing = filteredTabs.map(t => t.shortname);
+      
+      requiredTabs.forEach(req => {
+        if (!existing.includes(req)) {
+          const dummy = new CrisLayoutTab();
+          const fakeIds: any = { publications: 9911, projects: 9912, patents: 9913, orgunits: 9914 };
+          const headers: any = { publications: 'Publicaciones', projects: 'Proyectos', patents: 'Patentes', orgunits: 'Unidades Organizativas' };
+          dummy.id = fakeIds[req] || Math.floor(Math.random() * 1000000);
+          dummy.shortname = req;
+          dummy.header = headers[req];
+          dummy.entityType = 'Person';
+          dummy.leading = false;
+          dummy.isActive = false;
+          dummy.children = [];
+          dummy.rows = [];
+          (dummy as any).isDummy = true;
+          filteredTabs.push(dummy);
+        }
+      });
+
+      const order = ['details', 'publications', 'projects', 'patents', 'orgunits'];
+      filteredTabs.sort((a, b) => {
+        const idxA = order.indexOf(a.shortname);
+        const idxB = order.indexOf(b.shortname);
+        return (idxA > -1 ? idxA : 99) - (idxB > -1 ? idxB : 99);
+      });
+
+      return filteredTabs;
+    }
+
+    if (this.item.entityType === 'Project') {
+      const requiredTabs = ['publications', 'orgunits'];
+      const newTabs = [...safeTabs];
+      const existing = newTabs.map(t => t.shortname);
+      
+      requiredTabs.forEach(req => {
+        if (!existing.includes(req)) {
+          const dummy = new CrisLayoutTab();
+          const fakeIds: any = { publications: 9921, orgunits: 9922 };
+          const headers: any = { publications: 'Publicaciones', orgunits: 'Unidades Organizativas' };
+          dummy.id = fakeIds[req] || Math.floor(Math.random() * 1000000);
+          dummy.shortname = req;
+          dummy.header = headers[req];
+          dummy.entityType = 'Project';
+          dummy.leading = false;
+          dummy.isActive = false;
+          dummy.children = [];
+          dummy.rows = [];
+          (dummy as any).isDummy = true;
+          newTabs.push(dummy);
+        }
+      });
+
+      const order = ['maininformation', 'publications', 'orgunits'];
+      newTabs.sort((a, b) => {
+        const idxA = order.indexOf(a.shortname);
+        const idxB = order.indexOf(b.shortname);
+        return (idxA > -1 ? idxA : 99) - (idxB > -1 ? idxB : 99);
+      });
+
+      return newTabs;
+    }
+
+    return safeTabs;
+  }
+
+  /**
    * Get tabs for the specific item
    */
   ngOnInit(): void {
 
     if (this.dataTabs$) {
       this.tabs$ = this.dataTabs$.pipe(
-        map((res: any) => {
-          return res.payload.page;
-        }),
+        map((res: any) => this.processEntityTabs(res.payload.page)),
       );
     } else {
       this.tabs$ = this.router.data.pipe(
-        map((res: any) => {
-          return res.tabs.payload.page;
-        }),
+        map((res: any) => this.processEntityTabs(res.tabs.payload.page)),
       );
     }
     this.leadingTabs$ = this.getLeadingTabs();
@@ -122,6 +231,7 @@ export class CrisLayoutComponent implements OnInit {
       getFirstSucceededRemoteData(),
       getRemoteDataPayload(),
       getPaginatedListPayload(),
+      map((tabs: CrisLayoutTab[]) => this.processEntityTabs(tabs))
     );
   }
 

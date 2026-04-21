@@ -1,0 +1,95 @@
+/**
+ * Person Detail View Styles
+ * Professional and Premium look for IIAP
+ */
+
+:host-context(ds-cris-layout-loader.PERSON) {
+  .container {
+    padding-top: 1.5rem;
+  }
+
+  // Cards styling in relation boxes
+  ds-cris-layout-box-container {
+    display: block;
+    margin-bottom: 2rem;
+
+    .card {
+      border: none;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+      border-radius: 12px;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      overflow: hidden;
+
+      &:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+      }
+
+      .card-header {
+        background-color: transparent;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        padding: 1.25rem 1.5rem;
+        
+        h5 {
+          color: var(--ds-primary);
+          font-weight: 700;
+          margin-bottom: 0;
+          font-size: 1.2rem;
+          display: flex;
+          align-items: center;
+
+          &::before {
+            content: "";
+            display: inline-block;
+            width: 4px;
+            height: 20px;
+            background-color: var(--ds-secondary);
+            margin-right: 12px;
+            border-radius: 2px;
+          }
+        }
+      }
+
+      .card-body {
+        padding: 1.5rem;
+      }
+    }
+  }
+
+  // Specific styling for the leading box (profile header)
+  ds-cris-layout-leading {
+    .card {
+      background: linear-gradient(135deg, #ffffff 0%, #f9fbf7 100%);
+      border-left: 5px solid var(--ds-primary);
+      
+      .profile-img {
+        border: 4px solid white;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      }
+    }
+  }
+
+  // Tabs styling
+  ds-cris-layout-tabs-sidebar {
+    .nav-pills {
+      .nav-link {
+        border-radius: 8px;
+        margin-bottom: 0.5rem;
+        color: var(--ds-dark);
+        font-weight: 500;
+        transition: all 0.2s ease;
+
+        &.active {
+          background-color: var(--ds-primary);
+          color: white;
+          box-shadow: 0 4px 10px rgba(148, 186, 101, 0.3);
+        }
+
+        &:hover:not(.active) {
+          background-color: rgba(148, 186, 101, 0.1);
+          color: var(--ds-primary);
+        }
+      }
+    }
+  }
+}

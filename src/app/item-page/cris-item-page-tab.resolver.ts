@@ -55,13 +55,102 @@ export const crisItemPageTabResolver: ResolveFn<RemoteData<PaginatedList<CrisLay
         ).pipe(
           getFirstCompletedRemoteData(),
           map((tabsRD: RemoteData<PaginatedList<CrisLayoutTab>>) => {
-            if (tabsRD.hasSucceeded && tabsRD?.payload?.page?.length > 0) {
-              // By splitting the url with uuid we can understand if the item is primary item page or a tab
-              const urlSplit = state.url.split(route.params.id);
-              const givenTab = urlSplit[1];
-              const itemPageRoute = getItemPageRoute(itemRD.payload);
+            if (tabsRD.hasSucceeded) {
+              if (itemRD.payload.entityType === 'OrgUnit') {
+                const tabs = tabsRD.payload.page || [];
+                const requiredTabs = ['organizations', 'projects', 'publications', 'people'];
+                const existing = tabs.map(t => t.shortname);
+                requiredTabs.forEach(req => {
+                  if (!existing.includes(req)) {
+                    const dummy = new CrisLayoutTab();
+                    const fakeIds: any = { organizations: 9901, projects: 9902, publications: 9903, people: 9904 };
+                    const headers: any = { organizations: 'Dependencias', projects: 'Proyectos', publications: 'Publicaciones', people: 'Personas' };
+                    dummy.id = fakeIds[req] || Math.floor(Math.random() * 1000000);
+                    dummy.shortname = req;
+                    dummy.header = headers[req];
+                    dummy.entityType = 'OrgUnit';
+                    dummy.leading = false;
+                    dummy.isActive = false;
+                    dummy.children = [];
+                    dummy.rows = [];
+                    (dummy as any).isDummy = true;
+                    tabs.push(dummy);
+                  }
+                });
+                const order = ['maininformation', 'organizations', 'projects', 'publications', 'people'];
+                tabs.sort((a, b) => {
+                  const idxA = order.indexOf(a.shortname);
+                  const idxB = order.indexOf(b.shortname);
+                  return (idxA > -1 ? idxA : 99) - (idxB > -1 ? idxB : 99);
+                });
+                tabsRD.payload.page = tabs;
+              } else if (itemRD.payload.entityType === 'Person') {
+                const safeTabs = tabsRD.payload.page || [];
+                const requiredTabs = ['publications', 'projects', 'patents', 'orgunits'];
+                // Filter out unwanted tabs for Person display
+                const filteredTabs = safeTabs.filter(t => t.shortname !== 'otherinfo' && t.shortname !== 'indicators');
+                const existing = filteredTabs.map(t => t.shortname);
+                requiredTabs.forEach(req => {
+                  if (!existing.includes(req)) {
+                    const dummy = new CrisLayoutTab();
+                    const fakeIds: any = { publications: 9911, projects: 9912, patents: 9913, orgunits: 9914 };
+                    const headers: any = { publications: 'Publicaciones', projects: 'Proyectos', patents: 'Patentes', orgunits: 'Unidades Organizativas' };
+                    dummy.id = fakeIds[req] || Math.floor(Math.random() * 1000000);
+                    dummy.shortname = req;
+                    dummy.header = headers[req];
+                    dummy.entityType = 'Person';
+                    dummy.leading = false;
+                    dummy.isActive = false;
+                    dummy.children = [];
+                    dummy.rows = [];
+                    (dummy as any).isDummy = true;
+                    filteredTabs.push(dummy);
+                  }
+                });
+                const order = ['details', 'publications', 'projects', 'patents', 'orgunits'];
+                filteredTabs.sort((a, b) => {
+                  const idxA = order.indexOf(a.shortname);
+                  const idxB = order.indexOf(b.shortname);
+                  return (idxA > -1 ? idxA : 99) - (idxB > -1 ? idxB : 99);
+                });
+                tabsRD.payload.page = filteredTabs;
+              } else if (itemRD.payload.entityType === 'Project') {
+                const tabs = tabsRD.payload.page || [];
+                const requiredTabs = ['publications', 'orgunits'];
+                const existing = tabs.map(t => t.shortname);
+                requiredTabs.forEach(req => {
+                  if (!existing.includes(req)) {
+                    const dummy = new CrisLayoutTab();
+                    const fakeIds: any = { publications: 9921, orgunits: 9922 };
+                    const headers: any = { publications: 'Publicaciones', orgunits: 'Unidades Organizativas' };
+                    dummy.id = fakeIds[req] || Math.floor(Math.random() * 1000000);
+                    dummy.shortname = req;
+                    dummy.header = headers[req];
+                    dummy.entityType = 'Project';
+                    dummy.leading = false;
+                    dummy.isActive = false;
+                    dummy.children = [];
+                    dummy.rows = [];
+                    (dummy as any).isDummy = true;
+                    tabs.push(dummy);
+                  }
+                });
+                const order = ['maininformation', 'publications', 'orgunits'];
+                tabs.sort((a, b) => {
+                  const idxA = order.indexOf(a.shortname);
+                  const idxB = order.indexOf(b.shortname);
+                  return (idxA > -1 ? idxA : 99) - (idxB > -1 ? idxB : 99);
+                });
+                tabsRD.payload.page = tabs;
+              }
 
-              const isValidTab = !givenTab || tabsRD.payload.page.some((tab) => {
+              if (tabsRD?.payload?.page?.length > 0) {
+                // By splitting the url with uuid we can understand if the item is primary item page or a tab
+                const urlSplit = state.url.split(route.params.id);
+                const givenTab = urlSplit[1];
+                const itemPageRoute = getItemPageRoute(itemRD.payload);
+
+                const isValidTab = !givenTab || tabsRD.payload.page.some((tab) => {
                 const shortnameSplit = tab.shortname.split('::');
                 const shortname = shortnameSplit[shortnameSplit.length - 1];
                 return `/${shortname}` === givenTab;
@@ -82,6 +171,7 @@ export const crisItemPageTabResolver: ResolveFn<RemoteData<PaginatedList<CrisLay
                   router.navigateByUrl(itemPageRoute);
                 }
               }
+            }
             }
             return tabsRD;
           }),

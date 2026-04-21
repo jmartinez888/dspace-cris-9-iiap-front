@@ -7,7 +7,6 @@ import { BehaviorSubject } from 'rxjs';
 
 import { CrisLayoutTab } from '../../../core/layout/models/tab.model';
 import { Item } from '../../../core/shared/item.model';
-import { ContextMenuComponent } from '../../../shared/context-menu/context-menu.component';
 import { CrisLayoutMatrixComponent } from '../../cris-layout-matrix/cris-layout-matrix.component';
 import { CrisLayoutNavbarComponent } from './cris-layout-navbar/cris-layout-navbar.component';
 
@@ -17,7 +16,6 @@ import { CrisLayoutNavbarComponent } from './cris-layout-navbar/cris-layout-navb
   styleUrls: ['./cris-layout-horizontal.component.scss'],
   imports: [
     AsyncPipe,
-    ContextMenuComponent,
     CrisLayoutMatrixComponent,
     CrisLayoutNavbarComponent,
   ],

@@ -39,7 +39,8 @@ import { RemoteData } from '../../core/data/remote-data';
 import { LinkHeadService } from '../../core/services/link-head.service';
 import { ServerResponseService } from '../../core/services/server-response.service';
 import { Item } from '../../core/shared/item.model';
-import { MetadataMap } from '../../core/shared/metadata.models';
+import { MetadataMap, MetadataValue } from '../../core/shared/metadata.models';
+import { PLACEHOLDER_VALUE } from '../../core/shared/metadata.utils';
 import { fadeInOut } from '../../shared/animations/fade';
 import { ContextMenuComponent } from '../../shared/context-menu/context-menu.component';
 import { hasValue } from '../../shared/empty.util';
@@ -120,7 +121,16 @@ export class FullItemPageComponent extends ItemPageComponent implements OnInit, 
     this.metadata$ = this.itemRD$.pipe(
       map((rd: RemoteData<Item>) => rd.payload),
       filter((item: Item) => hasValue(item)),
-      map((item: Item) => item.metadata),
+      map((item: Item) => {
+        const metadataMap: MetadataMap = {};
+        Object.keys(item.metadata).forEach((key: string) => {
+          const filteredValues = item.metadata[key].filter((value: MetadataValue) => value.value !== PLACEHOLDER_VALUE);
+          if (filteredValues.length > 0) {
+            metadataMap[key] = filteredValues;
+          }
+        });
+        return metadataMap;
+      }),
       tap((metadataMap: MetadataMap) => this.nextMetadataMapLimit(metadataMap)),
     );
 

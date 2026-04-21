@@ -49,7 +49,7 @@ export class CrisLayoutRelationBoxComponent extends CrisLayoutBoxModelComponent 
   /**
    * flag for enable/disable search bar
    */
-  searchEnabled = false;
+  searchEnabled = true;
 
   /**
    * A boolean representing if to show or not the search notice

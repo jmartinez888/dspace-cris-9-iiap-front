@@ -825,10 +825,10 @@ export class DefaultAppConfig implements AppConfig {
     },
     itemPage: {
       OrgUnit: {
-        orientation: 'vertical',
+        orientation: 'horizontal',
       },
       Project: {
-        orientation: 'vertical',
+        orientation: 'horizontal',
       },
       default: {
         orientation: 'horizontal',
