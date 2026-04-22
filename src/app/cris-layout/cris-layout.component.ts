@@ -129,8 +129,23 @@ export class CrisLayoutComponent implements OnInit {
 
     if (this.item.entityType === 'Person') {
       const requiredTabs = ['publications', 'projects', 'patents', 'orgunits'];
+      // Mapping from custom/production shortnames to their standard equivalents
+      const aliasMap: Record<string, string> = {
+        'p_pubs': 'publications',
+        'p_projs': 'projects',
+        'p_pats': 'patents',
+        'p_orgs': 'orgunits',
+      };
       // Filter out unwanted tabs for Person display
       const filteredTabs = safeTabs.filter(t => t.shortname !== 'otherinfo' && t.shortname !== 'indicators');
+
+      // Normalize aliased shortnames to their standard equivalents
+      filteredTabs.forEach(t => {
+        if (aliasMap[t.shortname]) {
+          t.shortname = aliasMap[t.shortname];
+        }
+      });
+
       const existing = filteredTabs.map(t => t.shortname);
       
       requiredTabs.forEach(req => {
