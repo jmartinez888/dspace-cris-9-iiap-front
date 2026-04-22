@@ -1,76 +1,82 @@
 @if (!!tab) {
-  <div class="container">
-    @if (!tab.rows || tab.rows.length === 0) {
-      @if (item?.entityType === 'OrgUnit') {
-        @if (tab.shortname === 'organizations') {
-          <div class="alert alert-info mt-4" style="background-color: #f8f9fa; border-left: 4px solid #FF7E2E; color: #333;">
-            La Unidad Organizativa <strong>{{ item?.name || item?.firstMetadataValue('dc.title') }}</strong> no cuenta con dependencias registradas.
-          </div>
-        }
-        @if (tab.shortname === 'projects') {
-          <div class="alert alert-info mt-4" style="background-color: #f8f9fa; border-left: 4px solid #FF7E2E; color: #333;">
-            La Unidad Organizativa <strong>{{ item?.name || item?.firstMetadataValue('dc.title') }}</strong> no cuenta con proyectos registrados.
-          </div>
-        }
-        @if (tab.shortname === 'publications') {
-          <div class="alert alert-info mt-4" style="background-color: #f8f9fa; border-left: 4px solid #FF7E2E; color: #333;">
-            La Unidad Organizativa <strong>{{ item?.name || item?.firstMetadataValue('dc.title') }}</strong> no cuenta con publicaciones registradas.
-          </div>
-        }
-        @if (tab.shortname === 'people') {
-          <div class="alert alert-info mt-4" style="background-color: #f8f9fa; border-left: 4px solid #FF7E2E; color: #333;">
-            La Unidad Organizativa <strong>{{ item?.name || item?.firstMetadataValue('dc.title') }}</strong> no cuenta con personas registradas.
-          </div>
-        }
-      }
-      
-      @if (item?.entityType === 'Person') {
-        @if (tab.shortname === 'patents') {
-          <div class="alert alert-info mt-4" style="background-color: #f8f9fa; border-left: 4px solid #FF7E2E; color: #333;">
-            <strong>{{ item?.name || item?.firstMetadataValue('dc.title') }}</strong> no cuenta con Patentes registradas.
-          </div>
-        }
-        @if (tab.shortname === 'projects') {
-          <div class="alert alert-info mt-4" style="background-color: #f8f9fa; border-left: 4px solid #FF7E2E; color: #333;">
-            <strong>{{ item?.name || item?.firstMetadataValue('dc.title') }}</strong> no cuenta con Proyectos registrados.
-          </div>
-        }
-        @if (tab.shortname === 'publications') {
-          <div class="alert alert-info mt-4" style="background-color: #f8f9fa; border-left: 4px solid #FF7E2E; color: #333;">
-            <strong>{{ item?.name || item?.firstMetadataValue('dc.title') }}</strong> no cuenta con Publicaciones relacionadas.
-          </div>
-        }
-        @if (tab.shortname === 'orgunits') {
-          <div class="alert alert-info mt-4" style="background-color: #f8f9fa; border-left: 4px solid #FF7E2E; color: #333;">
-            <strong>{{ item?.name || item?.firstMetadataValue('dc.title') }}</strong> no cuenta con Unidades Organizativas relacionadas.
-          </div>
-        }
-      }
+<div class="container">
+  @if (!tab.rows || tab.rows.length === 0) {
+  @if (item?.entityType === 'OrgUnit') {
+  @if (tab.shortname === 'organizations') {
+  <div class="alert alert-info mt-4" style="background-color: #f8f9fa; border-left: 4px solid #FF7E2E; color: #333;">
+    La Unidad Organizativa <strong>{{ item?.name || item?.firstMetadataValue('dc.title') }}</strong> no cuenta con
+    dependencias registradas.
+  </div>
+  }
+  @if (tab.shortname === 'projects') {
+  <div class="alert alert-info mt-4" style="background-color: #f8f9fa; border-left: 4px solid #FF7E2E; color: #333;">
+    La Unidad Organizativa <strong>{{ item?.name || item?.firstMetadataValue('dc.title') }}</strong> no cuenta con
+    proyectos relacionados.
+  </div>
+  }
+  @if (tab.shortname === 'publications') {
+  <div class="alert alert-info mt-4" style="background-color: #f8f9fa; border-left: 4px solid #FF7E2E; color: #333;">
+    La Unidad Organizativa <strong>{{ item?.name || item?.firstMetadataValue('dc.title') }}</strong> no cuenta con
+    publicaciones registradas.
+  </div>
+  }
+  @if (tab.shortname === 'people') {
+  <div class="alert alert-info mt-4" style="background-color: #f8f9fa; border-left: 4px solid #FF7E2E; color: #333;">
+    La Unidad Organizativa <strong>{{ item?.name || item?.firstMetadataValue('dc.title') }}</strong> no cuenta con
+    personas registradas.
+  </div>
+  }
+  }
 
-      @if (item?.entityType === 'Project') {
-        @if (tab.shortname === 'publications') {
-          <div class="alert alert-info mt-4" style="background-color: #f8f9fa; border-left: 4px solid #FF7E2E; color: #333;">
-            <strong>{{ item?.name || item?.firstMetadataValue('dc.title') }}</strong> no cuenta con Publicaciones relacionadas.
-          </div>
-        }
-        @if (tab.shortname === 'orgunits') {
-          <div class="alert alert-info mt-4" style="background-color: #f8f9fa; border-left: 4px solid #FF7E2E; color: #333;">
-            <strong>{{ item?.name || item?.firstMetadataValue('dc.title') }}</strong> no cuenta con Unidades Organizativas relacionadas.
-          </div>
-        }
+  @if (item?.entityType === 'Person') {
+  @if (tab.shortname === 'patents') {
+  <div class="alert alert-info mt-4" style="background-color: #f8f9fa; border-left: 4px solid #FF7E2E; color: #333;">
+    <strong>{{ item?.name || item?.firstMetadataValue('dc.title') }}</strong> no cuenta con Patentes registradas.
+  </div>
+  }
+  @if (tab.shortname === 'projects') {
+  <div class="alert alert-info mt-4" style="background-color: #f8f9fa; border-left: 4px solid #FF7E2E; color: #333;">
+    <strong>{{ item?.name || item?.firstMetadataValue('dc.title') }}</strong> no cuenta con Proyectos relacionados.
+  </div>
+  }
+  @if (tab.shortname === 'publications') {
+  <div class="alert alert-info mt-4" style="background-color: #f8f9fa; border-left: 4px solid #FF7E2E; color: #333;">
+    <strong>{{ item?.name || item?.firstMetadataValue('dc.title') }}</strong> no cuenta con Publicaciones relacionadas.
+  </div>
+  }
+  @if (tab.shortname === 'orgunits') {
+  <div class="alert alert-info mt-4" style="background-color: #f8f9fa; border-left: 4px solid #FF7E2E; color: #333;">
+    <strong>{{ item?.name || item?.firstMetadataValue('dc.title') }}</strong> no cuenta con Unidades Organizativas
+    relacionadas.
+  </div>
+  }
+  }
+
+  @if (item?.entityType === 'Project') {
+  @if (tab.shortname === 'publications') {
+  <div class="alert alert-info mt-4" style="background-color: #f8f9fa; border-left: 4px solid #FF7E2E; color: #333;">
+    <strong>{{ item?.name || item?.firstMetadataValue('dc.title') }}</strong> no cuenta con Publicaciones relacionadas.
+  </div>
+  }
+  @if (tab.shortname === 'orgunits') {
+  <div class="alert alert-info mt-4" style="background-color: #f8f9fa; border-left: 4px solid #FF7E2E; color: #333;">
+    <strong>{{ item?.name || item?.firstMetadataValue('dc.title') }}</strong> no cuenta con Unidades Organizativas
+    relacionadas.
+  </div>
+  }
+  }
+  } @else {
+  @for (row of tab.rows; track row) {
+  <div [class]="row.style" [class.row]="!hasRowClass(row.style)">
+    @for (cell of row.cells; track cell) {
+    <div class="cell" [class]="cell.style" [class.col]="!hasColClass(cell.style)" [class.px-0]="!showCellPadding">
+      @for (box of cell.boxes; track box) {
+      <ds-cris-layout-box-container [box]="box" [item]="item" [tabName]="tab.shortname"></ds-cris-layout-box-container>
       }
-    } @else {
-      @for (row of tab.rows; track row) {
-        <div [class]="row.style" [class.row]="!hasRowClass(row.style)">
-          @for (cell of row.cells; track cell) {
-            <div class="cell" [class]="cell.style" [class.col]="!hasColClass(cell.style)" [class.px-0]="!showCellPadding">
-              @for (box of cell.boxes; track box) {
-                <ds-cris-layout-box-container [box]="box" [item]="item" [tabName]="tab.shortname"></ds-cris-layout-box-container>
-              }
-            </div>
-          }
-        </div>
-      }
+    </div>
     }
   </div>
+  }
+  }
+</div>
 }

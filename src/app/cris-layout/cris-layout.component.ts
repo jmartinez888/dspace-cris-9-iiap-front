@@ -146,7 +146,25 @@ export class CrisLayoutComponent implements OnInit {
         }
       });
 
-      const existing = filteredTabs.map(t => t.shortname);
+      // Deduplicate tabs with the same shortname after normalization.
+      // When duplicates exist, keep the one that has actual data (rows with boxes).
+      const deduped: CrisLayoutTab[] = [];
+      const seen = new Map<string, number>();
+      filteredTabs.forEach(t => {
+        const idx = seen.get(t.shortname);
+        if (idx === undefined) {
+          seen.set(t.shortname, deduped.length);
+          deduped.push(t);
+        } else {
+          // If the existing one has no data but this one does, replace it
+          const hasData = (tab: CrisLayoutTab) => tab.rows && tab.rows.length > 0;
+          if (!hasData(deduped[idx]) && hasData(t)) {
+            deduped[idx] = t;
+          }
+        }
+      });
+
+      const existing = deduped.map(t => t.shortname);
       
       requiredTabs.forEach(req => {
         if (!existing.includes(req)) {
@@ -162,18 +180,18 @@ export class CrisLayoutComponent implements OnInit {
           dummy.children = [];
           dummy.rows = [];
           (dummy as any).isDummy = true;
-          filteredTabs.push(dummy);
+          deduped.push(dummy);
         }
       });
 
       const order = ['details', 'publications', 'projects', 'patents', 'orgunits'];
-      filteredTabs.sort((a, b) => {
+      deduped.sort((a, b) => {
         const idxA = order.indexOf(a.shortname);
         const idxB = order.indexOf(b.shortname);
         return (idxA > -1 ? idxA : 99) - (idxB > -1 ? idxB : 99);
       });
 
-      return filteredTabs;
+      return deduped;
     }
 
     if (this.item.entityType === 'Project') {
