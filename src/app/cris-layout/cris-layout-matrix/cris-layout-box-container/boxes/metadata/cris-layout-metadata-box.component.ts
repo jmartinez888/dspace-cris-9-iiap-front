@@ -100,10 +100,15 @@ export class CrisLayoutMetadataBoxComponent extends CrisLayoutBoxModelComponent 
 
     // Collect all existing fields from all rows/cells
     const existingFields: LayoutField[] = [];
+    const otherFields: LayoutField[] = [];
     for (const row of config.rows) {
       for (const cell of (row.cells || [])) {
         for (const field of (cell.fields || [])) {
-          existingFields.push(field);
+          if (field.fieldType === 'METADATA' || field.metadata) {
+            existingFields.push(field);
+          } else {
+            otherFields.push(field);
+          }
         }
       }
     }
@@ -269,6 +274,15 @@ export class CrisLayoutMetadataBoxComponent extends CrisLayoutBoxModelComponent 
         orderedFields.push(newField);
       }
     }
+    // Append any extra metadata fields that were present in the config but not in our required list
+    for (const [metadata, field] of Array.from(existingFieldMap.entries())) {
+      const mergedField: LayoutField = { ...field };
+      if (!mergedField.labelAsHeading) {
+        mergedField.styleLabel = LABEL_COL;
+        mergedField.styleValue = VALUE_COL;
+      }
+      orderedFields.push(mergedField);
+    }
 
     // Separate non-tag fields (compact, same cell) from tag fields (own row each)
     const compactFields: LayoutField[] = [];
@@ -281,17 +295,31 @@ export class CrisLayoutMetadataBoxComponent extends CrisLayoutBoxModelComponent 
       }
     }
 
-    // Build rows: all compact fields in ONE cell (like OrgUnit/Person),
-    // each tag field in its own row (needs full-width flex-column layout)
+    // Build rows: non-metadata fields (thumbnail) in left column, compact metadata in right column
     const newRows: MetadataBoxRow[] = [];
 
-    if (compactFields.length > 0) {
+    if (compactFields.length > 0 || otherFields.length > 0) {
+      const cells: any[] = [];
+      
+      // If we have non-metadata fields (like thumbnail), put them in a col-md-3
+      if (otherFields.length > 0) {
+        cells.push({
+          style: 'col-md-3 pe-md-1',
+          fields: otherFields
+        });
+      }
+      
+      // Put metadata fields in the remaining width
+      if (compactFields.length > 0) {
+        cells.push({
+          style: otherFields.length > 0 ? 'col-md-9' : 'col-12',
+          fields: compactFields
+        });
+      }
+
       newRows.push({
         style: '',
-        cells: [{
-          style: 'col-12',
-          fields: compactFields,
-        }],
+        cells: cells,
       });
     }
 
@@ -299,7 +327,7 @@ export class CrisLayoutMetadataBoxComponent extends CrisLayoutBoxModelComponent 
       newRows.push({
         style: '',
         cells: [{
-          style: 'col-12',
+          style: otherFields.length > 0 ? 'col-md-9 offset-md-3' : 'col-12',
           fields: [tagField],
         }],
       });
