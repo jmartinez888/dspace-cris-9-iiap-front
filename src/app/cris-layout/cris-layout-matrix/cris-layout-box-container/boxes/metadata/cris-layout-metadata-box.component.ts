@@ -274,15 +274,6 @@ export class CrisLayoutMetadataBoxComponent extends CrisLayoutBoxModelComponent 
         orderedFields.push(newField);
       }
     }
-    // Append any extra metadata fields that were present in the config but not in our required list
-    for (const [metadata, field] of Array.from(existingFieldMap.entries())) {
-      const mergedField: LayoutField = { ...field };
-      if (!mergedField.labelAsHeading) {
-        mergedField.styleLabel = LABEL_COL;
-        mergedField.styleValue = VALUE_COL;
-      }
-      orderedFields.push(mergedField);
-    }
 
     // Separate non-tag fields (compact, same cell) from tag fields (own row each)
     const compactFields: LayoutField[] = [];

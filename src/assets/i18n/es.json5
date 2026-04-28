@@ -11615,6 +11615,9 @@
   // "context-menu.actions.edit-item-relationships.btn.organizations": "Manage SubOrganizations",
   "context-menu.actions.edit-item-relationships.btn.organizations": "Administrar suborganizaciones",
 
+  // "context-menu.actions.edit-item-relationships.btn.orgunits": "Manage Organizations",
+  "context-menu.actions.edit-item-relationships.btn.orgunits": "Gestionar Unidades Organizativas",
+
   // "context-menu.actions.edit-item-relationships.btn.rppublications": "Manage Researchers Publications",
   "context-menu.actions.edit-item-relationships.btn.rppublications": "Gestionar publicaciones de investigadores",
 
