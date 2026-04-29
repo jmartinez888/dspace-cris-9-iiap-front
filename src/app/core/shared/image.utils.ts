@@ -5,14 +5,14 @@ import {
 import { map } from 'rxjs/operators';
 
 export const getDefaultImageUrlByEntityType = (entityType: string): Observable<string> => {
-  const fallbackImage = 'assets/images/file-placeholder.svg';
+  const fallbackImage = '/assets/images/file-placeholder.svg';
 
   if (!entityType) {
     return of(fallbackImage);
   }
 
   const type = entityType.toLowerCase();
-  const defaultImage = `assets/images/${type}-placeholder.svg`;
+  const defaultImage = `/assets/images/${type}-placeholder.svg`;
 
   // For known institutional entity types, we return the path directly to avoid SSR detection issues
   const knownTypes = ['project', 'person', 'orgunit', 'funding', 'award'];

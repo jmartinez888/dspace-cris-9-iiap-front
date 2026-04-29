@@ -11615,6 +11615,9 @@
   // "context-menu.actions.edit-item-relationships.btn.organizations": "Manage SubOrganizations",
   "context-menu.actions.edit-item-relationships.btn.organizations": "Administrar suborganizaciones",
 
+  // "context-menu.actions.edit-item-relationships.btn.orgunits": "Manage Organizations",
+  "context-menu.actions.edit-item-relationships.btn.orgunits": "Gestionar Unidades Organizativas",
+
   // "context-menu.actions.edit-item-relationships.btn.rppublications": "Manage Researchers Publications",
   "context-menu.actions.edit-item-relationships.btn.rppublications": "Gestionar publicaciones de investigadores",
 
@@ -14367,7 +14370,7 @@
   "layout.field.label.Project.[dc.title]": "Título del Proyecto",
 
   // "layout.field.label.Project.[crispj.coordinator]": "Consortium Coordinator",
-  "layout.field.label.Project.[crispj.coordinator]": "Coordinador del Consorcio",
+  "layout.field.label.Project.[crispj.coordinator]": "Coordinador General",
 
   // "layout.field.label.Project.[crispj.partnerou]": "Partner Organisations",
   "layout.field.label.Project.[crispj.partnerou]": "Organizaciones Asociadas",
@@ -14388,7 +14391,7 @@
   "layout.field.label.Project.[oairecerif.project.endDate]": "Fecha de Finalización",
 
   // "layout.field.label.Project.[crispj.coinvestigators]": "Investigators",
-  "layout.field.label.Project.[crispj.coinvestigators]": "Investigadores",
+  "layout.field.label.Project.[crispj.coinvestigators]": "Co-Investigadores",
 
   // "layout.field.label.Project.[crispj.organization]": "Organisations",
   "layout.field.label.Project.[crispj.organization]": "Organizaciones",
@@ -14401,6 +14404,9 @@
 
   // "layout.field.label.Project.[crispj.openaireid]": "OpenAIRE ID",
   "layout.field.label.Project.[crispj.openaireid]": "ID de OpenAIRE",
+
+  "layout.field.label.Project.[crispj.contractorou]": "Organización Ejecutora Principal",
+  "layout.field.label.Project.[perucris.subject.ocde]": "Campos del Conocimiento OCDE",
 
   // "layout.field.label.Funding.[dc.relation.project]": "Project",
   "layout.field.label.Funding.[dc.relation.project]": "Proyecto",

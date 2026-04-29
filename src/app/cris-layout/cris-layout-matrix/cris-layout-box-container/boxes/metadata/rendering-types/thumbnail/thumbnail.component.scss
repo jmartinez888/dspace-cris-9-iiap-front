@@ -1,0 +1,17 @@
+:host {
+  display: block;
+  width: 100%;
+
+  /* Ensure the thumbnail takes up a larger portion of the available space in the details box */
+  ::ng-deep ds-thumbnail {
+    display: block;
+    width: 100%;
+    
+    img {
+      width: 100%;
+      max-width: 180px; /* Increased from the default 125px */
+      height: auto;
+      object-fit: contain;
+    }
+  }
+}
