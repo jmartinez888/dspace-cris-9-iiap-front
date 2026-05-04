@@ -76,11 +76,19 @@
       [label]="'publication.page.description'">
     </ds-generic-item-page-field>
 
-    <ds-generic-item-page-field [item]="object"
-      [fields]="['dc.subject']"
-      [separator]="', '"
-      [label]="'item.page.subject'">
-    </ds-generic-item-page-field>
+    @if (subjectChips && subjectChips.hasItems()) {
+      <div class="mb-3">
+        <span class="col-sm-4 font-weight-bold">{{ 'item.page.subject' | translate }}</span>
+        <div class="d-flex flex-column mt-1 project-tag-green">
+          <ds-chips
+            [clickable]="false"
+            [chips]="subjectChips"
+            [showIcons]="false"
+            [editable]="false">
+          </ds-chips>
+        </div>
+      </div>
+    }
     <ds-generic-item-page-field [item]="object"
       [fields]="['dc.identifier.citation']"
       [label]="'item.page.citation'">

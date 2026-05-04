@@ -26,6 +26,10 @@ import { ThemedMetadataRepresentationListComponent } from '../../metadata-repres
 import { RelatedItemsComponent } from '../../related-items/related-items-component';
 import { ItemComponent } from '../shared/item.component';
 
+import { Chips } from '../../../../shared/form/chips/models/chips.model';
+import { ChipsComponent } from '../../../../shared/form/chips/chips.component';
+import { OnInit } from '@angular/core';
+
 /**
  * Component that represents a publication Item page
  */
@@ -56,8 +60,17 @@ import { ItemComponent } from '../shared/item.component';
     ThemedResultsBackButtonComponent,
     ThemedThumbnailComponent,
     TranslateModule,
+    ChipsComponent,
   ],
 })
-export class PublicationComponent extends ItemComponent {
+export class PublicationComponent extends ItemComponent implements OnInit {
+  public subjectChips: Chips;
 
+  ngOnInit() {
+    super.ngOnInit();
+    const subjects = this.object.allMetadataValues('dc.subject');
+    if (subjects && subjects.length > 0) {
+      this.subjectChips = new Chips(subjects, 'value');
+    }
+  }
 }
