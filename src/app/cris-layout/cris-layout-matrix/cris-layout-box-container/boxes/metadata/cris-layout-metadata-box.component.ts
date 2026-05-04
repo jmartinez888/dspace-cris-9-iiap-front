@@ -64,6 +64,8 @@ export class CrisLayoutMetadataBoxComponent extends CrisLayoutBoxModelComponent 
     const entityType = this.item?.firstMetadataValue('dspace.entity.type');
     if (entityType === 'Project' && (this.box.shortname === 'details' || this.box.shortname === 'primarydata')) {
       config = this.processProjectDetailsBox(config);
+    } else if (entityType === 'Publication') {
+      config = this.processPublicationDetailsBox(config);
     }
     this.setMetadataComponents(config);
   }
@@ -327,6 +329,61 @@ export class CrisLayoutMetadataBoxComponent extends CrisLayoutBoxModelComponent 
     return {
       ...config,
       rows: newRows,
+    };
+  }
+
+  /**
+   * Apply tag styling to dc.subject for Publication entities.
+   */
+  private processPublicationDetailsBox(config: MetadataBoxConfiguration): MetadataBoxConfiguration {
+    if (!config?.rows) {
+      return config;
+    }
+
+    const newRows: MetadataBoxRow[] = [];
+    const tagFields: LayoutField[] = [];
+
+    // First pass: extract tag fields and keep other fields in their original rows
+    for (const row of config.rows) {
+      const newCells: any[] = [];
+      for (const cell of (row.cells || [])) {
+        const newFields: LayoutField[] = [];
+        for (const field of (cell.fields || [])) {
+          if (field.metadata === 'dc.subject') {
+            const modifiedField = {
+              ...field,
+              rendering: 'tag',
+              labelAsHeading: true,
+              style: 'project-tag-green'
+            };
+            tagFields.push(modifiedField);
+          } else {
+            newFields.push(field);
+          }
+        }
+        if (newFields.length > 0) {
+          newCells.push({ ...cell, fields: newFields });
+        }
+      }
+      if (newCells.length > 0) {
+        newRows.push({ ...row, cells: newCells });
+      }
+    }
+
+    // Second pass: append tag fields in their own rows at the bottom
+    for (const tagField of tagFields) {
+      newRows.push({
+        style: '',
+        cells: [{
+          style: 'col-12', // For publications, usually no 3-column offset for metadata box at the bottom
+          fields: [tagField]
+        }]
+      });
+    }
+
+    return {
+      ...config,
+      rows: newRows
     };
   }
 
