@@ -116,7 +116,7 @@ export class CrisLayoutMetadataBoxComponent extends CrisLayoutBoxModelComponent 
     }
 
     // Consistent column widths for label/value alignment (matching Person/OrgUnit)
-    const LABEL_COL = 'col-sm-4 font-weight-bold';
+    const LABEL_COL = 'col-12 col-md-4 font-weight-bold';
     const VALUE_COL = ''; // The wrapper already has 'col', we don't want col-sm-8 on every item inside flex-column
 
     // Define the required field order with their rendering configurations
@@ -248,6 +248,8 @@ export class CrisLayoutMetadataBoxComponent extends CrisLayoutBoxModelComponent 
           }
         }
 
+        mergedField.style = (mergedField.style || 'mb-2') + ' project-metadata-field';
+
         // Force consistent column widths for alignment (non-tag fields)
         if (!required.labelAsHeading) {
           mergedField.styleLabel = LABEL_COL;
@@ -269,7 +271,7 @@ export class CrisLayoutMetadataBoxComponent extends CrisLayoutBoxModelComponent 
           fieldType: required.fieldType,
           labelAsHeading: required.labelAsHeading,
           valuesInline: required.valuesInline,
-          style: required.style || 'mb-2',
+          style: (required.style || 'mb-2') + ' project-metadata-field',
           styleLabel: required.styleLabel || LABEL_COL,
           styleValue: required.styleValue || VALUE_COL,
         };
@@ -297,7 +299,7 @@ export class CrisLayoutMetadataBoxComponent extends CrisLayoutBoxModelComponent 
       // If we have non-metadata fields (like thumbnail), put them in a col-md-3
       if (otherFields.length > 0) {
         cells.push({
-          style: 'col-md-3 pe-md-1',
+          style: 'col-12 col-md-3 mb-3 mb-md-0 pe-md-4 pe-lg-2',
           fields: otherFields
         });
       }
@@ -305,7 +307,7 @@ export class CrisLayoutMetadataBoxComponent extends CrisLayoutBoxModelComponent 
       // Put metadata fields in the remaining width
       if (compactFields.length > 0) {
         cells.push({
-          style: otherFields.length > 0 ? 'col-md-9' : 'col-12',
+          style: otherFields.length > 0 ? 'col-12 col-md-9' : 'col-12',
           fields: compactFields
         });
       }
@@ -320,7 +322,7 @@ export class CrisLayoutMetadataBoxComponent extends CrisLayoutBoxModelComponent 
       newRows.push({
         style: '',
         cells: [{
-          style: otherFields.length > 0 ? 'col-md-9 offset-md-3' : 'col-12',
+          style: otherFields.length > 0 ? 'col-12 col-md-9 offset-md-3' : 'col-12',
           fields: [tagField],
         }],
       });

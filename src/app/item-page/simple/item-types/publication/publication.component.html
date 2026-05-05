@@ -12,10 +12,12 @@
     </div>
   </div>
 }
-<div class="d-flex flex-row">
-  <ds-item-page-title-field [item]="object" class="me-auto">
+<div class="d-flex flex-column-reverse flex-md-row align-items-md-start">
+  <ds-item-page-title-field [item]="object" class="me-auto pe-md-4">
   </ds-item-page-title-field>
-  <ds-context-menu [contextMenuObject]="object" [contextMenuObjectType]="$any('ITEM')"></ds-context-menu>
+  <div class="d-flex justify-content-end mb-2 mb-md-0">
+    <ds-context-menu [contextMenuObject]="object" [contextMenuObjectType]="$any('ITEM')"></ds-context-menu>
+  </div>
 </div>
 <div class="row">
   <div class="col-12 col-md-4">

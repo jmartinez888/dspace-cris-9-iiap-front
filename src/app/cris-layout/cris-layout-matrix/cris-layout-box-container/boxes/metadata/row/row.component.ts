@@ -3,6 +3,7 @@ import {
   Component,
   Input,
 } from '@angular/core';
+import { NgClass } from '@angular/common';
 
 import { RouterLink } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
@@ -25,6 +26,7 @@ import { MetadataContainerComponent } from './metadata-container/metadata-contai
   templateUrl: './row.component.html',
   styleUrls: ['./row.component.scss'],
   imports: [
+    NgClass,
     MetadataContainerComponent,
     RouterLink,
     TranslateModule,

@@ -752,7 +752,7 @@ ngb-tooltip-window {
    IIAP Institutional Branding (Orange & Green)
    ========================================================================== */
 
-/* Badges (Tags de Publicación, Proyecto, etc.) y Contadores */
+/* Badges (Tags de PublicaciÃ³n, Proyecto, etc.) y Contadores */
 .badge.bg-info,
 .badge-info,
 .badge-item-type,
@@ -763,7 +763,7 @@ ngb-tooltip-window {
     font-weight: 600;
 }
 
-/* Home Navigation & Discovery Tabs (Comunidades, Resultados, Estadísticas) */
+/* Home Navigation & Discovery Tabs (Comunidades, Resultados, EstadÃ­sticas) */
 .nav-pills .nav-link.active,
 .nav-pills .show>.nav-link {
     background-color: #94ba65 !important;
@@ -776,18 +776,18 @@ ngb-tooltip-window {
     transition: all 0.3s ease;
 
     &:hover {
-        color: #7da54e !important; // Verde más oscuro al hover
+        color: #7da54e !important; // Verde mÃ¡s oscuro al hover
         text-decoration: none;
     }
 }
 
-/* Pestañas de Navegación (Tabs: Autores, Proyectos, etc.) - Mantener Naranja */
+/* PestaÃ±as de NavegaciÃ³n (Tabs: Autores, Proyectos, etc.) - Mantener Naranja */
 .nav-tabs .nav-link {
     color: #FF7E2E !important;
     font-weight: 500;
 
     &:hover {
-        color: #e66a1f !important; // Naranja un poco más oscuro
+        color: #e66a1f !important; // Naranja un poco mÃ¡s oscuro
         text-decoration: none;
         background-color: transparent !important;
         transform: none !important;
@@ -798,13 +798,13 @@ ngb-tooltip-window {
     }
 }
 
-/* Forzar verde en iconos de cabecera específicos */
+/* Forzar verde en iconos de cabecera especÃ­ficos */
 .navbar-nav .nav-link:hover,
 .ds-header-icon-color-hover {
     color: #94ba65 !important;
 }
 
-/* Enlaces institucionales (Verde Elegante) para la sección principal */
+/* Enlaces institucionales (Verde Elegante) para la secciÃ³n principal */
 #main-content a:not(.nav-link):not(.btn):not(.badge) {
     color: #94ba65;
     font-weight: 500;
@@ -816,7 +816,7 @@ ngb-tooltip-window {
     }
 }
 
-/* Efecto de agrandamiento suave para ítems de contadores (Resultados, Proyectos, Personas) */
+/* Efecto de agrandamiento suave para Ã­tems de contadores (Resultados, Proyectos, Personas) */
 .counters-section {
     transition: transform 0.3s ease;
 }
@@ -860,7 +860,7 @@ ds-breadcrumbs {
    IIAP OMNI-OVERRIDE (Phase 2 - High Specificity)
    ========================================================================== */
 
-/* 1. FUERZA TOTAL EN BOTONES (Buscar, Exportar, Estadística, Iniciar Sesión) */
+/* 1. FUERZA TOTAL EN BOTONES (Buscar, Exportar, EstadÃ­stica, Iniciar SesiÃ³n) */
 html body .btn,
 html body .ds-search-form-submit,
 html body .search-button {
@@ -877,7 +877,7 @@ html body .search-button {
     }
 }
 
-/* Botones que SÍ deben ser sólidos (Buscar principal si se desea) */
+/* Botones que SÃ deben ser sÃ³lidos (Buscar principal si se desea) */
 html body .btn-primary,
 html body .btn-secondary,
 html body .btn-orange {
@@ -899,7 +899,7 @@ html body .btn-orange {
 }
 
 
-/* Forzar que los bordes de los botones outline también sean verdes/naranjas */
+/* Forzar que los bordes de los botones outline tambiÃ©n sean verdes/naranjas */
 html body .btn-outline-primary,
 html body .btn-outline-secondary {
     color: #94ba65 !important;
@@ -912,7 +912,7 @@ html body .btn-outline-secondary {
     }
 }
 
-/* 2. FUERZA TOTAL EN NAVEGACIÓN Y CABECERA */
+/* 2. FUERZA TOTAL EN NAVEGACIÃ“N Y CABECERA */
 html body .navbar-nav .nav-link,
 html body .navbar-nav .nav-item>a,
 html body .ds-header-icon-color,
@@ -922,11 +922,11 @@ html body .ds-navbar-link-color {
 
     &:hover,
     &.active {
-        color: #7da54e !important; // Verde más oscuro al hover/activo
+        color: #7da54e !important; // Verde mÃ¡s oscuro al hover/activo
     }
 }
 
-/* Iconos específicos (Mundo, Lupa, Cuenta) - Solo color de fuente cuando NO están en botones sólidos */
+/* Iconos especÃ­ficos (Mundo, Lupa, Cuenta) - Solo color de fuente cuando NO estÃ¡n en botones sÃ³lidos */
 html body .fas.fa-globe,
 html body .fas.fa-search,
 html body .fas.fa-user,
@@ -939,7 +939,7 @@ html body .account-button .btn {
     padding: 0.25rem !important;
 }
 
-/* Forzar blanco en iconos para botones sólidos */
+/* Forzar blanco en iconos para botones sÃ³lidos */
 html body .btn-primary .fas,
 html body .btn-secondary .fas,
 html body .btn-orange .fas,
@@ -967,7 +967,7 @@ html body ds-breadcrumbs .breadcrumb-item a {
     }
 
     &.active {
-        color: #1a1a1a !important; // El ítem actual en gris oscuro neutral
+        color: #1a1a1a !important; // El Ã­tem actual en gris oscuro neutral
     }
 }
 
@@ -976,7 +976,7 @@ html body .breadcrumb-item+.breadcrumb-item::before {
     color: #ced4da !important;
 }
 
-/* Ajuste buscador principal - Mantener sólido el botón de buscar pero sin márgenes deformados */
+/* Ajuste buscador principal - Mantener sÃ³lido el botÃ³n de buscar pero sin mÃ¡rgenes deformados */
 html body .ds-search-form .input-group-append .btn,
 html body .ds-search-form .btn-primary.ds-search-form-submit {
     background-color: #FF7E2E !important;
@@ -985,7 +985,7 @@ html body .ds-search-form .btn-primary.ds-search-form-submit {
     margin: 0 !important;
 }
 
-/* Forzar transparencia en botones de "Más..." y expanders */
+/* Forzar transparencia en botones de "MÃ¡s..." y expanders */
 html body .btn-link,
 html body .truncatable-list .btn {
     background-color: transparent !important;
@@ -999,7 +999,7 @@ html body .truncatable-list .btn {
     }
 }
 
-/* Forzar Estilo Outline con Hover Sólido en botones de navegación del ítem (Vista Sencilla / Completa) */
+/* Forzar Estilo Outline con Hover SÃ³lido en botones de navegaciÃ³n del Ã­tem (Vista Sencilla / Completa) */
 html body .item-page .btn-outline-primary,
 html body .item-page .simple-view-link a,
 html body .item-page .full-view-link a {
@@ -1018,7 +1018,7 @@ html body .item-page .full-view-link a {
     }
 }
 
-/* PAGINACIÓN INSTITUCIONAL IIAP */
+/* PAGINACIÃ“N INSTITUCIONAL IIAP */
 html body .page-item.active .page-link {
     background-color: #94ba65 !important;
     border-color: #94ba65 !important;
@@ -1035,7 +1035,7 @@ html body .page-link {
     }
 }
 
-/* Estandarización de Listas y Botones "Examinar" (Collection Browse) */
+/* EstandarizaciÃ³n de Listas y Botones "Examinar" (Collection Browse) */
 html body .list-group-item.active {
     background-color: #94ba65 !important;
     border-color: #94ba65 !important;
@@ -1101,4 +1101,83 @@ html body .list-group-item {
 ds-metadata-container .d-flex>span[class*="col-"] {
     font-weight: 600 !important;
     color: #4a4a4a;
+}
+
+/* Scoped responsive rules for Project Entity layout to prevent regressions in other entities */
+.project-metadata-field {
+    >.d-flex {
+        flex-wrap: wrap;
+
+        @media (min-width: 768px) {
+            flex-wrap: nowrap;
+        }
+    }
+}
+
+/* Global responsive fixes for CRIS Layout entities (Person, OrgUnit, etc.) on mobile */
+@media (max-width: 767.98px) {
+
+    /* 1. Force metadata cells (e.g. Thumbnail box and Details box) to stack vertically.
+     Bootstrap 5 uses 'width' (not flex-basis) for col sizing, so we must override width too. */
+    [ds-row].row>div {
+        flex: 0 0 100% !important;
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+
+    /* 2. Add vertical gap between thumbnail cell and details cell when stacked */
+    [ds-row].row>div:first-child:not(:last-child) {
+        margin-bottom: 1rem !important;
+    }
+
+    /* 3. Add vertical breathing room to the main row container */
+    [ds-row].row {
+        padding-top: 0.5rem;
+        padding-bottom: 0.5rem;
+    }
+
+    /* 4. Add spacing between individual metadata entries when stacked */
+    ds-metadata-container {
+        margin-bottom: 0.75rem;
+
+        /* Cancel bottom margin on the last entry to prevent excessive gap before the button */
+        &:last-of-type {
+            margin-bottom: 0 !important;
+            margin-top: 0 !important;
+        }
+    }
+
+    /* 5. Force labels and values inside the metadata containers to stack vertically */
+    ds-metadata-container>div>.d-flex:not(.flex-column) {
+        flex-wrap: wrap !important;
+
+        >span[class*="col-"] {
+            flex: 0 0 100% !important;
+            width: 100% !important;
+            max-width: 100% !important;
+            padding-right: 0 !important;
+            margin-bottom: 0.15rem;
+        }
+
+        >div.col {
+            flex: 0 0 100% !important;
+            width: 100% !important;
+            max-width: 100% !important;
+            padding-left: 0 !important;
+        }
+    }
+}
+
+/* Tablet horizontal spacing fix (768px–991.98px): increase gap between thumbnail and details */
+@media (min-width: 768px) and (max-width: 991.98px) {
+    [ds-row].row>div:last-child:not(:first-child) {
+        padding-left: 2.5rem !important;
+    }
+}
+
+/* Collapse empty/ghost ds-metadata-container elements globally.
+   Angular keeps the host element in the DOM even when the @if inside
+   produces no children. This rule hides them so they don't create whitespace. */
+ds-metadata-container:not(:has(> div)) {
+    display: none !important;
 }

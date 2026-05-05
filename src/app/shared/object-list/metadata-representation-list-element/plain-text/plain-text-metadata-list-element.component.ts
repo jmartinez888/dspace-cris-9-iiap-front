@@ -1,6 +1,5 @@
 
 import { Component } from '@angular/core';
-import { RouterLink } from '@angular/router';
 
 import { VALUE_LIST_BROWSE_DEFINITION } from '../../../../core/shared/value-list-browse-definition.resource-type';
 import { MetadataRepresentationListElementComponent } from '../metadata-representation-list-element.component';
@@ -10,7 +9,6 @@ import { MetadataLinkViewComponent } from '../../../metadata-link-view/metadata-
   selector: 'ds-plain-text-metadata-list-element',
   templateUrl: './plain-text-metadata-list-element.component.html',
   imports: [
-    RouterLink,
     MetadataLinkViewComponent,
   ],
 })
