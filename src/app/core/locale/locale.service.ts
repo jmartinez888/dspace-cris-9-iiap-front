@@ -128,7 +128,8 @@ export class LocaleService implements OnDestroy {
             map((eperson) => {
               const languages: string[] = [];
               const ePersonLang = eperson.firstMetadataValue(this.EPERSON_LANG_METADATA);
-              if (ePersonLang) {
+              const isActiveLang = environment.languages.some(lang => lang.code === ePersonLang && lang.active);
+              if (ePersonLang && isActiveLang) {
                 languages.push(...this.setQuality(
                   [ePersonLang],
                   LANG_ORIGIN.EPERSON,
@@ -191,6 +192,7 @@ export class LocaleService implements OnDestroy {
     if (isEmpty(lang)) {
       this.subs.push(this.getCurrentLanguageCode().subscribe(curLang => {
         lang = curLang;
+        this.saveLanguageCodeToCookie(lang);
         this.translate.use(lang);
         this.document.documentElement.lang = lang;
       }));
