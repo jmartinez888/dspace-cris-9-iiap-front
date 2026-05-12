@@ -14589,7 +14589,7 @@
   "layout.field.label.Publication.[dc.relation.funding]": "Financiamiento(s)",
 
   // "layout.field.label.Publication.[dc.subject]": "Subjects",
-  "layout.field.label.Publication.[dc.subject]": "Materias",
+  "layout.field.label.Publication.[dc.subject]": "Palabras Clave",
 
   // "layout.field.label.Publication.BITSTREAM": "File(s)",
   "layout.field.label.Publication.BITSTREAM": "Archivo(s)",

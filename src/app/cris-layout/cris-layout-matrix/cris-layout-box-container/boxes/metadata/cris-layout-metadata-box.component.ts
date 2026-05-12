@@ -64,7 +64,7 @@ export class CrisLayoutMetadataBoxComponent extends CrisLayoutBoxModelComponent 
     const entityType = this.item?.firstMetadataValue('dspace.entity.type');
     if (entityType === 'Project' && (this.box.shortname === 'details' || this.box.shortname === 'primarydata')) {
       config = this.processProjectDetailsBox(config);
-    } else if (entityType === 'Publication') {
+    } else if (entityType === 'Publication' && (this.box.shortname === 'pub_details' || this.box.shortname === 'details' || this.box.shortname === 'primarydata')) {
       config = this.processPublicationDetailsBox(config);
     }
     this.setMetadataComponents(config);
@@ -295,7 +295,7 @@ export class CrisLayoutMetadataBoxComponent extends CrisLayoutBoxModelComponent 
 
     if (compactFields.length > 0 || otherFields.length > 0) {
       const cells: any[] = [];
-      
+
       // If we have non-metadata fields (like thumbnail), put them in a col-md-3
       if (otherFields.length > 0) {
         cells.push({
@@ -303,7 +303,7 @@ export class CrisLayoutMetadataBoxComponent extends CrisLayoutBoxModelComponent 
           fields: otherFields
         });
       }
-      
+
       // Put metadata fields in the remaining width
       if (compactFields.length > 0) {
         cells.push({
@@ -335,57 +335,223 @@ export class CrisLayoutMetadataBoxComponent extends CrisLayoutBoxModelComponent 
   }
 
   /**
-   * Apply tag styling to dc.subject for Publication entities.
+   * Reorder and enrich the metadata configuration for Publication entity detail boxes.
+   * This ensures the required display order regardless of backend configuration order.
+   *
+   * Required order:
+   * 1. dc.identifier.doi
+   * 2. dc.date.issued
+   * 3. dc.publisher
+   * 4. dc.contributor.author
+   * 5. dc.language.iso
+   * 6. dc.description.abstract (longtext rendering, heading)
+   * 7. dc.subject (tag rendering, heading)
    */
   private processPublicationDetailsBox(config: MetadataBoxConfiguration): MetadataBoxConfiguration {
     if (!config?.rows) {
       return config;
     }
 
-    const newRows: MetadataBoxRow[] = [];
-    const tagFields: LayoutField[] = [];
+    // Only apply the layout enrichment and reordering for the details box
+    if (this.box.shortname !== 'pub_details' && this.box.shortname !== 'details' && this.box.shortname !== 'primarydata') {
+      return config;
+    }
 
-    // First pass: extract tag fields and keep other fields in their original rows
+    // Collect all existing fields from all rows/cells
+    const existingFields: LayoutField[] = [];
     for (const row of config.rows) {
-      const newCells: any[] = [];
       for (const cell of (row.cells || [])) {
-        const newFields: LayoutField[] = [];
         for (const field of (cell.fields || [])) {
-          if (field.metadata === 'dc.subject') {
-            const modifiedField = {
-              ...field,
-              rendering: 'tag',
-              labelAsHeading: true,
-              style: 'project-tag-green'
-            };
-            tagFields.push(modifiedField);
-          } else {
-            newFields.push(field);
+          if (field.fieldType === 'METADATA' || field.metadata) {
+            existingFields.push(field);
           }
         }
-        if (newFields.length > 0) {
-          newCells.push({ ...cell, fields: newFields });
-        }
-      }
-      if (newCells.length > 0) {
-        newRows.push({ ...row, cells: newCells });
       }
     }
 
-    // Second pass: append tag fields in their own rows at the bottom
+    // Consistent column widths for label/value alignment (matching Person/OrgUnit)
+    const LABEL_COL = 'col-12 col-md-4 font-weight-bold';
+    const VALUE_COL = '';
+
+    // Define the required field order with their rendering configurations
+    const requiredFieldOrder: Array<{
+      metadata: string;
+      label: string;
+      rendering: string;
+      fieldType: string;
+      labelAsHeading: boolean;
+      valuesInline: boolean;
+      style?: string;
+      styleLabel?: string;
+      styleValue?: string;
+    }> = [
+        {
+          metadata: 'dc.identifier.doi',
+          label: 'DOI',
+          rendering: 'identifier.doi',
+          fieldType: LayoutFieldType.METADATA,
+          labelAsHeading: false,
+          valuesInline: false,
+          styleLabel: LABEL_COL,
+          styleValue: VALUE_COL,
+        },
+        {
+          metadata: 'dc.date.issued',
+          label: 'Fecha de emisión',
+          rendering: 'date',
+          fieldType: LayoutFieldType.METADATA,
+          labelAsHeading: false,
+          valuesInline: false,
+          styleLabel: LABEL_COL,
+          styleValue: VALUE_COL,
+        },
+        {
+          metadata: 'dc.publisher',
+          label: 'Editor',
+          rendering: 'crisref',
+          fieldType: LayoutFieldType.METADATA,
+          labelAsHeading: false,
+          valuesInline: false,
+          styleLabel: LABEL_COL,
+          styleValue: VALUE_COL,
+        },
+        {
+          metadata: 'dc.contributor.author',
+          label: 'Autor(es)',
+          rendering: 'crisref',
+          fieldType: LayoutFieldType.METADATA,
+          labelAsHeading: false,
+          valuesInline: false,
+          styleLabel: LABEL_COL,
+          styleValue: VALUE_COL,
+        },
+        {
+          metadata: 'dc.language.iso',
+          label: 'Lenguaje',
+          rendering: 'text',
+          fieldType: LayoutFieldType.METADATA,
+          labelAsHeading: false,
+          valuesInline: false,
+          styleLabel: LABEL_COL,
+          styleValue: VALUE_COL,
+        },
+        {
+          metadata: 'dc.description.abstract',
+          label: 'Resumen',
+          rendering: 'longtext',
+          fieldType: LayoutFieldType.METADATA,
+          labelAsHeading: true,
+          valuesInline: false,
+          styleLabel: LABEL_COL,
+          styleValue: VALUE_COL,
+        },
+        {
+          metadata: 'dc.subject',
+          label: 'Palabras Clave',
+          rendering: 'tag',
+          fieldType: LayoutFieldType.METADATA,
+          labelAsHeading: true,
+          valuesInline: false,
+          styleLabel: LABEL_COL,
+          styleValue: VALUE_COL,
+        },
+      ];
+
+    // Build a map of existing fields for quick lookup
+    const existingFieldMap = new Map<string, LayoutField>();
+    for (const field of existingFields) {
+      if (field.metadata) {
+        existingFieldMap.set(field.metadata, field);
+      }
+    }
+
+    // Build the ordered field list, merging existing config with required defaults
+    const orderedFields: LayoutField[] = [];
+    for (const required of requiredFieldOrder) {
+      // Only include the field if the item actually has this metadata
+      if (!this.item.firstMetadataValue(required.metadata) &&
+        this.item.allMetadata(required.metadata).length === 0) {
+        continue;
+      }
+
+      const existing = existingFieldMap.get(required.metadata);
+      if (existing) {
+        // Preserve existing field config but override rendering for specific cases
+        const mergedField: LayoutField = { ...existing };
+
+        // Override rendering for tags/headings
+        if (required.labelAsHeading) {
+          mergedField.rendering = required.rendering;
+          mergedField.labelAsHeading = required.labelAsHeading;
+        }
+
+        mergedField.style = (mergedField.style || 'mb-2') + ' publication-metadata-field';
+
+        // Force consistent column widths for alignment (non-tag fields)
+        if (!required.labelAsHeading) {
+          mergedField.styleLabel = LABEL_COL;
+          mergedField.styleValue = VALUE_COL;
+        }
+
+        // Ensure correct label
+        mergedField.label = required.label;
+
+        orderedFields.push(mergedField);
+        existingFieldMap.delete(required.metadata);
+      } else {
+        // Create a new field definition
+        const newField: LayoutField = {
+          metadata: required.metadata,
+          label: required.label,
+          rendering: required.rendering,
+          fieldType: required.fieldType,
+          labelAsHeading: required.labelAsHeading,
+          valuesInline: required.valuesInline,
+          style: (required.style || 'mb-2') + ' publication-metadata-field',
+          styleLabel: required.styleLabel || LABEL_COL,
+          styleValue: required.styleValue || VALUE_COL,
+        };
+        orderedFields.push(newField);
+      }
+    }
+
+    // Separate non-tag fields (compact, same cell) from tag/heading fields (own row each)
+    const compactFields: LayoutField[] = [];
+    const tagFields: LayoutField[] = [];
+    for (const field of orderedFields) {
+      if (field.labelAsHeading) {
+        tagFields.push(field);
+      } else {
+        compactFields.push(field);
+      }
+    }
+
+    // Build rows: 100% width cells (col-12) inside pub_details
+    const newRows: MetadataBoxRow[] = [];
+
+    if (compactFields.length > 0) {
+      newRows.push({
+        style: '',
+        cells: [{
+          style: 'col-12',
+          fields: compactFields
+        }],
+      });
+    }
+
     for (const tagField of tagFields) {
       newRows.push({
         style: '',
         cells: [{
-          style: 'col-12', // For publications, usually no 3-column offset for metadata box at the bottom
-          fields: [tagField]
-        }]
+          style: 'col-12',
+          fields: [tagField],
+        }],
       });
     }
 
     return {
       ...config,
-      rows: newRows
+      rows: newRows,
     };
   }
 
