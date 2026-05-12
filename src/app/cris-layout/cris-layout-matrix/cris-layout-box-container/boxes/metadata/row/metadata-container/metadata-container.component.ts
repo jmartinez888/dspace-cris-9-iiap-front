@@ -109,8 +109,8 @@ export class MetadataContainerComponent implements OnInit {
    */
   getLabel(): string {
     if (this.field.fieldType === LayoutFieldType.BITSTREAM.toString()) {
-      return (hasValue(this.field.bitstream.metadataValue) ?
-        this.getTranslationIfExists(`${this.fieldI18nPrefix}.${this.item.entityType}.BITSTREAM[${this.field.bitstream.metadataValue}]`) :
+      return (hasValue(this.field.bitstream?.metadataValue) ?
+        this.getTranslationIfExists(`${this.fieldI18nPrefix}.${this.item.entityType}.BITSTREAM[${this.field.bitstream?.metadataValue}]`) :
         this.getTranslationIfExists(`${this.fieldI18nPrefix}.${this.item.entityType}.BITSTREAM`)
       ) ?? this.field.label;
     } else {
@@ -169,13 +169,13 @@ export class MetadataContainerComponent implements OnInit {
 
   hasBitstream(): Observable<boolean> {
     const filters: MetadataFilter[] = [];
-    if (isNotEmpty(this.field.bitstream.metadataValue)) {
+    if (isNotEmpty(this.field.bitstream?.metadataValue)) {
       filters.push({
-        metadataName: this.field.bitstream.metadataField,
-        metadataValue: this.field.bitstream.metadataValue,
+        metadataName: this.field.bitstream?.metadataField,
+        metadataValue: this.field.bitstream?.metadataValue,
       });
     }
-    return this.bitstreamDataService.findShowableBitstreamsByItem(this.item.uuid, this.field.bitstream.bundle, filters, {}, false)
+    return this.bitstreamDataService.findShowableBitstreamsByItem(this.item.uuid, this.field.bitstream?.bundle, filters, {}, false)
       .pipe(
         getFirstCompletedRemoteData(),
         map((response: RemoteData<PaginatedList<Bitstream>>) => {

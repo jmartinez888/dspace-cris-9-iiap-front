@@ -4,7 +4,7 @@
   <ds-metadata-container class="w-100" [box]="box" [item]="item" [field]="field"></ds-metadata-container>
   }
 
-  @if ((box.shortname === 'details' || box.shortname === 'namecard') && lastCell && isLastRow) {
+  @if ((box.shortname === 'details' || box.shortname === 'namecard' || box.shortname === 'pub_details') && lastCell && isLastRow) {
   <div class="full-view-link mt-3 mb-2">
     <a [routerLink]="['/items', item.uuid, 'full']" class="btn btn-outline-primary">
       <i class="fas fa-info-circle"></i> {{ 'item.page.link.full' | translate }}
