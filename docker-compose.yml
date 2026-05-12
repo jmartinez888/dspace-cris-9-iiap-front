@@ -1,5 +1,6 @@
 networks:
   dspacenet:
+
 services:
   frontend:
     environment:
@@ -23,3 +24,10 @@ services:
     stdin_open: true
     tty: true
     restart: unless-stopped
+    # ── Resource Limits for Dokploy / constrained VPS ──
+    deploy:
+      resources:
+        limits:
+          memory: 2G
+        reservations:
+          memory: 512M
