@@ -24,10 +24,10 @@ services:
     stdin_open: true
     tty: true
     restart: unless-stopped
-    # ── Resource Limits for Dokploy / constrained VPS ──
+    # ── Resource Limits for Dokploy / 16 GB VPS ──
     deploy:
       resources:
         limits:
-          memory: 2G
+          memory: 8G
         reservations:
-          memory: 512M
+          memory: 1G
