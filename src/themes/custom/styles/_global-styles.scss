@@ -53,3 +53,15 @@ nav.cris-layout-navbar {
 h1 {
   margin-bottom: 25px; 
 }
+
+// Fix contrast visual bug in MyDSpace dropdowns (green-on-green text-primary readability issue)
+.dropdown-item {
+  &:hover, &:focus, &.active, &:active {
+    color: $white !important;
+    
+    .text-primary, .text-secondary {
+      color: $white !important;
+    }
+  }
+}
+
