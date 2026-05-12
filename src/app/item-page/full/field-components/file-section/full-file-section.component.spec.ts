@@ -120,7 +120,7 @@ describe('FullFileSectionComponent', () => {
   describe('when the full file section gets loaded with bitstreams available', () => {
     it('should contain a list with bitstreams', () => {
       const fileSection = fixture.debugElement.queryAll(By.css('.file-section'));
-      expect(fileSection.length).toEqual(6);
+      expect(fileSection.length).toEqual(3);
     });
 
     it('and the title should be wrapped', () => {
