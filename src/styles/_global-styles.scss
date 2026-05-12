@@ -898,6 +898,42 @@ html body .btn-orange {
     }
 }
 
+/* Fuerza total en botones de éxito (Depositar) y peligro (Descartar) para evitar transparencia general */
+html body .btn.btn-success {
+    background-color: #678b3d !important; // Verde oscuro para contraste semántico con guardar
+    border-color: #678b3d !important;
+    color: #ffffff !important;
+
+    &:hover,
+    &:focus,
+    &:active {
+        background-color: #516e2f !important;
+        border-color: #516e2f !important;
+        color: #ffffff !important;
+    }
+
+    .fas, .far, .fab, i {
+        color: #ffffff !important;
+    }
+}
+
+html body .btn.btn-danger {
+    background-color: #cf4444 !important; // Rojo semántico para peligro/descartar
+    border-color: #cf4444 !important;
+    color: #ffffff !important;
+
+    &:hover,
+    &:focus,
+    &:active {
+        background-color: #a83232 !important;
+        border-color: #a83232 !important;
+        color: #ffffff !important;
+    }
+
+    .fas, .far, .fab, i {
+        color: #ffffff !important;
+    }
+}
 
 /* Forzar que los bordes de los botones outline tambiÃ©n sean verdes/naranjas */
 html body .btn-outline-primary,

@@ -521,7 +521,17 @@ export class DefaultAppConfig implements AppConfig {
 
     {
       name: 'custom',
-      extends: 'dspace'
+      extends: 'dspace',
+      headTags: [
+        {
+          tagName: 'link',
+          attributes: {
+            'rel': 'icon',
+            'href': 'assets/images/logo-iiap.ico',
+            'sizes': 'any',
+          },
+        },
+      ]
     },
     {
       // The default dspace theme

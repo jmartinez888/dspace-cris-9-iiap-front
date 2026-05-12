@@ -11,34 +11,54 @@ ARG NODE_VERSION=22
 ARG DSPACE_VERSION=dspace-cris-2025_02_x
 ARG DOCKER_REGISTRY=docker.io
 
+# ==============================================================================
+# Stage 1: BUILD — compile Angular SSR + Mirador on constrained memory
+# ==============================================================================
 FROM ${DOCKER_REGISTRY:-docker.io}/4science/dspace-cris-angular-dependencies:${DSPACE_VERSION:-dspace-cris-2025_02_x} AS build
+
+# Cap V8 heap to 3 GB — prevents OOM on ≤4 GB instances while still allowing
+# a full production build. Adjust down to 2048 if running on 2 GB RAM.
+ENV NODE_OPTIONS="--max-old-space-size=3072"
 
 COPY . /app/
 
 WORKDIR /app
 
-# Build Angular app
+# Build Angular browser + server bundles (production)
 RUN --mount=type=cache,target=/root/.npm \
   npm run build:prod
+
+# Build Mirador viewer plugin
 RUN --mount=type=cache,target=/root/.npm \
   npm run build:mirador
 
-# ---- Production image ----
+# ==============================================================================
+# Stage 2: PRODUCTION — ultra-lean runtime image
+# ==============================================================================
 FROM docker.io/node:${NODE_VERSION-22}-alpine AS prod
 
-# Install pm2 globally and clean npm cache
+# Install PM2 process manager and clean up in one layer
 RUN --mount=type=cache,target=/root/.npm \
   npm install --global pm2 && npm cache clean --force
 
 WORKDIR /app
 
-# Only copy built files and config
+# Copy only the compiled artifacts — no source code, no node_modules bloat
 COPY --chown=node:node --from=build /app/dist /app/dist
 COPY --chown=node:node --from=build /app/config /app/config
 COPY --chown=node:node --from=build /app/docker/dspace-ui.json /app/dspace-ui.json
 
+# Drop to non-root user
 USER node
+
 ENV NODE_ENV=production
+# Cap runtime memory per worker — prevents slow memory leaks from ballooning
+ENV NODE_OPTIONS="--max-old-space-size=768"
+
 EXPOSE 4000
+
+# Health check: PM2 status endpoint (Dokploy will use this to detect readiness)
+HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
+  CMD node -e "require('http').get('http://localhost:4000', (r) => { process.exit(r.statusCode === 200 ? 0 : 1) }).on('error', () => process.exit(1))"
 
 CMD ["pm2-runtime", "start", "dspace-ui.json", "--json"]
