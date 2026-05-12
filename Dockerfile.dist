@@ -16,9 +16,9 @@ ARG DOCKER_REGISTRY=docker.io
 # ==============================================================================
 FROM ${DOCKER_REGISTRY:-docker.io}/4science/dspace-cris-angular-dependencies:${DSPACE_VERSION:-dspace-cris-2025_02_x} AS build
 
-# Cap V8 heap to 3 GB — prevents OOM on ≤4 GB instances while still allowing
-# a full production build. Adjust down to 2048 if running on 2 GB RAM.
-ENV NODE_OPTIONS="--max-old-space-size=3072"
+# Cap V8 heap to 8 GB — gives the Angular AOT compiler ample room on a 16 GB host.
+# Adjust down to 4096 on smaller instances.
+ENV NODE_OPTIONS="--max-old-space-size=8192"
 
 COPY . /app/
 
