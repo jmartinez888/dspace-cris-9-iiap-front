@@ -69,6 +69,11 @@ jobs:
           file: ./Dockerfile.dist
           push: true
           tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:development
+          # Forzar arquitectura única — evita manifiestos multi-arch fantasma
+          platforms: linux/amd64
+          # Desactivar provenance — evita la arquitectura "unknown/unknown"
+          # que rompe el pull en Dokploy/Docker clients
+          provenance: false
           cache-from: type=gha
           cache-to: type=gha,mode=max
           # Pasar las build args necesarias
