@@ -1,0 +1,44 @@
+# =============================================================================
+# Docker Compose — Producción (Dokploy)
+# =============================================================================
+# Este archivo NO compila nada. Solo hace pull de la imagen precompilada
+# desde GitHub Container Registry (GHCR) que fue construida por GitHub Actions.
+#
+# Uso en Dokploy:
+#   1. Crear servicio tipo "Compose"
+#   2. Pegar este contenido (o apuntar a este archivo)
+#   3. Configurar las credenciales del registro GHCR si el repo es privado
+# =============================================================================
+
+networks:
+  dspacenet:
+
+services:
+  frontend:
+    # ── Imagen precompilada desde GHCR (NO build local) ──
+    image: ghcr.io/jmartinez888/dspace-cris-9-iiap-front:development
+    environment:
+      DSPACE_UI_SSL: 'false'
+      DSPACE_UI_HOST: '0.0.0.0'
+      DSPACE_UI_PORT: '4000'
+      DSPACE_UI_NAMESPACE: /
+      DSPACE_REST_SSL: 'true'
+      DSPACE_REST_HOST: api-cris.iiap.gob.pe
+      DSPACE_REST_PORT: 443
+      DSPACE_REST_NAMESPACE: /server
+      NODE_TLS_REJECT_UNAUTHORIZED: '0'
+    networks:
+      dspacenet:
+    ports:
+      - published: 4000
+        target: 4000
+    stdin_open: true
+    tty: true
+    restart: unless-stopped
+    # ── Resource Limits (ya no necesita 8G porque NO compila) ──
+    deploy:
+      resources:
+        limits:
+          memory: 2G
+        reservations:
+          memory: 512M

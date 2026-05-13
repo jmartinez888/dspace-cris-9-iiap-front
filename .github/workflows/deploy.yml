@@ -1,0 +1,129 @@
+# =============================================================================
+# CI/CD — Build & Push to GHCR + Auto-Cleanup (Plan Gratuito: 500 MB)
+# =============================================================================
+# Este workflow:
+#   1. Compila la imagen Docker multi-stage desde Dockerfile.dist
+#   2. La sube a GitHub Container Registry (GHCR) con tag estático
+#   3. Limpia TODAS las versiones anteriores y huérfanas (untagged)
+#      para mantener exactamente 1 versión y respetar la cuota de 500 MB
+#   4. Envía un webhook a Dokploy para re-desplegar automáticamente
+# =============================================================================
+
+name: Build & Deploy to GHCR
+
+on:
+  push:
+    branches:
+      - development
+  # Permite ejecución manual desde la pestaña "Actions"
+  workflow_dispatch:
+
+# ── Variables reutilizables ──────────────────────────────────────────────────
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}  # jmartinez888/dspace-cris-9-iiap-front
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  build-and-push:
+    name: 🐳 Build, Push & Cleanup
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    steps:
+      # ────────────────────────────────────────────────────────
+      # 1. Checkout del código fuente
+      # ────────────────────────────────────────────────────────
+      - name: 📥 Checkout repository
+        uses: actions/checkout@v4
+
+      # ────────────────────────────────────────────────────────
+      # 2. Configurar Docker Buildx (soporte para caché avanzada)
+      # ────────────────────────────────────────────────────────
+      - name: 🔧 Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      # ────────────────────────────────────────────────────────
+      # 3. Autenticación en GHCR
+      # ────────────────────────────────────────────────────────
+      - name: 🔑 Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      # ────────────────────────────────────────────────────────
+      # 4. Build & Push de la imagen Docker
+      #    - Tag estático: ghcr.io/jmartinez888/dspace-cris-9-iiap-front:development
+      #    - Multi-stage build vía Dockerfile.dist
+      #    - Caché de capas en GHCR para acelerar builds subsecuentes
+      # ────────────────────────────────────────────────────────
+      - name: 🏗️ Build and push Docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ./Dockerfile.dist
+          push: true
+          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:development
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          # Pasar las build args necesarias
+          build-args: |
+            NODE_VERSION=22
+            DSPACE_VERSION=dspace-cris-2025_02_x
+
+      # ────────────────────────────────────────────────────────
+      # 5. CRÍTICO: Limpieza de versiones antiguas (untagged)
+      #    Elimina todas las versiones "huérfanas" sin etiqueta
+      #    que quedan después de sobrescribir el tag :development
+      #    Mantiene 0 versiones untagged (solo la tagged sobrevive)
+      # ────────────────────────────────────────────────────────
+      - name: 🧹 Delete untagged (orphan) image versions
+        uses: actions/delete-package-versions@v5
+        with:
+          package-name: dspace-cris-9-iiap-front
+          package-type: container
+          delete-only-untagged-versions: 'true'
+          min-versions-to-keep: 0
+        continue-on-error: true  # No bloquear el pipeline si no hay nada que limpiar
+
+      # ────────────────────────────────────────────────────────
+      # 6. Limpieza adicional: mantener solo 1 versión tagged
+      #    Por seguridad, si alguna vez se escapara un tag extra,
+      #    este paso garantiza que solo 1 versión total sobreviva.
+      # ────────────────────────────────────────────────────────
+      - name: 🗑️ Keep only latest tagged version
+        uses: actions/delete-package-versions@v5
+        with:
+          package-name: dspace-cris-9-iiap-front
+          package-type: container
+          min-versions-to-keep: 1
+        continue-on-error: true
+
+      # ────────────────────────────────────────────────────────
+      # 7. (Opcional) Webhook a Dokploy para re-deploy automático
+      #    Configurar DOKPLOY_WEBHOOK_URL en los secrets del repo.
+      #    Descomenta este paso cuando tengas la URL del webhook.
+      # ────────────────────────────────────────────────────────
+      # - name: 🚀 Trigger Dokploy redeploy
+      #   if: success()
+      #   run: |
+      #     curl -s -o /dev/null -w "%{http_code}" \
+      #       -X POST "${{ secrets.DOKPLOY_WEBHOOK_URL }}" \
+      #       -H "Content-Type: application/json"
+
+      - name: ✅ Deploy summary
+        if: success()
+        run: |
+          echo "## 🐳 Deploy exitoso" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Imagen:** \`${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:development\`" >> $GITHUB_STEP_SUMMARY
+          echo "**Commit:** \`${{ github.sha }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "**Branch:** \`${{ github.ref_name }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "**Fecha:** $(date -u +'%Y-%m-%d %H:%M:%S UTC')" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Las versiones antiguas y huérfanas han sido eliminadas del registro." >> $GITHUB_STEP_SUMMARY
