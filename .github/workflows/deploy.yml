@@ -14,7 +14,7 @@ name: Build & Deploy to GHCR
 on:
   push:
     branches:
-      - development
+      - feature/hide-license-and-locale-fixes
   # Permite ejecución manual desde la pestaña "Actions"
   workflow_dispatch:
 
