@@ -3,9 +3,10 @@ networks:
 
 services:
   frontend:
+    image: ghcr.io/jmartinez888/dspace-cris-9-iiap-front:development
     environment:
       DSPACE_UI_SSL: 'false'
-      DSPACE_UI_HOST: frontend
+      DSPACE_UI_HOST: '0.0.0.0'
       DSPACE_UI_PORT: '4000'
       DSPACE_UI_NAMESPACE: /
       DSPACE_REST_SSL: 'true'
@@ -13,21 +14,17 @@ services:
       DSPACE_REST_PORT: 443
       DSPACE_REST_NAMESPACE: /server
       NODE_TLS_REJECT_UNAUTHORIZED: '0'
-    build:
-      context: .
-      dockerfile: Dockerfile.dist
     networks:
       dspacenet:
     ports:
-    - published: 4000
-      target: 4000
+      - published: 4000
+        target: 4000
     stdin_open: true
     tty: true
     restart: unless-stopped
-    # ── Resource Limits for Dokploy / 16 GB VPS ──
     deploy:
       resources:
         limits:
-          memory: 8G
+          memory: 2G
         reservations:
-          memory: 1G
+          memory: 512M
