@@ -14,14 +14,14 @@ name: Build & Deploy to GHCR
 on:
   push:
     branches:
-      - feature/hide-license-and-locale-fixes
+      - development
   # Permite ejecución manual desde la pestaña "Actions"
   workflow_dispatch:
 
 # ── Variables reutilizables ──────────────────────────────────────────────────
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}  # jmartinez888/dspace-cris-9-iiap-front
+  IMAGE_NAME: ${{ github.repository }} # jmartinez888/dspace-cris-9-iiap-front
 
 permissions:
   contents: read
@@ -92,9 +92,9 @@ jobs:
         with:
           package-name: dspace-cris-9-iiap-front
           package-type: container
-          delete-only-untagged-versions: 'true'
+          delete-only-untagged-versions: "true"
           min-versions-to-keep: 0
-        continue-on-error: true  # No bloquear el pipeline si no hay nada que limpiar
+        continue-on-error: true # No bloquear el pipeline si no hay nada que limpiar
 
       # ────────────────────────────────────────────────────────
       # 6. Limpieza adicional: mantener solo 1 versión tagged
