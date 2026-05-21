@@ -110,16 +110,15 @@ jobs:
         continue-on-error: true
 
       # ────────────────────────────────────────────────────────
-      # 7. (Opcional) Webhook a Dokploy para re-deploy automático
+      # 7. Webhook a Dokploy para re-deploy automático
       #    Configurar DOKPLOY_WEBHOOK_URL en los secrets del repo.
-      #    Descomenta este paso cuando tengas la URL del webhook.
       # ────────────────────────────────────────────────────────
-      # - name: 🚀 Trigger Dokploy redeploy
-      #   if: success()
-      #   run: |
-      #     curl -s -o /dev/null -w "%{http_code}" \
-      #       -X POST "${{ secrets.DOKPLOY_WEBHOOK_URL }}" \
-      #       -H "Content-Type: application/json"
+      - name: 🚀 Trigger Dokploy redeploy
+        if: success()
+        run: |
+          curl -s -o /dev/null -w "%{http_code}" \
+            -X POST "${{ secrets.DOKPLOY_WEBHOOK_URL }}" \
+            -H "Content-Type: application/json"
 
       - name: ✅ Deploy summary
         if: success()
