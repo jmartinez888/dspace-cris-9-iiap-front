@@ -118,7 +118,7 @@ jobs:
         run: |
           curl -X POST "${{ secrets.DOKPLOY_WEBHOOK_URL }}" \
             -H "Content-Type: application/json" \
-            -d "{\"ref\": \"${{ github.ref }}\"}"
+            -d "{\"ref\": \"refs/heads/development\"}"
 
       - name: 📋 Deploy summary
         if: success()
