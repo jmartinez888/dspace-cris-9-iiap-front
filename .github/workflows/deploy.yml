@@ -116,9 +116,7 @@ jobs:
       - name: 🚀 Trigger Dokploy redeploy
         if: success()
         run: |
-          curl -s -o /dev/null -w "%{http_code}" \
-            -X POST "${{ secrets.DOKPLOY_WEBHOOK_URL }}" \
-            -H "Content-Type: application/json"
+          curl -X GET "${{ secrets.DOKPLOY_WEBHOOK_URL }}"
 
       - name: 📋 Deploy summary
         if: success()
