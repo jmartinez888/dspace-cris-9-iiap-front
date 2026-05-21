@@ -121,7 +121,7 @@ jobs:
       - name: 📋 Deploy summary
         if: success()
         run: |
-          echo "## ✅🐳 Deploy exitoso" >> $GITHUB_STEP_SUMMARY
+          echo "##🐳 Deploy exitoso" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "**Imagen:** \`${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:development\`" >> $GITHUB_STEP_SUMMARY
           echo "**Commit:** \`${{ github.sha }}\`" >> $GITHUB_STEP_SUMMARY
