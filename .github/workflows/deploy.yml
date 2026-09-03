@@ -14,7 +14,7 @@ name: Build & Deploy to GHCR
 on:
   push:
     branches:
-      - development
+      - optimize-deployment
   # Permite ejecución manual desde la pestaña "Actions"
   workflow_dispatch:
 
@@ -118,7 +118,7 @@ jobs:
         run: |
           curl -X POST "${{ secrets.DOKPLOY_WEBHOOK_URL }}" \
             -H "Content-Type: application/json" \
-            -d "{\"ref\": \"refs/heads/development\"}"
+            -d "{\"ref\": \"refs/heads/optimize-deployment\"}"
 
       - name: 📋 Deploy summary
         if: success()
