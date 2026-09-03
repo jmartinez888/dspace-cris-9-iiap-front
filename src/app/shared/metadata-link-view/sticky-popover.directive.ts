@@ -1,4 +1,4 @@
-import { DOCUMENT } from '@angular/common';
+import { DOCUMENT, isPlatformBrowser } from '@angular/common';
 import {
   ApplicationRef,
   ChangeDetectorRef,
@@ -10,6 +10,7 @@ import {
   NgZone,
   OnDestroy,
   OnInit,
+  PLATFORM_ID,
   Renderer2,
   TemplateRef,
   ViewContainerRef,
@@ -53,12 +54,13 @@ export class StickyPopoverDirective extends NgbPopover implements OnInit, OnDest
     viewContainerRef: ViewContainerRef,
     config: NgbPopoverConfig,
     _ngZone: NgZone,
-    @Inject(DOCUMENT) _document: Document,
+    @Inject(DOCUMENT) private _document: Document,
     _changeDetector: ChangeDetectorRef,
     applicationRef: ApplicationRef,
     private router: Router,
+    @Inject(PLATFORM_ID) private platformId: any,
   ) {
-    super(_elementRef, _renderer, injector, viewContainerRef, config, _ngZone, document, _changeDetector, applicationRef);
+    super(_elementRef, _renderer, injector, viewContainerRef, config, _ngZone, _document, _changeDetector, applicationRef);
     this._elRef = _elementRef;
     this._render = _renderer;
     this.triggers = 'manual';
@@ -71,6 +73,10 @@ export class StickyPopoverDirective extends NgbPopover implements OnInit, OnDest
   ngOnInit(): void {
     super.ngOnInit();
     this.ngbPopover = this.dsStickyPopover;
+
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
 
     this._render.listen(this._elRef.nativeElement, 'mouseenter', () => {
       this.canClosePopover = true;
@@ -103,7 +109,13 @@ export class StickyPopoverDirective extends NgbPopover implements OnInit, OnDest
    */
   open() {
     super.open();
-    const popover = window.document.querySelector('.popover');
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+    const popover = this._document?.querySelector('.popover');
+    if (!popover) {
+      return;
+    }
     this._render.listen(popover, 'mouseover', () => {
       this.canClosePopover = false;
     });

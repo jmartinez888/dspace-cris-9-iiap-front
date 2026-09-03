@@ -130,23 +130,25 @@ export class ItemSearchResultListElementComponent extends SearchResultListElemen
     if (this.showMetrics && this.orejimeService && this.orejimeService.watchConsentUpdates instanceof Function) {
       this.orejimeService.watchConsentUpdates();
 
-      this.hasLoadedThirdPartyMetrics$ = combineLatest([
-        this.orejimeService.consentsUpdates$.pipe(
-          filter(consents => isNotEmpty(consents)),
-        ),
-        this.dso.metrics?.pipe(
-          getFirstSucceededRemoteListPayload(),
-          map(metrics => {
-            return metrics.filter(metric => this.thirdPartyMetrics.includes(metric.metricType));
+      if (this.orejimeService.consentsUpdates$) {
+        this.hasLoadedThirdPartyMetrics$ = combineLatest([
+          this.orejimeService.consentsUpdates$.pipe(
+            filter(consents => isNotEmpty(consents)),
+          ),
+          this.dso.metrics?.pipe(
+            getFirstSucceededRemoteListPayload(),
+            map(metrics => {
+              return metrics.filter(metric => this.thirdPartyMetrics.includes(metric.metricType));
+            }),
+          ),
+        ]).pipe(
+          map(([consents, metrics = []]) => {
+            return metrics.reduce((previous, current) => {
+              return consents[current.metricType] && previous;
+            }, true);
           }),
-        ),
-      ]).pipe(
-        map(([consents, metrics = []]) => {
-          return metrics.reduce((previous, current) => {
-            return consents[current.metricType] && previous;
-          }, true);
-        }),
-      );
+        );
+      }
     }
   }
 
