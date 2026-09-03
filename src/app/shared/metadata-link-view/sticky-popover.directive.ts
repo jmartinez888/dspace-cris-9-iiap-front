@@ -48,19 +48,23 @@ export class StickyPopoverDirective extends NgbPopover implements OnInit, OnDest
   /** Renderer to listen to and manipulate DOM elements */
   private readonly _render;
 
+  /** Injected document reference */
+  private readonly _doc: Document;
+
   constructor(
     _elementRef: ElementRef<HTMLElement>,
     _renderer: Renderer2, injector: Injector,
     viewContainerRef: ViewContainerRef,
     config: NgbPopoverConfig,
     _ngZone: NgZone,
-    @Inject(DOCUMENT) private _document: Document,
+    @Inject(DOCUMENT) _doc: Document,
     _changeDetector: ChangeDetectorRef,
     applicationRef: ApplicationRef,
     private router: Router,
     @Inject(PLATFORM_ID) private platformId: any,
   ) {
-    super(_elementRef, _renderer, injector, viewContainerRef, config, _ngZone, _document, _changeDetector, applicationRef);
+    super(_elementRef, _renderer, injector, viewContainerRef, config, _ngZone, _doc, _changeDetector, applicationRef);
+    this._doc = _doc;
     this._elRef = _elementRef;
     this._render = _renderer;
     this.triggers = 'manual';
@@ -112,7 +116,7 @@ export class StickyPopoverDirective extends NgbPopover implements OnInit, OnDest
     if (!isPlatformBrowser(this.platformId)) {
       return;
     }
-    const popover = this._document?.querySelector('.popover');
+    const popover = this._doc?.querySelector('.popover');
     if (!popover) {
       return;
     }
