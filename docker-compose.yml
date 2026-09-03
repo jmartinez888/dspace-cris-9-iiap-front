@@ -3,10 +3,7 @@ networks:
 
 services:
   frontend:
-    build:
-      context: .
-      dockerfile: Dockerfile.dist
-    image: ghcr.io/jmartinez888/dspace-cris-9-iiap-front:production
+    image: ghcr.io/jmartinez888/dspace-cris-9-iiap-front:development
     environment:
       DSPACE_UI_SSL: 'false'
       DSPACE_UI_HOST: '0.0.0.0'
