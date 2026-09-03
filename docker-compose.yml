@@ -4,6 +4,7 @@ networks:
 services:
   frontend:
     image: ghcr.io/jmartinez888/dspace-cris-9-iiap-front:development
+    pull_policy: always
     environment:
       DSPACE_UI_SSL: 'false'
       DSPACE_UI_HOST: '0.0.0.0'
