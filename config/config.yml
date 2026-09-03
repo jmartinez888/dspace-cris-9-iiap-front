@@ -14,6 +14,7 @@ fallbackLanguage: es
 
 ssr:
   enabled: true
+  inlineCriticalCss: false
 
 cache:
   serverSide:
@@ -23,8 +24,8 @@ cache:
       timeToLive: 86400000 # 1 day
       allowStale: true
     anonymousCache:
-      max: 200
-      timeToLive: 60000 # 1 minute
+      max: 300
+      timeToLive: 300000 # 5 minutes
       allowStale: true
 
 languages:

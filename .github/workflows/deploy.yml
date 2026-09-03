@@ -75,7 +75,7 @@ jobs:
           # que rompe el pull en Dokploy/Docker clients
           provenance: false
           cache-from: type=gha
-          cache-to: type=gha,mode=max
+          cache-to: type=gha,mode=min
           # Pasar las build args necesarias
           build-args: |
             NODE_VERSION=22
