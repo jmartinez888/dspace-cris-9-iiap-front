@@ -14,7 +14,7 @@ services:
       DSPACE_REST_PORT: 443
       DSPACE_REST_NAMESPACE: /server
       NODE_TLS_REJECT_UNAUTHORIZED: '0'
-      NODE_OPTIONS: '--max-old-space-size=768'
+      NODE_OPTIONS: '--max-old-space-size=1024'
     networks:
       dspacenet:
     ports:
@@ -22,14 +22,14 @@ services:
         target: 4000
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "node", "-e", "require('http').get('http://localhost:4000', (r) => { process.exit(r.statusCode === 200 ? 0 : 1) }).on('error', () => process.exit(1))"]
+      test: ["CMD", "node", "-e", "require('http').get('http://localhost:4000/app/client/health', (r) => { process.exit(r.statusCode === 200 ? 0 : 1) }).on('error', () => process.exit(1))"]
       interval: 30s
-      timeout: 10s
-      start_period: 60s
+      timeout: 5s
+      start_period: 30s
       retries: 3
     deploy:
       resources:
         limits:
-          memory: 1G
+          memory: 1.5G
         reservations:
-          memory: 256M
+          memory: 512M

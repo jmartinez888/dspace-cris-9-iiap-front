@@ -15,6 +15,18 @@ fallbackLanguage: es
 ssr:
   enabled: true
 
+cache:
+  serverSide:
+    debug: false
+    botCache:
+      max: 500
+      timeToLive: 86400000 # 1 day
+      allowStale: true
+    anonymousCache:
+      max: 200
+      timeToLive: 60000 # 1 minute
+      allowStale: true
+
 languages:
   - code: es
     label: Español

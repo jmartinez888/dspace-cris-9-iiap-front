@@ -5,9 +5,9 @@
          "cwd": "/app",
          "script": "dist/server/main.js",
          "instances": 1,
-         "exec_mode": "cluster",
-         "max_memory_restart": "768M",
-         "node_args": "--max-old-space-size=768",
+         "exec_mode": "fork",
+         "max_memory_restart": "1200M",
+         "node_args": "--max-old-space-size=1024",
          "env": {
            "NODE_ENV": "production"
          }
