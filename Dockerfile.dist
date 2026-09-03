@@ -18,6 +18,11 @@ COPY . /app/
 
 WORKDIR /app
 
+# Sync node_modules with our package-lock.json
+# Base image may be missing packages we added (e.g. @ng-dynamic-forms/core)
+RUN --mount=type=cache,target=/root/.npm \
+  npm ci --legacy-peer-deps
+
 # Build Angular browser + server bundles (production)
 RUN --mount=type=cache,target=/root/.npm \
   npm run build:prod
@@ -36,7 +41,7 @@ WORKDIR /app
 # Copy package files and install only production dependencies
 COPY --from=build /app/package.json /app/package-lock.json ./
 RUN --mount=type=cache,target=/root/.npm \
-  npm ci --omit=dev --ignore-scripts && \
+  npm ci --omit=dev --legacy-peer-deps --ignore-scripts && \
   npm cache clean --force
 
 # ==============================================================================
