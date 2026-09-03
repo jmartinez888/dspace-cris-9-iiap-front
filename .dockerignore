@@ -2,6 +2,8 @@
 .idea
 .vscode
 .DS_Store
+.agents
+.github
 *.iml
 
 # Build folders
@@ -28,3 +30,23 @@ webpack.records.json
 
 # Yarn no longer used
 yarn.lock
+
+# Test & docs — not needed in production image
+cypress
+e2e
+docs
+lint
+*.md
+!README.md
+CONTRIBUTING.md
+SECURITY.md
+LICENSES_THIRD_PARTY
+
+# CI/CD configs
+bitbucket-pipelines.yml
+.codecov.yml
+.editorconfig
+.eslintrc.json
+.gitattributes
+typedoc.json
+karma.conf.js

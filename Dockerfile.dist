@@ -1,23 +1,17 @@
 # syntax=docker/dockerfile:1.7-labs
 
-# This image will be published as dspace/dspace-angular:$DSPACE_VERSION-dist
-# See https://github.com/4science/dspace-angular/tree/main/docker for usage details
+# Optimized production Dockerfile for DSpace-CRIS Angular frontend
+# Build: docker build -f Dockerfile.dist -t dspace-cris-frontend .
 
-# Test build:
-# docker build -f Dockerfile.dist -t 4science/dspace-angular:dspace-cris-2025_02_x-dist .
-
-# Angular 20 + Node 22 optimized Dockerfile
 ARG NODE_VERSION=22
 ARG DSPACE_VERSION=dspace-cris-2025_02_x
 ARG DOCKER_REGISTRY=docker.io
 
 # ==============================================================================
-# Stage 1: BUILD — compile Angular SSR + Mirador on constrained memory
+# Stage 1: BUILD — compile Angular SSR + Mirador
 # ==============================================================================
 FROM ${DOCKER_REGISTRY:-docker.io}/4science/dspace-cris-angular-dependencies:${DSPACE_VERSION:-dspace-cris-2025_02_x} AS build
 
-# Cap V8 heap to 8 GB — gives the Angular AOT compiler ample room on a 16 GB host.
-# Adjust down to 4096 on smaller instances.
 ENV NODE_OPTIONS="--max-old-space-size=8192"
 
 COPY . /app/
@@ -33,31 +27,51 @@ RUN --mount=type=cache,target=/root/.npm \
   npm run build:mirador
 
 # ==============================================================================
-# Stage 2: PRODUCTION — ultra-lean runtime image
+# Stage 2: PRODUCTION DEPENDENCIES — only runtime deps, no devDependencies
 # ==============================================================================
-FROM docker.io/node:${NODE_VERSION-22}-alpine AS prod
-
-# Install PM2 process manager and clean up in one layer
-RUN --mount=type=cache,target=/root/.npm \
-  npm install --global pm2 && npm cache clean --force
+FROM docker.io/node:${NODE_VERSION-22}-alpine AS deps
 
 WORKDIR /app
 
-# Copy only the compiled artifacts — no source code, no node_modules bloat
+# Copy package files and install only production dependencies
+COPY --from=build /app/package.json /app/package-lock.json ./
+RUN --mount=type=cache,target=/root/.npm \
+  npm ci --omit=dev --ignore-scripts && \
+  npm cache clean --force
+
+# ==============================================================================
+# Stage 3: RUNTIME — ultra-lean final image
+# ==============================================================================
+FROM docker.io/node:${NODE_VERSION-22}-alpine AS prod
+
+# Install PM2 globally and clean up in one layer
+RUN --mount=type=cache,target=/root/.npm \
+  npm install --global pm2 && \
+  npm cache clean --force && \
+  # Remove unnecessary files from the base image
+  rm -rf /tmp/* /var/tmp/* /usr/share/man /usr/share/doc
+
+WORKDIR /app
+
+# Copy compiled artifacts only
 COPY --chown=node:node --from=build /app/dist /app/dist
 COPY --chown=node:node --from=build /app/config /app/config
 COPY --chown=node:node --from=build /app/docker/dspace-ui.json /app/dspace-ui.json
+
+# Copy production-only node_modules (much smaller than full)
+COPY --chown=node:node --from=deps /app/node_modules /app/node_modules
+COPY --chown=node:node --from=deps /app/package.json /app/package.json
 
 # Drop to non-root user
 USER node
 
 ENV NODE_ENV=production
-# Cap runtime memory per worker — prevents slow memory leaks from ballooning
+# Cap runtime memory per worker
 ENV NODE_OPTIONS="--max-old-space-size=768"
 
 EXPOSE 4000
 
-# Health check: PM2 status endpoint (Dokploy will use this to detect readiness)
+# Health check
 HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
   CMD node -e "require('http').get('http://localhost:4000', (r) => { process.exit(r.statusCode === 200 ? 0 : 1) }).on('error', () => process.exit(1))"
 
