@@ -24,8 +24,9 @@ RUN --mount=type=cache,target=/root/.npm \
 # Copy source code after dependencies are installed
 COPY . /app/
 
-# Build Angular browser + server bundles and Mirador in one layer
+# Build Angular browser + server bundles and Mirador with persistent Angular build cache
 RUN --mount=type=cache,target=/root/.npm \
+    --mount=type=cache,target=/app/.angular/cache \
   npm run build:prod && npm run build:mirador
 
 # ==============================================================================
@@ -43,7 +44,7 @@ COPY --chown=node:node --from=build /app/config /app/config
 USER node
 
 ENV NODE_ENV=production
-ENV NODE_OPTIONS="--max-old-space-size=1024"
+ENV NODE_OPTIONS="--max-old-space-size=896"
 
 EXPOSE 4000
 

@@ -24,8 +24,8 @@ cache:
       timeToLive: 86400000 # 1 day
       allowStale: true
     anonymousCache:
-      max: 300
-      timeToLive: 300000 # 5 minutes
+      max: 1000
+      timeToLive: 600000 # 10 minutes
       allowStale: true
 
 languages:
