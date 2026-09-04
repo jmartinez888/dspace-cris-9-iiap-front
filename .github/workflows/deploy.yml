@@ -14,7 +14,7 @@ name: Build & Deploy to GHCR
 on:
   push:
     branches:
-      - development
+      - fix/deploy
   # Permite ejecución manual desde la pestaña "Actions"
   workflow_dispatch:
 
