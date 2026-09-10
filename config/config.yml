@@ -15,6 +15,20 @@ fallbackLanguage: es
 ssr:
   enabled: true
 
+# Cache only public SSR responses. Community and collection search routes are
+# served client-side in production, so this cache protects the remaining
+# indexable public pages without caching authenticated content.
+cache:
+  serverSide:
+    botCache:
+      max: 250
+      timeToLive: 86400000 # 24 hours
+      allowStale: true
+    anonymousCache:
+      max: 75
+      timeToLive: 60000 # 1 minute
+      allowStale: true
+
 languages:
   - code: es
     label: Español

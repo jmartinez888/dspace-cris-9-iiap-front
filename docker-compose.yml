@@ -3,7 +3,12 @@ networks:
 
 services:
   frontend:
-    image: ghcr.io/jmartinez888/dspace-cris-9-iiap-front:development
+    # By default deploy the current development image. Set DSPACE_UI_IMAGE_TAG
+    # to a sha-* tag for an explicit rollback.
+    image: ghcr.io/jmartinez888/dspace-cris-9-iiap-front:${DSPACE_UI_IMAGE_TAG:-development}
+    # A mutable tag must always be pulled during a Dokploy deployment. Without
+    # this, restarting the compose project can keep an obsolete local image.
+    pull_policy: always
     environment:
       DSPACE_UI_SSL: 'false'
       DSPACE_UI_HOST: '0.0.0.0'
@@ -19,12 +24,12 @@ services:
     ports:
       - published: 4000
         target: 4000
-    stdin_open: true
-    tty: true
     restart: unless-stopped
     deploy:
       resources:
         limits:
+          # Reserve capacity for the REST backend and the rest of the host.
+          cpus: '2.0'
           memory: 2G
         reservations:
-          memory: 512M
+          memory: 768M

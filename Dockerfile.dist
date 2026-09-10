@@ -37,28 +37,25 @@ RUN --mount=type=cache,target=/root/.npm \
 # ==============================================================================
 FROM docker.io/node:${NODE_VERSION-22}-alpine AS prod
 
-# Install PM2 process manager and clean up in one layer
-RUN --mount=type=cache,target=/root/.npm \
-  npm install --global pm2 && npm cache clean --force
-
 WORKDIR /app
 
 # Copy only the compiled artifacts — no source code, no node_modules bloat
 COPY --chown=node:node --from=build /app/dist /app/dist
 COPY --chown=node:node --from=build /app/config /app/config
-COPY --chown=node:node --from=build /app/docker/dspace-ui.json /app/dspace-ui.json
 
 # Drop to non-root user
 USER node
 
-ENV NODE_ENV=production
-# Cap runtime memory per worker — prevents slow memory leaks from ballooning
-ENV NODE_OPTIONS="--max-old-space-size=768"
+# The deployed process exhausted its former 896 MiB heap under concurrent SSR.
+# Keep V8 below the 2 GiB cgroup limit while allowing room for native memory.
+ENV NODE_ENV=production \
+    NODE_OPTIONS="--max-old-space-size=1280"
 
 EXPOSE 4000
 
-# Health check: PM2 status endpoint (Dokploy will use this to detect readiness)
-HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
-  CMD node -e "require('http').get('http://localhost:4000', (r) => { process.exit(r.statusCode === 200 ? 0 : 1) }).on('error', () => process.exit(1))"
+# Keep the probe independent from Angular SSR and allow short request queues
+# during deploys or cache warm-up without triggering a restart cycle.
+HEALTHCHECK --interval=30s --timeout=30s --start-period=90s --retries=3 \
+  CMD node -e "require('http').get('http://localhost:4000/app/client/health', (r) => { process.exit(r.statusCode === 200 ? 0 : 1) }).on('error', () => process.exit(1))"
 
-CMD ["pm2-runtime", "start", "dspace-ui.json", "--json"]
+CMD ["node", "dist/server/main.js"]

@@ -122,7 +122,17 @@ export function app() {
    * Enable request logging
    * See [morgan](https://github.com/expressjs/morgan)
    */
-  server.use(morgan('dev'));
+  // Avoid serializing long query strings for every successful production
+  // request. Slow responses and errors are still visible through the status
+  // code and response time, while development keeps the detailed format.
+  server.use(morgan(environment.production ? ':method :status :response-time ms' : 'dev', {
+    skip: (req) => environment.production && (
+      req.path === '/app/client/health' ||
+      req.path === '/app/health' ||
+      req.path.startsWith('/assets/') ||
+      req.path.startsWith('/iiif/')
+    ),
+  }));
 
   /*
    * Add cookie parser middleware
