@@ -18,6 +18,11 @@ on:
   # Permite ejecución manual desde la pestaña "Actions"
   workflow_dispatch:
 
+# Only the newest development revision should consume a build runner or deploy.
+concurrency:
+  group: dspace-cris-ui-development
+  cancel-in-progress: true
+
 # ── Variables reutilizables ──────────────────────────────────────────────────
 env:
   REGISTRY: ghcr.io
@@ -59,7 +64,7 @@ jobs:
 
       # ────────────────────────────────────────────────────────
       # 4. Build & Push de la imagen Docker
-      #    - Tag estático: ghcr.io/jmartinez888/dspace-cris-9-iiap-front:development
+      #    - Tag mutable para Dokploy y tag inmutable por revisión para trazabilidad
       #    - Multi-stage build vía Dockerfile.dist
       #    - Caché de capas en GHCR para acelerar builds subsecuentes
       # ────────────────────────────────────────────────────────
@@ -69,14 +74,19 @@ jobs:
           context: .
           file: ./Dockerfile.dist
           push: true
-          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:development
+          tags: |
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:development
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:sha-${{ github.sha }}
+          labels: |
+            org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }}
+            org.opencontainers.image.revision=${{ github.sha }}
           # Forzar arquitectura única — evita manifiestos multi-arch fantasma
           platforms: linux/amd64
           # Desactivar provenance — evita la arquitectura "unknown/unknown"
           # que rompe el pull en Dokploy/Docker clients
           provenance: false
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          cache-from: type=gha,scope=dspace-cris-ui
+          cache-to: type=gha,mode=max,scope=dspace-cris-ui
           # Pasar las build args necesarias
           build-args: |
             NODE_VERSION=22
@@ -126,7 +136,7 @@ jobs:
         run: |
           echo "##🐳 Deploy exitoso" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "**Imagen:** \`${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:development\`" >> $GITHUB_STEP_SUMMARY
+          echo "**Imagen:** \`${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:sha-${{ github.sha }}\`" >> $GITHUB_STEP_SUMMARY
           echo "**Commit:** \`${{ github.sha }}\`" >> $GITHUB_STEP_SUMMARY
           echo "**Branch:** \`${{ github.ref_name }}\`" >> $GITHUB_STEP_SUMMARY
           echo "**Fecha:** $(date -u +'%Y-%m-%d %H:%M:%S UTC')" >> $GITHUB_STEP_SUMMARY

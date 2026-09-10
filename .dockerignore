@@ -3,6 +3,13 @@
 .vscode
 .DS_Store
 *.iml
+.angular
+.agents
+.github
+cypress
+e2e
+docs
+lint
 
 # Build folders
 node_modules

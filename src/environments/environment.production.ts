@@ -19,6 +19,17 @@ export const environment: Partial<BuildConfig> = {
         pattern: '^/collections/[a-f0-9-]{36}/browse(/.*)?$',
         flag: 'i',
       },
+      // Faceted searches have high-cardinality URLs and trigger many REST
+      // calls. Rendering them in SSR lets crawlers exhaust the Node process;
+      // serve the application shell and let the browser fetch search results.
+      {
+        pattern: '^/communities/[a-f0-9-]{36}/search$',
+        flag: 'i',
+      },
+      {
+        pattern: '^/collections/[a-f0-9-]{36}/search$',
+        flag: 'i',
+      },
       { pattern: '^/browse/' },
       { pattern: '^/search' },
       { pattern: '^/community-list$' },
