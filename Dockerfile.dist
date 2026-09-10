@@ -46,10 +46,10 @@ COPY --chown=node:node --from=build /app/config /app/config
 # Drop to non-root user
 USER node
 
-# The deployed process currently requires just over 1 GiB RSS under load.
-# This caps V8 while retaining room inside the 2 GiB container cgroup.
+# The deployed process exhausted its former 896 MiB heap under concurrent SSR.
+# Keep V8 below the 2 GiB cgroup limit while allowing room for native memory.
 ENV NODE_ENV=production \
-    NODE_OPTIONS="--max-old-space-size=896"
+    NODE_OPTIONS="--max-old-space-size=1280"
 
 EXPOSE 4000
 
