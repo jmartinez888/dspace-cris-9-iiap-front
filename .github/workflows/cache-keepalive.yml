@@ -33,6 +33,8 @@ jobs:
         uses: actions/setup-node@v7
         with:
           node-version: 22
+          # node_modules is cached explicitly; the npm download cache would be redundant.
+          package-manager-cache: false
 
       # Same keys as deploy.yml. Only restoring; nothing is saved here.
       - name: 📦 Touch node_modules cache
