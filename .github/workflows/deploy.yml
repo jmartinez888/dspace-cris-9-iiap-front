@@ -109,7 +109,6 @@ jobs:
           # Pasar las build args necesarias
           build-args: |
             NODE_VERSION=22
-            DSPACE_VERSION=dspace-cris-2025_02_x
 
       # ────────────────────────────────────────────────────────
       # 5. Limpieza de versiones antiguas

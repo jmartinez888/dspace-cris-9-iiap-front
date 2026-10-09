@@ -19,6 +19,13 @@ services:
       DSPACE_REST_PORT: 443
       DSPACE_REST_NAMESPACE: /server
       NODE_TLS_REJECT_UNAUTHORIZED: '0'
+      # SSR is disabled on purpose: production navigation was slow and the
+      # service became unavailable for periods while it was rendering. Pages
+      # are served as client-side rendered until SSR is re-evaluated.
+      DSPACE_SSR_ENABLED: 'false'
+      # Hostnames Angular SSR may render (CVE-2026-27739). Has no effect while
+      # SSR is disabled, but it is required as soon as SSR is re-enabled.
+      NG_ALLOWED_HOSTS: cris.iiap.gob.pe
     networks:
       dspacenet:
     ports:
