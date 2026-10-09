@@ -1,12 +1,16 @@
 # =============================================================================
-# CI/CD — Build & Push to GHCR + Auto-Cleanup (Plan Gratuito: 500 MB)
+# CI/CD — Build & Push to GHCR + Auto-Cleanup
 # =============================================================================
 # Este workflow:
 #   1. Compila la imagen Docker multi-stage desde Dockerfile.dist
-#   2. La sube a GitHub Container Registry (GHCR) con tag estático
-#   3. Limpia TODAS las versiones anteriores y huérfanas (untagged)
-#      para mantener exactamente 1 versión y respetar la cuota de 500 MB
-#   4. Envía un webhook a Dokploy para re-desplegar automáticamente
+#   2. La sube a GitHub Container Registry (GHCR) con tag inmutable sha-<commit>
+#      (y con el tag mutable :development solo desde la rama development)
+#   3. Conserva las últimas versiones para permitir rollback vía
+#      DSPACE_UI_IMAGE_TAG=sha-<commit> y elimina las más antiguas
+#   4. Envía un webhook a Dokploy para re-desplegar (solo desde development)
+#
+# Lanzarlo con workflow_dispatch en otra rama compila y publica la imagen
+# sha-<commit> sin mover :development ni desplegar en producción.
 # =============================================================================
 
 name: Build & Deploy to GHCR
@@ -15,19 +19,34 @@ on:
   push:
     branches:
       - development
+    # Cambios que no afectan a la imagen no deben compilar ni desplegar.
+    # Para forzar un deploy usar workflow_dispatch.
+    paths-ignore:
+      - '**/*.md'
+      - 'docs/**'
+      - '.agents/**'
+      - '.claude/**'
+      - 'cypress/**'
+      - 'e2e/**'
+      - 'lint/**'
+      - '.github/ISSUE_TEMPLATE/**'
+      - '.github/dependabot.yml'
+      - 'bitbucket-pipelines.yml'
+      - 'skills-lock.json'
   # Permite ejecución manual desde la pestaña "Actions"
   workflow_dispatch:
 
-# Only the newest development revision should consume a build runner or deploy.
+# Only the newest revision of each branch should consume a build runner or deploy.
 concurrency:
-  group: dspace-cris-ui-development
+  group: dspace-cris-ui-${{ github.ref }}
   cancel-in-progress: true
 
 # ── Variables reutilizables ──────────────────────────────────────────────────
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }} # jmartinez888/dspace-cris-9-iiap-front
-  ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: "true"
+  # Versiones de la imagen que se conservan en GHCR para poder hacer rollback
+  KEEP_VERSIONS: 10
 
 permissions:
   contents: read
@@ -44,19 +63,19 @@ jobs:
       # 1. Checkout del código fuente
       # ────────────────────────────────────────────────────────
       - name: 📥 Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       # ────────────────────────────────────────────────────────
-      # 2. Configurar Docker Buildx (soporte para caché avanzada)
+      # 2. Configurar Docker Buildx
       # ────────────────────────────────────────────────────────
       - name: 🔧 Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+        uses: docker/setup-buildx-action@v4
 
       # ────────────────────────────────────────────────────────
       # 3. Autenticación en GHCR
       # ────────────────────────────────────────────────────────
       - name: 🔑 Log in to GitHub Container Registry
-        uses: docker/login-action@v3
+        uses: docker/login-action@v4
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
@@ -64,19 +83,21 @@ jobs:
 
       # ────────────────────────────────────────────────────────
       # 4. Build & Push de la imagen Docker
-      #    - Tag mutable para Dokploy y tag inmutable por revisión para trazabilidad
+      #    - Tag inmutable por revisión para trazabilidad y rollback
+      #    - Tag mutable :development (el que usa Dokploy) solo desde development
       #    - Multi-stage build vía Dockerfile.dist
-      #    - Caché de capas en GHCR para acelerar builds subsecuentes
+      #    - Sin caché gha: GitHub la expulsa tras 7 días sin uso y exportarla
+      #      costaba ~1 min por build sin reutilizarse entre deploys
       # ────────────────────────────────────────────────────────
       - name: 🏗️ Build and push Docker image
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with:
           context: .
           file: ./Dockerfile.dist
           push: true
           tags: |
-            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:development
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:sha-${{ github.sha }}
+            ${{ github.ref == 'refs/heads/development' && format('{0}/{1}:development', env.REGISTRY, env.IMAGE_NAME) || '' }}
           labels: |
             org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }}
             org.opencontainers.image.revision=${{ github.sha }}
@@ -85,47 +106,41 @@ jobs:
           # Desactivar provenance — evita la arquitectura "unknown/unknown"
           # que rompe el pull en Dokploy/Docker clients
           provenance: false
-          cache-from: type=gha,scope=dspace-cris-ui
-          cache-to: type=gha,mode=max,scope=dspace-cris-ui
           # Pasar las build args necesarias
           build-args: |
             NODE_VERSION=22
             DSPACE_VERSION=dspace-cris-2025_02_x
 
       # ────────────────────────────────────────────────────────
-      # 5. CRÍTICO: Limpieza de versiones antiguas (untagged)
-      #    Elimina todas las versiones "huérfanas" sin etiqueta
-      #    que quedan después de sobrescribir el tag :development
-      #    Mantiene 0 versiones untagged (solo la tagged sobrevive)
+      # 5. Limpieza de versiones antiguas
+      #    Conserva las KEEP_VERSIONS versiones más recientes (rollback)
+      #    y elimina el resto. Usa la API REST directamente porque
+      #    actions/delete-package-versions sigue en Node 20, retirado
+      #    de los runners de GitHub el 2026-09-23.
       # ────────────────────────────────────────────────────────
-      - name: 🧹 Delete untagged (orphan) image versions
-        uses: actions/delete-package-versions@v5
-        with:
-          package-name: dspace-cris-9-iiap-front
-          package-type: container
-          delete-only-untagged-versions: "true"
-          min-versions-to-keep: 0
-        continue-on-error: true # No bloquear el pipeline si no hay nada que limpiar
+      - name: 🧹 Keep only the newest image versions
+        continue-on-error: true # No bloquear el deploy por la limpieza
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PACKAGE_PATH: users/${{ github.repository_owner }}/packages/container/dspace-cris-9-iiap-front
+        run: |
+          gh api --paginate "$PACKAGE_PATH/versions?per_page=100" \
+            --jq '.[] | [.id, .created_at] | @tsv' \
+            | sort -t $'\t' -k2,2r \
+            | tail -n +$((KEEP_VERSIONS + 1)) \
+            | cut -f1 \
+            | while read -r id; do
+                echo "Deleting package version $id"
+                gh api -X DELETE "$PACKAGE_PATH/versions/$id"
+              done
 
       # ────────────────────────────────────────────────────────
-      # 6. Limpieza adicional: mantener solo 1 versión tagged
-      #    Por seguridad, si alguna vez se escapara un tag extra,
-      #    este paso garantiza que solo 1 versión total sobreviva.
-      # ────────────────────────────────────────────────────────
-      - name: 🗑️ Keep only latest tagged version
-        uses: actions/delete-package-versions@v5
-        with:
-          package-name: dspace-cris-9-iiap-front
-          package-type: container
-          min-versions-to-keep: 1
-        continue-on-error: true
-
-      # ────────────────────────────────────────────────────────
-      # 7. Webhook a Dokploy para re-deploy automático
+      # 6. Webhook a Dokploy para re-deploy automático
       #    Configurar DOKPLOY_WEBHOOK_URL en los secrets del repo.
+      #    Solo desde development: otras ramas no deben desplegar.
       # ────────────────────────────────────────────────────────
       - name: 🚀 Trigger Dokploy redeploy
-        if: success()
+        if: success() && github.ref == 'refs/heads/development'
         run: |
           curl -X POST "${{ secrets.DOKPLOY_WEBHOOK_URL }}" \
             -H "Content-Type: application/json" \
@@ -134,11 +149,12 @@ jobs:
       - name: 📋 Deploy summary
         if: success()
         run: |
-          echo "##🐳 Deploy exitoso" >> $GITHUB_STEP_SUMMARY
+          echo "##🐳 Build exitoso" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "**Imagen:** \`${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:sha-${{ github.sha }}\`" >> $GITHUB_STEP_SUMMARY
           echo "**Commit:** \`${{ github.sha }}\`" >> $GITHUB_STEP_SUMMARY
           echo "**Branch:** \`${{ github.ref_name }}\`" >> $GITHUB_STEP_SUMMARY
           echo "**Fecha:** $(date -u +'%Y-%m-%d %H:%M:%S UTC')" >> $GITHUB_STEP_SUMMARY
+          echo "**Desplegado en Dokploy:** ${{ github.ref == 'refs/heads/development' && 'sí' || 'no (rama distinta de development)' }}" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "Las versiones antiguas y huérfanas han sido eliminadas del registro." >> $GITHUB_STEP_SUMMARY
+          echo "Se conservan las ${{ env.KEEP_VERSIONS }} versiones más recientes en GHCR (rollback con DSPACE_UI_IMAGE_TAG=sha-<commit>)." >> $GITHUB_STEP_SUMMARY

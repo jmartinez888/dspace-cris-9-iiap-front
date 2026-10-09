@@ -10,11 +10,15 @@
 ARG NODE_VERSION=22
 ARG DSPACE_VERSION=dspace-cris-2025_02_x
 ARG DOCKER_REGISTRY=docker.io
+# The 4science dependencies tag is mutable and is rebuilt upstream with a
+# different package-lock, so builds are pinned to the last verified digest
+# (the one used by the 2026-09-10 production build). Update it deliberately.
+ARG DEPENDENCIES_DIGEST=sha256:5a215b69d96c0a1f54c883330dc2913b9f44f4389c26646ad84b1bd44341f600
 
 # ==============================================================================
 # Stage 1: BUILD — compile Angular SSR + Mirador on constrained memory
 # ==============================================================================
-FROM ${DOCKER_REGISTRY:-docker.io}/4science/dspace-cris-angular-dependencies:${DSPACE_VERSION:-dspace-cris-2025_02_x} AS build
+FROM ${DOCKER_REGISTRY:-docker.io}/4science/dspace-cris-angular-dependencies:${DSPACE_VERSION:-dspace-cris-2025_02_x}@${DEPENDENCIES_DIGEST} AS build
 
 # Cap V8 heap to 8 GB — gives the Angular AOT compiler ample room on a 16 GB host.
 # Adjust down to 4096 on smaller instances.
