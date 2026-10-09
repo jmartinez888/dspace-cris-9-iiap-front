@@ -226,3 +226,5 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
 }
+
+// perf test: incremental build measurement (to be reverted)
