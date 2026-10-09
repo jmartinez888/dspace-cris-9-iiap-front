@@ -1,0 +1,56 @@
+# =============================================================================
+# Keep the deploy caches alive
+# =============================================================================
+# GitHub removes Actions caches that have not been accessed for 7 days.
+# Deploys are often weeks apart, so without this job deploy.yml would start
+# with cold caches (full npm ci and full Angular build). Restoring a cache
+# counts as an access, so a restore every few days keeps them available.
+# =============================================================================
+
+name: Keep deploy caches alive
+
+on:
+  schedule:
+    # Every 3 days at 06:17 UTC (well inside the 7-day eviction window).
+    - cron: '17 6 */3 * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  touch-caches:
+    name: ♻️ Restore deploy caches
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: 📥 Checkout repository
+        uses: actions/checkout@v7
+
+      - name: 🟢 Set up Node.js
+        id: node
+        uses: actions/setup-node@v7
+        with:
+          node-version: 22
+
+      # Same keys as deploy.yml. Only restoring; nothing is saved here.
+      - name: 📦 Touch node_modules cache
+        uses: actions/cache/restore@v6
+        with:
+          path: node_modules
+          key: node-modules-${{ runner.os }}-${{ steps.node.outputs.node-version }}-${{ hashFiles('package-lock.json') }}
+
+      - name: 💾 Touch Angular build cache
+        uses: actions/cache/restore@v6
+        with:
+          path: .angular/cache
+          key: angular-cache-${{ runner.os }}-${{ hashFiles('package-lock.json') }}-
+          restore-keys: |
+            angular-cache-${{ runner.os }}-${{ hashFiles('package-lock.json') }}-
+
+      - name: 🖼️ Touch Mirador build cache
+        uses: actions/cache/restore@v6
+        with:
+          path: dist/iiif
+          key: mirador-${{ hashFiles('webpack/webpack.mirador.config.ts', 'src/mirador-viewer/**', 'package-lock.json') }}

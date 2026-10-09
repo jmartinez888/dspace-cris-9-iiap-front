@@ -2,12 +2,17 @@
 # CI/CD — Build & Push to GHCR + Auto-Cleanup
 # =============================================================================
 # Este workflow:
-#   1. Compila la imagen Docker multi-stage desde Dockerfile.dist
-#   2. La sube a GitHub Container Registry (GHCR) con tag inmutable sha-<commit>
+#   1. Compila dist/ directamente en el runner, con cachés persistentes de
+#      node_modules, de Angular (.angular/cache) y de Mirador
+#   2. Empaqueta dist/ con Dockerfile.runtime y sube la imagen a GitHub
+#      Container Registry (GHCR) con tag inmutable sha-<commit>
 #      (y con el tag mutable :development solo desde la rama development)
 #   3. Conserva las últimas versiones para permitir rollback vía
 #      DSPACE_UI_IMAGE_TAG=sha-<commit> y elimina las más antiguas
-#   4. Envía un webhook a Dokploy para re-desplegar (solo desde development)
+#   4. Despliega en Dokploy vía API (solo desde development)
+#
+# GitHub expulsa las cachés tras 7 días sin uso; cache-keepalive.yml las
+# mantiene vivas entre deploys espaciados.
 #
 # Lanzarlo con workflow_dispatch en otra rama compila y publica la imagen
 # sha-<commit> sin mover :development ni desplegar en producción.
@@ -66,7 +71,92 @@ jobs:
         uses: actions/checkout@v7
 
       # ────────────────────────────────────────────────────────
-      # 2. Configurar Docker Buildx
+      # 2. Node.js y dependencias
+      #    node_modules se cachea por versión de Node + hash del
+      #    lockfile; npm ci solo corre cuando cambia el lockfile.
+      # ────────────────────────────────────────────────────────
+      - name: 🟢 Set up Node.js
+        id: node
+        uses: actions/setup-node@v7
+        with:
+          node-version: 22
+
+      - name: 📦 Restore node_modules
+        id: node-modules-cache
+        uses: actions/cache@v6
+        with:
+          path: node_modules
+          key: node-modules-${{ runner.os }}-${{ steps.node.outputs.node-version }}-${{ hashFiles('package-lock.json') }}
+
+      - name: 📦 Install dependencies
+        if: steps.node-modules-cache.outputs.cache-hit != 'true'
+        env:
+          # The Cypress binary is only needed for e2e tests, never for this build.
+          CYPRESS_INSTALL_BINARY: 0
+        run: npm ci --no-audit --no-fund
+
+      # ────────────────────────────────────────────────────────
+      # 3. Build de Angular (browser + server)
+      #    La caché persistente de Angular se restaura de la última
+      #    ejecución y se guarda con una clave nueva en cada run.
+      #    Browser y server se compilan en paralelo si el runner tiene
+      #    RAM suficiente (16 GB en repos públicos; los privados tienen
+      #    8 GB y compilan en secuencia).
+      # ────────────────────────────────────────────────────────
+      - name: 💾 Restore Angular build cache
+        uses: actions/cache@v6
+        with:
+          path: .angular/cache
+          key: angular-cache-${{ runner.os }}-${{ hashFiles('package-lock.json') }}-${{ github.run_id }}
+          restore-keys: |
+            angular-cache-${{ runner.os }}-${{ hashFiles('package-lock.json') }}-
+            angular-cache-${{ runner.os }}-
+
+      - name: 🏗️ Build Angular (browser + server)
+        env:
+          NODE_ENV: production
+          NODE_OPTIONS: --max-old-space-size=6144
+        run: |
+          # angular.json only enables the disk cache outside CI by default.
+          npx ng config cli.cache.environment all
+          mem_gb=$(awk '/MemTotal/ {print int($2 / 1048576)}' /proc/meminfo)
+          echo "Runner: $(nproc) vCPU, ${mem_gb} GB RAM"
+          if [ "$mem_gb" -ge 14 ]; then
+            echo "Building browser and server bundles in parallel"
+            npx ng build --configuration production > browser-build.log 2>&1 &
+            browser_pid=$!
+            npx ng run dspace-angular:server:production > server-build.log 2>&1 &
+            server_pid=$!
+            status=0
+            wait "$browser_pid" || status=1
+            wait "$server_pid" || status=1
+            echo "::group::Browser build log"; cat browser-build.log; echo "::endgroup::"
+            echo "::group::Server build log"; cat server-build.log; echo "::endgroup::"
+            grep -h "Time: " browser-build.log server-build.log || true
+            exit "$status"
+          else
+            echo "Building browser and server bundles sequentially"
+            npx ng build --configuration production
+            npx ng run dspace-angular:server:production
+          fi
+
+      # ────────────────────────────────────────────────────────
+      # 4. Visor Mirador: solo se recompila si cambian sus fuentes,
+      #    su config de webpack o las dependencias.
+      # ────────────────────────────────────────────────────────
+      - name: 🖼️ Restore Mirador build
+        id: mirador-cache
+        uses: actions/cache@v6
+        with:
+          path: dist/iiif
+          key: mirador-${{ hashFiles('webpack/webpack.mirador.config.ts', 'src/mirador-viewer/**', 'package-lock.json') }}
+
+      - name: 🖼️ Build Mirador
+        if: steps.mirador-cache.outputs.cache-hit != 'true'
+        run: npm run build:mirador
+
+      # ────────────────────────────────────────────────────────
+      # 5. Configurar Docker Buildx
       #    driver: docker usa el BuildKit integrado del Docker del runner
       #    y no descarga la imagen moby/buildkit de Docker Hub. No se
       #    exporta caché de BuildKit, así que el driver docker-container
@@ -78,7 +168,7 @@ jobs:
           driver: docker
 
       # ────────────────────────────────────────────────────────
-      # 3. Autenticación en GHCR
+      # 6. Autenticación en GHCR
       # ────────────────────────────────────────────────────────
       - name: 🔑 Log in to GitHub Container Registry
         uses: docker/login-action@v4
@@ -88,18 +178,16 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       # ────────────────────────────────────────────────────────
-      # 4. Build & Push de la imagen Docker
+      # 7. Empaquetado y push de la imagen Docker
       #    - Tag inmutable por revisión para trazabilidad y rollback
       #    - Tag mutable :development (el que usa Dokploy) solo desde development
-      #    - Multi-stage build vía Dockerfile.dist
-      #    - Sin caché gha: GitHub la expulsa tras 7 días sin uso y exportarla
-      #      costaba ~1 min por build sin reutilizarse entre deploys
+      #    - Dockerfile.runtime solo copia dist/ y config/ ya compilados
       # ────────────────────────────────────────────────────────
       - name: 🏗️ Build and push Docker image
         uses: docker/build-push-action@v7
         with:
           context: .
-          file: ./Dockerfile.dist
+          file: ./Dockerfile.runtime
           push: true
           tags: |
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:sha-${{ github.sha }}
@@ -117,7 +205,7 @@ jobs:
             NODE_VERSION=22
 
       # ────────────────────────────────────────────────────────
-      # 5. Limpieza de versiones antiguas
+      # 8. Limpieza de versiones antiguas
       #    Conserva las KEEP_VERSIONS versiones más recientes (rollback)
       #    y elimina el resto. Usa la API REST directamente porque
       #    actions/delete-package-versions sigue en Node 20, retirado
@@ -140,7 +228,7 @@ jobs:
               done
 
       # ────────────────────────────────────────────────────────
-      # 6. Deploy en Dokploy vía API, una vez publicada la imagen
+      # 9. Deploy en Dokploy vía API, una vez publicada la imagen
       #    Usa compose.deploy en lugar del webhook: el webhook exige
       #    activar Autodeploy, y entonces la GitHub App de Dokploy
       #    también desplegaría al hacer merge, antes de que exista la

@@ -1,0 +1,40 @@
+# Runtime-only image used by .github/workflows/deploy.yml.
+#
+# The workflow compiles dist/ directly on the runner (with persistent caches)
+# and this Dockerfile only packages the result. Dockerfile.dist still builds
+# everything inside Docker for local or standalone use; keep the runtime part
+# of both files in sync.
+#
+# Its build context is filtered by Dockerfile.runtime.dockerignore, which only
+# lets dist/ and config/ through.
+
+ARG NODE_VERSION=22
+# Node images come from Google's public Docker Hub mirror (same digests as
+# docker.io/library/node) so builds do not depend on Docker Hub availability
+# or rate limits. Override with --build-arg BASE_REGISTRY=docker.io/library.
+ARG BASE_REGISTRY=mirror.gcr.io/library
+
+FROM ${BASE_REGISTRY}/node:${NODE_VERSION}-alpine
+
+WORKDIR /app
+
+# Copy only the compiled artifacts — no source code, no node_modules bloat
+COPY --chown=node:node dist /app/dist
+COPY --chown=node:node config /app/config
+
+# Drop to non-root user
+USER node
+
+# The deployed process exhausted its former 896 MiB heap under concurrent SSR.
+# Keep V8 below the 2 GiB cgroup limit while allowing room for native memory.
+ENV NODE_ENV=production \
+    NODE_OPTIONS="--max-old-space-size=1280"
+
+EXPOSE 4000
+
+# Keep the probe independent from Angular SSR and allow short request queues
+# during deploys or cache warm-up without triggering a restart cycle.
+HEALTHCHECK --interval=30s --timeout=30s --start-period=90s --retries=3 \
+  CMD node -e "require('http').get('http://localhost:4000/app/client/health', (r) => { process.exit(r.statusCode === 200 ? 0 : 1) }).on('error', () => process.exit(1))"
+
+CMD ["node", "dist/server/main.js"]

@@ -3,6 +3,9 @@
 
 # Test build:
 # docker build -f Dockerfile.dist -t 4science/dspace-angular:dspace-cris-2025_02_x-dist .
+#
+# The deploy workflow does not use this file: it builds dist/ on the runner
+# and packages it with Dockerfile.runtime. Keep both runtime stages in sync.
 
 # Angular 20 + Node 22 optimized Dockerfile
 ARG NODE_VERSION=22
