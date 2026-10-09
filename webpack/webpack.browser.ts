@@ -23,7 +23,9 @@ module.exports = Object.assign({}, commonExports, {
       test: /\.(js|css|html|svg|json)$/,
       compressionOptions: {
         params: {
-          [zlib.constants.BROTLI_PARAM_QUALITY]: 11,
+          // Quality 10 instead of 11: ~3x faster to compress with files only
+          // ~1-2% larger, which noticeably shortens production builds.
+          [zlib.constants.BROTLI_PARAM_QUALITY]: 10,
         },
       },
       threshold: 10240,

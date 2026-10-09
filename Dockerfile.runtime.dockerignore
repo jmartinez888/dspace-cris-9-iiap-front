@@ -1,0 +1,4 @@
+# Build context for Dockerfile.runtime: only the compiled app and its config.
+*
+!dist/
+!config/
