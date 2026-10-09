@@ -140,10 +140,25 @@ jobs:
       # ────────────────────────────────────────────────────────
       - name: 🚀 Trigger Dokploy redeploy
         if: success() && github.ref == 'refs/heads/development'
+        env:
+          DOKPLOY_WEBHOOK_URL: ${{ secrets.DOKPLOY_WEBHOOK_URL }}
         run: |
-          curl -X POST "${{ secrets.DOKPLOY_WEBHOOK_URL }}" \
+          # Dokploy only reads the branch from the payload when a Git provider
+          # header is present; without X-GitHub-Event it answers
+          # "Branch Not Match" (HTTP 301) and does not deploy.
+          payload=$(jq -n \
+            --arg ref "$GITHUB_REF" \
+            --arg id "$GITHUB_SHA" \
+            --arg msg "$(git log -1 --format=%s)" \
+            '{ref: $ref, after: $id, head_commit: {id: $id, message: $msg}}')
+          status=$(curl -sS -o dokploy-response.json -w '%{http_code}' \
+            -X POST "$DOKPLOY_WEBHOOK_URL" \
             -H "Content-Type: application/json" \
-            -d "{\"ref\": \"refs/heads/development\"}"
+            -H "X-GitHub-Event: push" \
+            -d "$payload")
+          echo "Dokploy HTTP $status: $(cat dokploy-response.json)"
+          # Any answer other than 200 means Dokploy did not queue a deployment.
+          test "$status" = "200"
 
       - name: 📋 Deploy summary
         if: success()
