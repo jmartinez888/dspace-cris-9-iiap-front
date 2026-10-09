@@ -1,5 +1,3 @@
-# syntax=docker/dockerfile:1.7-labs
-
 # This image will be published as dspace/dspace-angular:$DSPACE_VERSION-dist
 # See https://github.com/4science/dspace-angular/tree/main/docker for usage details
 
@@ -8,11 +6,15 @@
 
 # Angular 20 + Node 22 optimized Dockerfile
 ARG NODE_VERSION=22
+# Node images come from Google's public Docker Hub mirror (same digests as
+# docker.io/library/node) so builds do not depend on Docker Hub availability
+# or rate limits. Override with --build-arg BASE_REGISTRY=docker.io/library.
+ARG BASE_REGISTRY=mirror.gcr.io/library
 
 # ==============================================================================
 # Stage 1: BUILD — compile Angular SSR + Mirador on constrained memory
 # ==============================================================================
-FROM docker.io/node:${NODE_VERSION}-alpine AS build
+FROM ${BASE_REGISTRY}/node:${NODE_VERSION}-alpine AS build
 
 WORKDIR /app
 
@@ -40,7 +42,7 @@ RUN npm run build:mirador
 # ==============================================================================
 # Stage 2: PRODUCTION — ultra-lean runtime image
 # ==============================================================================
-FROM docker.io/node:${NODE_VERSION-22}-alpine AS prod
+FROM ${BASE_REGISTRY}/node:${NODE_VERSION}-alpine AS prod
 
 WORKDIR /app
 
