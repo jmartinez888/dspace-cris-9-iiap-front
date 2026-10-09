@@ -54,7 +54,7 @@ import {
 } from '@ng-dynamic-forms/ui-ng-bootstrap';
 import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
-import { NgxMaskModule } from 'ngx-mask';
+import { provideNgxMask } from 'ngx-mask';
 import { of } from 'rxjs';
 
 import {
@@ -240,11 +240,11 @@ describe('DsDynamicFormControlContainerComponent test suite', () => {
         FormsModule,
         ReactiveFormsModule,
         NgbModule,
-        DynamicFormsCoreModule.forRoot(),
+        DynamicFormsCoreModule,
         TranslateModule.forRoot(),
-        NgxMaskModule.forRoot(),
       ],
       providers: [
+        provideNgxMask(),
         DsDynamicFormControlContainerComponent,
         DynamicFormService,
         { provide: DsDynamicTypeBindRelationService, useValue: getMockDsDynamicTypeBindRelationService() },

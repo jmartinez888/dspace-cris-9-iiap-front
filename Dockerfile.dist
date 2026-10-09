@@ -8,33 +8,34 @@
 
 # Angular 20 + Node 22 optimized Dockerfile
 ARG NODE_VERSION=22
-ARG DSPACE_VERSION=dspace-cris-2025_02_x
-ARG DOCKER_REGISTRY=docker.io
-# The 4science dependencies tag is mutable and is rebuilt upstream with a
-# different package-lock, so builds are pinned to the last verified digest
-# (the one used by the 2026-09-10 production build). Update it deliberately.
-ARG DEPENDENCIES_DIGEST=sha256:5a215b69d96c0a1f54c883330dc2913b9f44f4389c26646ad84b1bd44341f600
 
 # ==============================================================================
 # Stage 1: BUILD — compile Angular SSR + Mirador on constrained memory
 # ==============================================================================
-FROM ${DOCKER_REGISTRY:-docker.io}/4science/dspace-cris-angular-dependencies:${DSPACE_VERSION:-dspace-cris-2025_02_x}@${DEPENDENCIES_DIGEST} AS build
-
-# Cap V8 heap to 8 GB — gives the Angular AOT compiler ample room on a 16 GB host.
-# Adjust down to 4096 on smaller instances.
-ENV NODE_OPTIONS="--max-old-space-size=8192"
-
-COPY . /app/
+FROM docker.io/node:${NODE_VERSION}-alpine AS build
 
 WORKDIR /app
 
-# Build Angular browser + server bundles (production)
+# Cap V8 heap to 8 GB — gives the Angular AOT compiler ample room on a 16 GB host.
+# Adjust down to 4096 on smaller instances.
+# The Cypress binary is only needed for e2e tests, never for this build.
+ENV NODE_OPTIONS="--max-old-space-size=8192" \
+    CYPRESS_INSTALL_BINARY=0
+
+# Install dependencies from this repository's package-lock.json, the same tree
+# used for local development and tests. Copying only the manifests first keeps
+# this layer cached until the lockfile changes.
+COPY package.json package-lock.json ./
 RUN --mount=type=cache,target=/root/.npm \
-  npm run build:prod
+  npm ci --no-audit --no-fund
+
+COPY . /app/
+
+# Build Angular browser + server bundles (production)
+RUN npm run build:prod
 
 # Build Mirador viewer plugin
-RUN --mount=type=cache,target=/root/.npm \
-  npm run build:mirador
+RUN npm run build:mirador
 
 # ==============================================================================
 # Stage 2: PRODUCTION — ultra-lean runtime image

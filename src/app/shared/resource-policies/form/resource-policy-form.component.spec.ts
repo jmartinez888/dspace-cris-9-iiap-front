@@ -24,7 +24,7 @@ import { DYNAMIC_FORM_CONTROL_MAP_FN } from '@ng-dynamic-forms/core';
 import { provideMockStore } from '@ngrx/store/testing';
 import { TranslateModule } from '@ngx-translate/core';
 import { getTestScheduler } from 'jasmine-marbles';
-import { NgxMaskModule } from 'ngx-mask';
+import { provideNgxMask } from 'ngx-mask';
 import { of } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { TestScheduler } from 'rxjs/testing';
@@ -216,10 +216,10 @@ describe('ResourcePolicyFormComponent test suite', () => {
         FormComponent,
         ResourcePolicyFormComponent,
         TestComponent,
-        NgxMaskModule.forRoot(),
         BtnDisabledDirective,
       ],
       providers: [
+        provideNgxMask(),
         { provide: ActivatedRoute, useValue: activatedRouteStub },
         { provide: Router, useValue: new RouterMock() },
         // { provide: Store, useValue: StoreMock },

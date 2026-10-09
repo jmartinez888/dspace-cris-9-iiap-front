@@ -20,7 +20,7 @@ import {
   TranslateModule,
   TranslateService,
 } from '@ngx-translate/core';
-import { NgxMaskModule } from 'ngx-mask';
+import { provideNgxMask } from 'ngx-mask';
 import { of } from 'rxjs';
 import { LiveRegionService } from 'src/app/shared/live-region/live-region.service';
 
@@ -54,7 +54,6 @@ describe('DsDynamicFormArrayComponent', () => {
       imports: [
         ReactiveFormsModule,
         DsDynamicFormArrayComponent,
-        NgxMaskModule.forRoot(),
         TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
@@ -63,6 +62,7 @@ describe('DsDynamicFormArrayComponent', () => {
         }),
       ],
       providers: [
+        provideNgxMask(),
         DynamicFormLayoutService,
         DynamicFormValidationService,
         provideMockStore(),
