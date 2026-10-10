@@ -7317,6 +7317,15 @@
   // "search.filters.filter.organizationAddressLocality.label": "Search city",
   "search.filters.filter.organizationAddressLocality.label": "Búsqueda de ciudad",
 
+  // "search.filters.filter.orgunittype.head": "Unit type",
+  "search.filters.filter.orgunittype.head": "Tipo de unidad",
+
+  // "search.filters.filter.orgunittype.placeholder": "Unit type",
+  "search.filters.filter.orgunittype.placeholder": "Tipo de unidad",
+
+  // "search.filters.filter.orgunittype.label": "Search unit type",
+  "search.filters.filter.orgunittype.label": "Búsqueda de tipo de unidad",
+
   // "search.filters.filter.organizationFoundingDate.head": "Date Founded",
   "search.filters.filter.organizationFoundingDate.head": "Fecha de fundación",
 
@@ -12042,10 +12051,13 @@
   "explore.index.organization": "Organización",
 
   // "explore.index.organizationAddressCountry": "Organization address country",
-  "explore.index.organizationAddressCountry": "Dirección de la organización país",
+  "explore.index.organizationAddressCountry": "País",
 
   // "explore.index.organizationAddressLocality": "Organization address locality",
-  "explore.index.organizationAddressLocality": "Dirección de la organización localidad",
+  "explore.index.organizationAddressLocality": "Localidad",
+
+  // "explore.index.orgunittype": "Unit type",
+  "explore.index.orgunittype": "Tipo de unidad",
 
   // "explore.index.organizationFoundingDate": "Organization founding date",
   "explore.index.organizationFoundingDate": "Fecha de fundación de la organización",
