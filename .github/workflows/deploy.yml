@@ -36,7 +36,6 @@ on:
       - 'lint/**'
       - '.github/ISSUE_TEMPLATE/**'
       - '.github/dependabot.yml'
-      - 'bitbucket-pipelines.yml'
       - 'skills-lock.json'
   # Permite ejecución manual desde la pestaña "Actions"
   workflow_dispatch:
