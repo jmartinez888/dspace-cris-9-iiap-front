@@ -18,7 +18,6 @@ services:
       DSPACE_REST_HOST: api-cris.iiap.gob.pe
       DSPACE_REST_PORT: 443
       DSPACE_REST_NAMESPACE: /server
-      NODE_TLS_REJECT_UNAUTHORIZED: '0'
       # SSR is disabled on purpose: production navigation was slow and the
       # service became unavailable for periods while it was rendering. Pages
       # are served as client-side rendered until SSR is re-evaluated.
@@ -28,9 +27,14 @@ services:
       NG_ALLOWED_HOSTS: cris.iiap.gob.pe
     networks:
       dspacenet:
-    ports:
-      - published: 4000
-        target: 4000
+    # No published ports: Traefik reaches the container over dokploy-network.
+    # A published port bypasses the host firewall (ufw) and exposes the app
+    # on <server-ip>:4000 without TLS.
+    # Run an init process as PID 1 so signals are forwarded and the container
+    # stops in well under a second (about 3 s without it). SIGINT is the
+    # signal server.ts handles to close the HTTP server gracefully.
+    init: true
+    stop_signal: SIGINT
     restart: unless-stopped
     deploy:
       resources:
