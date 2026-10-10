@@ -2516,6 +2516,8 @@
 
   "explore.counters-section.project_funding": "Projects",
 
+  "explore.counters-section.orgunits": "Organizational units",
+
   "explore.facet-section.title": "Discover",
 
   "explore.index.all": "All",
@@ -2601,9 +2603,11 @@
 
   "explore.index.organization": "Organization",
 
-  "explore.index.organizationAddressCountry": "Organization address country",
+  "explore.index.organizationAddressCountry": "Country",
 
-  "explore.index.organizationAddressLocality": "Organization address locality",
+  "explore.index.organizationAddressLocality": "Locality",
+
+  "explore.index.orgunittype": "Unit type",
 
   "explore.index.organizationFoundingDate": "Organization founding date",
 
@@ -6108,6 +6112,12 @@
   "search.filters.filter.organizationAddressLocality.placeholder": "City",
 
   "search.filters.filter.organizationAddressLocality.label": "Search city",
+
+  "search.filters.filter.orgunittype.head": "Unit type",
+
+  "search.filters.filter.orgunittype.placeholder": "Unit type",
+
+  "search.filters.filter.orgunittype.label": "Search unit type",
 
   "search.filters.filter.organizationFoundingDate.head": "Date Founded",
 
