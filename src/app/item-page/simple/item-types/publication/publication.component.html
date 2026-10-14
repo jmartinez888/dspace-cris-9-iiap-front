@@ -32,6 +32,13 @@
       </div>
     }
     <ds-item-page-file-section [item]="object"></ds-item-page-file-section>
+    @if (doiLinks.length > 0) {
+      <ds-metadata-field-wrapper [label]="'publication.page.doi' | translate">
+        @for (doi of doiLinks; track doi.url) {
+          <a class="dont-break-out d-block" [href]="doi.url" target="_blank" rel="noopener noreferrer">{{ doi.label }}</a>
+        }
+      </ds-metadata-field-wrapper>
+    }
     <ds-item-page-date-field [item]="object"></ds-item-page-date-field>
     <ds-metadata-representation-list class="ds-item-page-mixed-author-field"
       [parentItem]="object"
@@ -54,6 +61,10 @@
     <ds-generic-item-page-field [item]="object"
       [fields]="['dc.publisher']"
       [label]="'publication.page.publisher'">
+    </ds-generic-item-page-field>
+    <ds-generic-item-page-field [item]="object"
+      [fields]="['dc.language.iso']"
+      [label]="'publication.page.language'">
     </ds-generic-item-page-field>
   </div>
   <div class="col-12 col-md-7">

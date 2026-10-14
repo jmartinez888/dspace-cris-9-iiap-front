@@ -6349,6 +6349,12 @@
   // "publication.listelement.badge": "Publication",
   "publication.listelement.badge": "Publicación",
 
+  // "publication.page.doi": "DOI",
+  "publication.page.doi": "DOI",
+
+  // "publication.page.language": "Language",
+  "publication.page.language": "Lenguaje",
+
   // "publication.page.description": "Description",
   "publication.page.description": "Descripción",
 

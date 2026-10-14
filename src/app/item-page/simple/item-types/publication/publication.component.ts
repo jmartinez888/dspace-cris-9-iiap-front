@@ -66,11 +66,25 @@ import { OnInit } from '@angular/core';
 export class PublicationComponent extends ItemComponent implements OnInit {
   public subjectChips: Chips;
 
+  /**
+   * DOIs of the publication (dc.identifier.doi), with the text to show and the
+   * resolver URL to link to. Values may be stored bare ("10.1002/mrc.4619"),
+   * with a "doi:" prefix or as a full https://doi.org/ URL.
+   */
+  public doiLinks: { label: string; url: string }[] = [];
+
   ngOnInit() {
     super.ngOnInit();
     const subjects = this.object.allMetadataValues('dc.subject');
     if (subjects && subjects.length > 0) {
       this.subjectChips = new Chips(subjects, 'value');
     }
+    this.doiLinks = this.object.allMetadataValues('dc.identifier.doi')
+      .map((value: string) => value.trim())
+      .filter((value: string) => value.length > 0)
+      .map((value: string) => {
+        const doi = value.replace(/^https?:\/\/(dx\.)?doi\.org\//i, '').replace(/^doi:\s*/i, '');
+        return { label: doi, url: `https://doi.org/${doi}` };
+      });
   }
 }
