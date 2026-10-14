@@ -5408,6 +5408,10 @@
 
   "publication.listelement.badge": "Publication",
 
+  "publication.page.doi": "DOI",
+
+  "publication.page.language": "Language",
+
   "publication.page.description": "Description",
 
   "publication.page.edit": "Edit this item",
