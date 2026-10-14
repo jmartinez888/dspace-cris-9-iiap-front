@@ -6113,6 +6113,12 @@
 
   "search.filters.filter.organizationAddressLocality.label": "Search city",
 
+  "search.filters.filter.orgunittype.head": "Unit type",
+
+  "search.filters.filter.orgunittype.placeholder": "Unit type",
+
+  "search.filters.filter.orgunittype.label": "Search unit type",
+
   "search.filters.filter.organizationFoundingDate.head": "Date Founded",
 
   "search.filters.filter.organizationFoundingDate.placeholder": "Date Founded",

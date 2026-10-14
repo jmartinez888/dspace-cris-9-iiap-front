@@ -7317,6 +7317,15 @@
   // "search.filters.filter.organizationAddressLocality.label": "Search city",
   "search.filters.filter.organizationAddressLocality.label": "Búsqueda de ciudad",
 
+  // "search.filters.filter.orgunittype.head": "Unit type",
+  "search.filters.filter.orgunittype.head": "Tipo de unidad",
+
+  // "search.filters.filter.orgunittype.placeholder": "Unit type",
+  "search.filters.filter.orgunittype.placeholder": "Tipo de unidad",
+
+  // "search.filters.filter.orgunittype.label": "Search unit type",
+  "search.filters.filter.orgunittype.label": "Búsqueda de tipo de unidad",
+
   // "search.filters.filter.organizationFoundingDate.head": "Date Founded",
   "search.filters.filter.organizationFoundingDate.head": "Fecha de fundación",
 
