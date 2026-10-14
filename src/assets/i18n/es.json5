@@ -12042,10 +12042,13 @@
   "explore.index.organization": "Organización",
 
   // "explore.index.organizationAddressCountry": "Organization address country",
-  "explore.index.organizationAddressCountry": "Dirección de la organización país",
+  "explore.index.organizationAddressCountry": "País",
 
   // "explore.index.organizationAddressLocality": "Organization address locality",
-  "explore.index.organizationAddressLocality": "Dirección de la organización localidad",
+  "explore.index.organizationAddressLocality": "Localidad",
+
+  // "explore.index.orgunittype": "Unit type",
+  "explore.index.orgunittype": "Tipo",
 
   // "explore.index.organizationFoundingDate": "Organization founding date",
   "explore.index.organizationFoundingDate": "Fecha de fundación de la organización",
