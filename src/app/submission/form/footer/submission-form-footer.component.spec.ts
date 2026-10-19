@@ -288,6 +288,59 @@ describe('SubmissionFormFooterComponent', () => {
       });
     });
 
+    describe('cancel button', () => {
+
+      beforeEach(() => {
+        submissionServiceStub.getSubmissionStatus.and.returnValue(of(true));
+        submissionServiceStub.getSubmissionSaveProcessingStatus.and.returnValue(of(false));
+        submissionServiceStub.getSubmissionDepositProcessingStatus.and.returnValue(of(false));
+        submissionServiceStub.hasUnsavedModification.and.returnValue(of(false));
+        submissionServiceStub.dispatchDiscard.calls.reset();
+        submissionServiceStub.redirectToItemPage.calls.reset();
+        submissionServiceStub.redirectToMyDSpace.calls.reset();
+      });
+
+      it('should be shown instead of discard when editing an item', () => {
+        submissionServiceStub.getSubmissionScope.and.returnValue(SubmissionScopeType.EditItem);
+        comp.ngOnChanges({
+          submissionId: new SimpleChange(null, submissionId, true),
+        });
+        fixture.detectChanges();
+
+        expect(fixture.debugElement.query(By.css('#cancel'))).not.toBeNull();
+        expect(fixture.debugElement.query(By.css('#discard'))).toBeNull();
+      });
+
+      it('should not be shown for a workspace item, which has discard', () => {
+        submissionServiceStub.getSubmissionScope.and.returnValue(SubmissionScopeType.WorkspaceItem);
+        comp.ngOnChanges({
+          submissionId: new SimpleChange(null, submissionId, true),
+        });
+        fixture.detectChanges();
+
+        expect(fixture.debugElement.query(By.css('#cancel'))).toBeNull();
+        expect(fixture.debugElement.query(By.css('#discard'))).not.toBeNull();
+      });
+
+      it('should go back to the item page when editing an item, without discarding', () => {
+        submissionServiceStub.getSubmissionScope.and.returnValue(SubmissionScopeType.EditItem);
+
+        comp.cancel();
+
+        expect(submissionServiceStub.redirectToItemPage).toHaveBeenCalledWith(submissionId);
+        expect(submissionServiceStub.dispatchDiscard).not.toHaveBeenCalled();
+      });
+
+      it('should go back to MyDSpace for a workflow item, without discarding', () => {
+        submissionServiceStub.getSubmissionScope.and.returnValue(SubmissionScopeType.WorkflowItem);
+
+        comp.cancel();
+
+        expect(submissionServiceStub.redirectToMyDSpace).toHaveBeenCalled();
+        expect(submissionServiceStub.dispatchDiscard).not.toHaveBeenCalled();
+      });
+    });
+
   });
 });
 
