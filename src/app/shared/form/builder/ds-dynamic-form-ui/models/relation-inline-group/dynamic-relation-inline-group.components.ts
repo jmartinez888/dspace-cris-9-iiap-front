@@ -116,9 +116,13 @@ export class DsDynamicRelationInlineGroupComponent extends DynamicFormControlCom
       },
     } as DynamicRowArrayModelConfig;
 
+    // Each inline group row is a flex line: drag handle, the group fields (which
+    // grow, "col") and the remove button side by side, while "Add more" (w-100)
+    // wraps below. Bootstrap 5 removed the old "form-row" class, which left the
+    // row unstyled and pushed the remove button onto its own line.
     const layout: DynamicFormControlLayout = {
       grid: {
-        group: 'form-row',
+        group: 'd-flex flex-wrap align-items-start',
       },
     };
 

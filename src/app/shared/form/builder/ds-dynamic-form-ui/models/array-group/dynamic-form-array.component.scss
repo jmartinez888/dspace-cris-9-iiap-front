@@ -82,6 +82,12 @@
 }
 
 
+// In flex rows (inline groups) let the fields block shrink below its content
+// width, so the remove button next to it is never pushed out on narrow screens.
+.drag-item-container > ds-dynamic-form-control-container {
+  min-width: 0;
+}
+
 .grey-background{
   background-color: #f3f3f3;
   margin-bottom: 10px;
