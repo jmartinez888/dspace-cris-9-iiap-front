@@ -11,6 +11,18 @@
           (click)="$event.preventDefault();confirmDiscard(content)">
           <i class="fas fa-trash"></i> {{'submission.general.discard.submit' | translate}}
         </button>
+      } @else {
+        <!-- Editing an existing item or a workflow item: leave without saving
+             (the pending changes guard asks for confirmation if there are any) -->
+        <button
+          type="button"
+          id="cancel"
+          [attr.data-test]="'cancel' | dsBrowserOnly"
+          class="btn btn-danger"
+          [dsBtnDisabled]="(processingSaveStatus | async) || (processingDepositStatus | async)"
+          (click)="cancel()">
+          <i class="fas fa-times"></i> {{'submission.general.cancel' | translate}}
+        </button>
       }
     </div>
     <div class="text-end d-flex justify-content-end align-items-center">

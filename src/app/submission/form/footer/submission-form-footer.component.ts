@@ -136,6 +136,20 @@ export class SubmissionFormFooterComponent implements OnChanges {
   /**
    * Compute the proper label for the save for later button
    */
+  /**
+   * Leave the form without saving: back to the item page when editing an item,
+   * otherwise to MyDSpace. Saved changes are kept; if there are unsaved ones, the
+   * pending changes guard of the route asks for confirmation before leaving.
+   * Unlike discard, this never deletes anything on the server.
+   */
+  public cancel(): void {
+    if (this.submissionService.getSubmissionScope() === SubmissionScopeType.EditItem) {
+      this.submissionService.redirectToItemPage(this.submissionId);
+    } else {
+      this.submissionService.redirectToMyDSpace();
+    }
+  }
+
   public saveForLaterLabel(): string {
     if (this.submissionService.getSubmissionScope() === SubmissionScopeType.EditItem) {
       return 'submission.general.save-later.edit-item';
