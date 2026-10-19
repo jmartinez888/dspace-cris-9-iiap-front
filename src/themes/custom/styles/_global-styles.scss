@@ -61,17 +61,42 @@ h1 {
   margin-bottom: 25px;
 }
 
-// Fix contrast visual bug in MyDSpace dropdowns (green-on-green text-primary readability issue)
+// Dropdown items: one appearance for every interactive state in the whole app
+// (navbar menus, MyDSpace, sort/filter menus and form typeaheads such as the
+// onebox, lookup and tag fields, which read the --bs-dropdown-link-hover-*
+// variables). In ngbTypeahead lists `.active` marks the option highlighted with
+// the mouse or the arrow keys, not a selected value, so hover, keyboard focus,
+// active and pressed share the same light highlight. Text on it is darkened to
+// keep WCAG AA contrast (the institutional green and orange are too light).
+$ds-dropdown-highlight-bg: mix($primary, $white, 18%);
+$ds-dropdown-highlight-primary-text: darken($primary, 32%);
+$ds-dropdown-highlight-secondary-text: darken($secondary, 22%);
+
+.dropdown-menu {
+  --bs-dropdown-link-hover-color: #{$dark};
+  --bs-dropdown-link-hover-bg: #{$ds-dropdown-highlight-bg};
+  --bs-dropdown-link-active-color: #{$dark};
+  --bs-dropdown-link-active-bg: #{$ds-dropdown-highlight-bg};
+}
+
 .dropdown-item {
 
+  &:hover,
   &:focus,
   &.active,
   &:active {
-    color: $white !important;
-
-    .text-primary,
-    .text-secondary {
-      color: $white !important;
+    .text-primary {
+      color: $ds-dropdown-highlight-primary-text !important;
     }
+
+    .text-secondary {
+      color: $ds-dropdown-highlight-secondary-text !important;
+    }
+  }
+
+  // Visible focus ring for keyboard navigation (the background alone is subtle)
+  &:focus-visible {
+    outline: 2px solid darken($primary, 20%);
+    outline-offset: -2px;
   }
 }
